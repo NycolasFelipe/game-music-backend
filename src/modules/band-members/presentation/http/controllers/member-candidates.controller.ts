@@ -14,8 +14,13 @@ import { GenerateMemberCandidatesUseCase } from "@/modules/band-members/applicat
 import {
   ApiGenerateCandidates,
   ApiListCharacteristics,
+  ApiListSkillDescriptions,
 } from "@/modules/band-members/decorators/api-band-members.decorator";
 import { CHARACTERISTICS } from "@/modules/band-members/domain/data/characteristics";
+import {
+  SKILL_DESCRIPTIONS,
+  type SkillLevelDescription,
+} from "@/modules/band-members/domain/data/skill-descriptions";
 import { GenerateCandidatesDto } from "@/modules/band-members/presentation/http/dto/generate-candidates.dto";
 import { CharacteristicView } from "@/modules/band-members/presentation/http/dto/characteristic.view";
 
@@ -59,5 +64,17 @@ export class MemberCandidatesController {
       category: c.category,
       rarity: c.rarity,
     }));
+  }
+
+  /**
+   * Lists the per-skill level descriptions (flavor text per instrument level),
+   * so clients can show them without duplicating the game data.
+   *
+   * @returns The descriptions keyed by skill.
+   */
+  @Get("skill-descriptions")
+  @ApiListSkillDescriptions()
+  skillDescriptions(): Record<string, SkillLevelDescription[]> {
+    return SKILL_DESCRIPTIONS;
   }
 }

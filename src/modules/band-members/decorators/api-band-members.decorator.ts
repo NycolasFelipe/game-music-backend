@@ -52,6 +52,19 @@ export function ApiListCharacteristics() {
 }
 
 /**
+ * Swagger docs for listing the per-skill level descriptions.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiListSkillDescriptions() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiOperation({ summary: "List per-skill level descriptions (flavor text)" }),
+    ApiOkResponse({ description: "The level descriptions keyed by skill." }),
+  );
+}
+
+/**
  * Swagger docs for adding a member to a band.
  *
  * @returns The composed set of Swagger decorators.
