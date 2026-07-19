@@ -67,6 +67,21 @@ export function ApiGetBand() {
 }
 
 /**
+ * Swagger docs for fetching a band's fame standing.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiGetBandFame() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiOperation({ summary: "Get a band's fame standing (derived from fans)" }),
+    ApiParam({ name: "id", format: "uuid" }),
+    ApiOkResponse({ description: "The band's fame view." }),
+    ApiNotFoundResponse({ description: "Band not found for this owner." }),
+  );
+}
+
+/**
  * Swagger docs for deleting a band.
  *
  * @returns The composed set of Swagger decorators.

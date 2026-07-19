@@ -3,6 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { CreateBandUseCase } from "@/modules/bands/application/use-cases/create-band.use-case";
 import { DeleteBandUseCase } from "@/modules/bands/application/use-cases/delete-band.use-case";
 import { GenerateBandNameUseCase } from "@/modules/bands/application/use-cases/generate-band-name.use-case";
+import { GetBandFameUseCase } from "@/modules/bands/application/use-cases/get-band-fame.use-case";
 import { GetBandUseCase } from "@/modules/bands/application/use-cases/get-band.use-case";
 import { ListBandsUseCase } from "@/modules/bands/application/use-cases/list-bands.use-case";
 import { ListBandRelationshipsUseCase } from "@/modules/bands/application/use-cases/list-band-relationships.use-case";
@@ -31,6 +32,7 @@ import { BandRelationshipsController } from "@/modules/bands/presentation/http/c
     CreateBandUseCase,
     ListBandsUseCase,
     GetBandUseCase,
+    GetBandFameUseCase,
     DeleteBandUseCase,
     ListBandRelationshipsUseCase,
     SetBandRelationshipLevelUseCase,

@@ -1,3 +1,4 @@
+import { FameView } from "@/modules/bands/application/dto/fame.view";
 import type {
   BandTheme,
   FoundationYear,
@@ -15,6 +16,8 @@ export class BandView {
   origin: OriginCity;
   foundationYear: FoundationYear;
   fanCount: number;
+  /** Fame standing derived from {@link fanCount}. */
+  fame: FameView;
   /** Live in-game year; advances by half-year steps per turn. */
   currentYear: number;
   createdAt: Date;

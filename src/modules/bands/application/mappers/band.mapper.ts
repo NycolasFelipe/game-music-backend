@@ -1,11 +1,23 @@
 import { BandMemberView } from "@/modules/bands/application/dto/band-member.view";
 import { BandView } from "@/modules/bands/application/dto/band.view";
+import { FameView } from "@/modules/bands/application/dto/fame.view";
 import { BandWithMembersView } from "@/modules/bands/application/dto/band-with-members.view";
 import { MemberRelationshipView } from "@/modules/bands/application/dto/member-relationship.view";
 import type { BandMemberEntity } from "@/modules/band-members/domain/entities/band-member.entity";
 import type { BandWithMembers } from "@/modules/bands/domain/entities/band-with-members";
 import type { MemberRelationshipEntity } from "@/modules/bands/domain/entities/member-relationship.entity";
 import type { BandEntity } from "@/modules/bands/domain/entities/band.entity";
+import { describeFame } from "@/modules/bands/domain/fame/fame.calculator";
+
+/**
+ * Derives a band's fame view from its fan count.
+ *
+ * @param fanCount - The band's fan count.
+ * @returns The fame view.
+ */
+export function toFameView(fanCount: number): FameView {
+  return describeFame(fanCount);
+}
 
 /**
  * Maps a band domain entity to its public view.
@@ -21,6 +33,7 @@ export function toBandView(band: BandEntity): BandView {
     origin: band.origin,
     foundationYear: band.foundationYear,
     fanCount: band.fanCount,
+    fame: toFameView(band.fanCount),
     currentYear: band.currentYear,
     createdAt: band.createdAt,
     updatedAt: band.updatedAt,

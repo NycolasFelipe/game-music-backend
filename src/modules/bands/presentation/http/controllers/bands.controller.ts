@@ -16,12 +16,14 @@ import { AuthenticatedUserEntity } from "@/common/entities/authenticated-user.en
 import { JwtAuthGuard } from "@/common/guards/jwt-auth.guard";
 import { BandView } from "@/modules/bands/application/dto/band.view";
 import { BandWithMembersView } from "@/modules/bands/application/dto/band-with-members.view";
+import { FameView } from "@/modules/bands/application/dto/fame.view";
 import { CreateBandUseCase } from "@/modules/bands/application/use-cases/create-band.use-case";
 import { DeleteBandUseCase } from "@/modules/bands/application/use-cases/delete-band.use-case";
 import {
   GenerateBandNameUseCase,
   type GeneratedBandName,
 } from "@/modules/bands/application/use-cases/generate-band-name.use-case";
+import { GetBandFameUseCase } from "@/modules/bands/application/use-cases/get-band-fame.use-case";
 import { GetBandUseCase } from "@/modules/bands/application/use-cases/get-band.use-case";
 import { ListBandsUseCase } from "@/modules/bands/application/use-cases/list-bands.use-case";
 import {
@@ -29,6 +31,7 @@ import {
   ApiDeleteBand,
   ApiGenerateBandName,
   ApiGetBand,
+  ApiGetBandFame,
   ApiListBands,
 } from "@/modules/bands/decorators/api-bands.decorator";
 import { CreateBandDto } from "@/modules/bands/presentation/http/dto/create-band.dto";
@@ -46,6 +49,7 @@ export class BandsController {
     private readonly createBandUseCase: CreateBandUseCase,
     private readonly listBandsUseCase: ListBandsUseCase,
     private readonly getBandUseCase: GetBandUseCase,
+    private readonly getBandFameUseCase: GetBandFameUseCase,
     private readonly deleteBandUseCase: DeleteBandUseCase,
   ) {}
 
@@ -108,6 +112,22 @@ export class BandsController {
     @Param("id", ParseUUIDPipe) id: string,
   ): Promise<BandWithMembersView> {
     return this.getBandUseCase.execute(actor, id);
+  }
+
+  /**
+   * Fetches a band's fame standing (derived from its fan count).
+   *
+   * @param actor - The authenticated owner.
+   * @param id - The band id.
+   * @returns The band's fame view.
+   */
+  @Get(":id/fame")
+  @ApiGetBandFame()
+  fame(
+    @CurrentUser() actor: AuthenticatedUserEntity,
+    @Param("id", ParseUUIDPipe) id: string,
+  ): Promise<FameView> {
+    return this.getBandFameUseCase.execute(actor, id);
   }
 
   /**
