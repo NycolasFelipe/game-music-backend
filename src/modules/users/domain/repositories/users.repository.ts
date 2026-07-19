@@ -1,4 +1,4 @@
-import { UserEntity } from "../entities/user.entity";
+import { UserEntity } from "@/modules/users/domain/entities/user.entity";
 
 /** DI token for the users repository implementation. */
 export const USERS_REPOSITORY = Symbol("USERS_REPOSITORY");

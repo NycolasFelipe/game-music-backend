@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { AuthenticatedUserEntity } from "../entities/authenticated-user.entity";
+import { AuthenticatedUserEntity } from "@/common/entities/authenticated-user.entity";
 
 /**
  * Parameter decorator that returns the authenticated user attached to the

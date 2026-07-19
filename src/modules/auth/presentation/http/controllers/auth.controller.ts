@@ -8,16 +8,16 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { CurrentUser } from "../../../../../common/decorators/current-user.decorator";
-import { AuthenticatedUserEntity } from "../../../../../common/entities/authenticated-user.entity";
-import { JwtAuthGuard } from "../../../../../common/guards/jwt-auth.guard";
-import { AuthResultDto } from "../../../application/dto/auth-result.dto";
-import { LoginUseCase } from "../../../application/use-cases/login.use-case";
+import { CurrentUser } from "@/common/decorators/current-user.decorator";
+import { AuthenticatedUserEntity } from "@/common/entities/authenticated-user.entity";
+import { JwtAuthGuard } from "@/common/guards/jwt-auth.guard";
+import { AuthResultDto } from "@/modules/auth/application/dto/auth-result.dto";
+import { LoginUseCase } from "@/modules/auth/application/use-cases/login.use-case";
 import {
   ApiGetCurrentUser,
   ApiLogin,
-} from "../../../decorators/api-auth.decorator";
-import { LoginDto } from "../dto/login.dto";
+} from "@/modules/auth/decorators/api-auth.decorator";
+import { LoginDto } from "@/modules/auth/presentation/http/dto/login.dto";
 
 /**
  * HTTP endpoints for authentication.

@@ -1,9 +1,9 @@
 import { UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Test } from "@nestjs/testing";
-import { PASSWORD_HASHER } from "../../../../common/crypto/password-hasher";
-import { UserEntity } from "../../../users/domain/entities/user.entity";
-import { USERS_REPOSITORY } from "../../../users/domain/repositories/users.repository";
+import { PASSWORD_HASHER } from "@/common/crypto/password-hasher";
+import { UserEntity } from "@/modules/users/domain/entities/user.entity";
+import { USERS_REPOSITORY } from "@/modules/users/domain/repositories/users.repository";
 import { LoginUseCase } from "./login.use-case";
 
 describe("LoginUseCase", () => {

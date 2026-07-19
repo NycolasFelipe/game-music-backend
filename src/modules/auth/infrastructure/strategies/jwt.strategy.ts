@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { AuthenticatedUserEntity } from "../../../../common/entities/authenticated-user.entity";
+import { AuthenticatedUserEntity } from "@/common/entities/authenticated-user.entity";
 
 /** Shape of the signed JWT payload. */
 interface JwtPayload {

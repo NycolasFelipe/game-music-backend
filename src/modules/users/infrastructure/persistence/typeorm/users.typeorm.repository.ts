@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { UserEntity } from "../../../domain/entities/user.entity";
+import { UserEntity } from "@/modules/users/domain/entities/user.entity";
 import {
   CreateUserData,
   UsersRepository,
-} from "../../../domain/repositories/users.repository";
+} from "@/modules/users/domain/repositories/users.repository";
 import { UserOrmEntity } from "./user.orm-entity";
 
 /**

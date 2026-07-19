@@ -6,7 +6,7 @@ import {
   ApiResponse,
   ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { LoginDto } from "../presentation/http/dto/login.dto";
+import { LoginDto } from "@/modules/auth/presentation/http/dto/login.dto";
 
 /**
  * Swagger documentation for the login endpoint.

@@ -2,11 +2,11 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
-import { CryptoModule } from "../../common/crypto/crypto.module";
-import { UsersModule } from "../users/users.module";
-import { LoginUseCase } from "./application/use-cases/login.use-case";
-import { JwtStrategy } from "./infrastructure/strategies/jwt.strategy";
-import { AuthController } from "./presentation/http/controllers/auth.controller";
+import { CryptoModule } from "@/common/crypto/crypto.module";
+import { UsersModule } from "@/modules/users/users.module";
+import { LoginUseCase } from "@/modules/auth/application/use-cases/login.use-case";
+import { JwtStrategy } from "@/modules/auth/infrastructure/strategies/jwt.strategy";
+import { AuthController } from "@/modules/auth/presentation/http/controllers/auth.controller";
 
 /**
  * Authentication module. Provides the login flow and JWT-based request

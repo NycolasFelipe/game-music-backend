@@ -1,7 +1,7 @@
 import "dotenv/config";
 import * as bcrypt from "bcryptjs";
-import { UserOrmEntity } from "../../modules/users/infrastructure/persistence/typeorm/user.orm-entity";
-import { AppDataSource } from "../data-source";
+import { UserOrmEntity } from "@/modules/users/infrastructure/persistence/typeorm/user.orm-entity";
+import { AppDataSource } from "@/database/data-source";
 
 const DEFAULT_USERNAME = "user";
 const DEFAULT_PASSWORD = "user";

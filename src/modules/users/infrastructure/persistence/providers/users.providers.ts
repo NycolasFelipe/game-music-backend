@@ -1,6 +1,6 @@
 import { Provider } from "@nestjs/common";
-import { USERS_REPOSITORY } from "../../../domain/repositories/users.repository";
-import { UsersTypeormRepository } from "../typeorm/users.typeorm.repository";
+import { USERS_REPOSITORY } from "@/modules/users/domain/repositories/users.repository";
+import { UsersTypeormRepository } from "@/modules/users/infrastructure/persistence/typeorm/users.typeorm.repository";
 
 /**
  * DI providers binding the {@link USERS_REPOSITORY} token to its TypeORM

@@ -5,12 +5,12 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { PASSWORD_HASHER } from "../../../../common/crypto/password-hasher";
-import type { PasswordHasher } from "../../../../common/crypto/password-hasher";
-import { USERS_REPOSITORY } from "../../../users/domain/repositories/users.repository";
-import type { UsersRepository } from "../../../users/domain/repositories/users.repository";
-import { AuthResultDto } from "../dto/auth-result.dto";
-import { LoginInput } from "../dto/login.input";
+import { PASSWORD_HASHER } from "@/common/crypto/password-hasher";
+import type { PasswordHasher } from "@/common/crypto/password-hasher";
+import { USERS_REPOSITORY } from "@/modules/users/domain/repositories/users.repository";
+import type { UsersRepository } from "@/modules/users/domain/repositories/users.repository";
+import { AuthResultDto } from "@/modules/auth/application/dto/auth-result.dto";
+import { LoginInput } from "@/modules/auth/application/dto/login.input";
 
 /**
  * Authenticates a user with username/password credentials and issues a JWT.
