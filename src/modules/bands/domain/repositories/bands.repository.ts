@@ -23,6 +23,20 @@ export interface CreateBandData {
 /** A member to create alongside a band (band id assigned during the insert). */
 export type CreateBandMemberSeed = Omit<CreateBandMemberData, "bandId">;
 
+/** Absolute band-aggregate values to apply atomically (e.g. after an event). */
+export interface BandStateChangesInput {
+  /** New absolute fan count. */
+  fanCount?: number;
+  /** New absolute happiness per member. */
+  memberHappiness?: Array<{ memberId: string; happiness: number }>;
+  /** New absolute level per canonical member pair (upserted). */
+  relationshipLevels?: Array<{
+    memberAId: string;
+    memberBId: string;
+    level: number;
+  }>;
+}
+
 /**
  * Persistence contract for bands. All lookups are scoped by owner so a user
  * can only ever reach their own bands.
@@ -77,4 +91,17 @@ export interface BandsRepository {
    * @returns `true` when a band was deleted, `false` otherwise.
    */
   deleteByIdAndOwner(id: string, ownerId: string): Promise<boolean>;
+
+  /**
+   * Applies absolute band-aggregate changes (fan count, member happiness,
+   * relationship levels) atomically. Used to persist event consequences.
+   *
+   * @param bandId - The band id.
+   * @param changes - The absolute values to apply.
+   * @returns A promise that resolves once applied.
+   */
+  applyBandStateChanges(
+    bandId: string,
+    changes: BandStateChangesInput,
+  ): Promise<void>;
 }

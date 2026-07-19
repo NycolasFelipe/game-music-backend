@@ -5,6 +5,7 @@ import { DatabaseModule } from "@/database/database.module";
 import { AuthModule } from "@/modules/auth/auth.module";
 import { BandMembersModule } from "@/modules/band-members/band-members.module";
 import { BandsModule } from "@/modules/bands/bands.module";
+import { EventsModule } from "@/modules/events/events.module";
 import { UsersModule } from "@/modules/users/users.module";
 
 @Module({
@@ -15,6 +16,7 @@ import { UsersModule } from "@/modules/users/users.module";
     AuthModule,
     BandsModule,
     BandMembersModule,
+    EventsModule,
   ],
   controllers: [],
   providers: [

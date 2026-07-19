@@ -9,6 +9,7 @@ import { BandEntity } from "@/modules/bands/domain/entities/band.entity";
 import { generateRelationshipsForMembers } from "@/modules/bands/domain/generation/relationship.generator";
 import {
   BandsRepository,
+  BandStateChangesInput,
   CreateBandData,
   CreateBandMemberSeed,
 } from "@/modules/bands/domain/repositories/bands.repository";
@@ -163,6 +164,45 @@ export class BandsTypeormRepository implements BandsRepository {
   async deleteByIdAndOwner(id: string, ownerId: string): Promise<boolean> {
     const result = await this.repository.delete({ id, ownerId });
     return (result.affected ?? 0) > 0;
+  }
+
+  /**
+   * Applies absolute band-aggregate changes atomically (fan count, member
+   * happiness, relationship levels).
+   *
+   * @param bandId - The band id.
+   * @param changes - The absolute values to apply.
+   * @returns A promise that resolves once applied.
+   */
+  async applyBandStateChanges(
+    bandId: string,
+    changes: BandStateChangesInput,
+  ): Promise<void> {
+    await this.dataSource.transaction(async (manager) => {
+      if (changes.fanCount !== undefined) {
+        await manager
+          .getRepository(BandOrmEntity)
+          .update({ id: bandId }, { fanCount: changes.fanCount });
+      }
+
+      for (const change of changes.memberHappiness ?? []) {
+        await manager
+          .getRepository(BandMemberOrmEntity)
+          .update(
+            { id: change.memberId, bandId },
+            { happiness: change.happiness },
+          );
+      }
+
+      for (const rel of changes.relationshipLevels ?? []) {
+        await manager
+          .getRepository(MemberRelationshipOrmEntity)
+          .update(
+            { bandId, memberAId: rel.memberAId, memberBId: rel.memberBId },
+            { level: rel.level },
+          );
+      }
+    });
   }
 
   /**
