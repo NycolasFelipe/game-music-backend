@@ -57,6 +57,7 @@ export class MemberCandidatesController {
       name: c.name,
       description: c.description,
       category: c.category,
+      rarity: c.rarity,
     }));
   }
 }

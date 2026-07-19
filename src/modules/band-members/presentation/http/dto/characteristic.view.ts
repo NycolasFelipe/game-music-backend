@@ -4,4 +4,6 @@ export class CharacteristicView {
   name: string;
   description: string;
   category: string;
+  /** Rarity tier (common | uncommon | rare | …), used for display coloring. */
+  rarity: string;
 }
