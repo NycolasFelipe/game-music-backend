@@ -1,6 +1,6 @@
 # 0002 — Módulos `bands` e `band-members`
 
-- **Status:** Aceita (implementação em fases — Fase 1 concluída)
+- **Status:** Aceita (implementação em fases — Fases 1 e 2 concluídas)
 - **Data:** 2026-07-18
 - **Decisores:** Equipe de backend
 - **Relacionada:** [0001 — Módulos iniciais: Usuários e Autenticação básica](0001-modulos-iniciais-usuarios-e-autenticacao.md)
@@ -73,7 +73,7 @@ Todos sob `@UseGuards(JwtAuthGuard)` e escopados por `@CurrentUser()`.
 
 | Método | Rota | Use case |
 |--------|------|----------|
-| `GET`    | `/bands/name:generate` | GenerateBandName |
+| `GET`    | `/bands/generate-name` | GenerateBandName |
 | `POST`   | `/bands` | CreateBand (transacional, 3–6 membros) |
 | `GET`    | `/bands` | ListBands (do dono) |
 | `GET`    | `/bands/:id` | GetBand (com membros) |
@@ -86,6 +86,8 @@ Todos sob `@UseGuards(JwtAuthGuard)` e escopados por `@CurrentUser()`.
 | `DELETE` | `/bands/:bandId/members/:memberId` | RemoveBandMember |
 
 ## Premissas assumidas
+- **Rota de geração** é `GET /bands/generate-name` (e não `name:generate`): o
+  `:` é interpretado como parâmetro de rota pelo parser do Nest.
 - **`fanCount`** modelado agora; a "fama" (−5..30, separada) fica para depois.
 - **Remoção durante o jogo** permite descer abaixo de 3 membros (o mínimo de 3 é
   regra apenas da criação). Revisável.
@@ -125,7 +127,7 @@ Todos sob `@UseGuards(JwtAuthGuard)` e escopados por `@CurrentUser()`.
 1. **Fundação** — entidades de domínio, ORM, migrations das duas tabelas,
    repositórios, wiring. **✅ Concluída.**
 2. **`bands`** — use cases (create transacional, list, get, delete, generate
-   name) + controller + DTOs + Swagger.
+   name) + controller + DTOs + Swagger. **✅ Concluída.**
 3. **`band-members`** — portar dados + gerador (funções puras) → candidates +
    add/list/get/update/remove.
 4. **Testes + Swagger** — unit tests dos use cases (incl. invariantes do
