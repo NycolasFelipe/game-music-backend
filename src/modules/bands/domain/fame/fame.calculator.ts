@@ -80,6 +80,55 @@ export function getFameDescription(fameLevel: number): FameLevelDescription {
   );
 }
 
+/** A fame level reached as a milestone (title/subtitle for that level). */
+export interface FameMilestone {
+  level: number;
+  title: string;
+  subtitle: string;
+}
+
+/** The change in fame between two fan counts. */
+export interface FameProgress {
+  previousLevel: number;
+  newLevel: number;
+  /** `true` when the new level is strictly higher than the previous. */
+  leveledUp: boolean;
+  /** Number of levels gained (`0` when unchanged or decreased). */
+  gainedLevels: number;
+  /** One milestone per level gained, in ascending order (empty when none). */
+  milestones: FameMilestone[];
+}
+
+/**
+ * Computes the fame progression between two fan counts. Milestones are emitted
+ * only for level increases (one per level gained), mirroring the frontend.
+ *
+ * @param previousFanCount - The fan count before the change.
+ * @param newFanCount - The fan count after the change.
+ * @returns The fame progression, with a milestone per level gained.
+ */
+export function computeFameProgress(
+  previousFanCount: number,
+  newFanCount: number,
+): FameProgress {
+  const previousLevel = calculateFameLevel(previousFanCount);
+  const newLevel = calculateFameLevel(newFanCount);
+  const milestones: FameMilestone[] = [];
+
+  for (let level = previousLevel + 1; level <= newLevel; level += 1) {
+    const { title, subtitle } = getFameDescription(level);
+    milestones.push({ level, title, subtitle });
+  }
+
+  return {
+    previousLevel,
+    newLevel,
+    leveledUp: newLevel > previousLevel,
+    gainedLevels: Math.max(0, newLevel - previousLevel),
+    milestones,
+  };
+}
+
 /**
  * Derives the full fame standing for a fan count: level, description and the
  * progression bounds towards the next level.

@@ -98,6 +98,33 @@ describe("ResolveActiveEventUseCase", () => {
     );
     expect(result.applied.fanCount).toBe(110);
     expect(result.event.resolved).toBe(true);
+    // 100 fans (level 1) -> 110 fans (level 2): one milestone.
+    expect(result.fameChange).toMatchObject({
+      previousLevel: 1,
+      newLevel: 2,
+      leveledUp: true,
+      gainedLevels: 1,
+    });
+    expect(result.fameChange.milestones).toEqual([
+      { level: 2, title: "Emergentes", subtitle: expect.any(String) },
+    ]);
+  });
+
+  it("reports no fame level-up when the level is unchanged", async () => {
+    bandsRepository.findByIdAndOwnerWithMembers.mockResolvedValue({
+      band: { fanCount: 5 },
+      members: [{ id: "m1", happiness: 2 }],
+      relationships: [],
+    });
+    const pending = event(false, [option]);
+    eventsRepository.findByIdAndBandId.mockResolvedValue(pending);
+    eventsRepository.markResolved.mockResolvedValue(event(true, [option]));
+
+    const result = await useCase.execute(actor, BAND_ID, EVENT_ID, "option_0");
+
+    // 5 fans -> 15 fans: both level 0, no milestone.
+    expect(result.fameChange.leveledUp).toBe(false);
+    expect(result.fameChange.milestones).toEqual([]);
   });
 
   it("throws Conflict when the event is already resolved", async () => {

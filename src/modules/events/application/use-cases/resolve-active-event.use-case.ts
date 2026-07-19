@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { AuthenticatedUserEntity } from "@/common/entities/authenticated-user.entity";
+import { computeFameProgress } from "@/modules/bands/domain/fame/fame.calculator";
 import { BANDS_REPOSITORY } from "@/modules/bands/domain/repositories/bands.repository";
 import type { BandsRepository } from "@/modules/bands/domain/repositories/bands.repository";
 import { EventResolutionView } from "@/modules/events/application/dto/event-resolution.view";
@@ -91,6 +92,11 @@ export class ResolveActiveEventUseCase {
 
     await this.bandsRepository.applyBandStateChanges(bandId, applied);
 
+    const fameChange = computeFameProgress(
+      band.band.fanCount,
+      applied.fanCount,
+    );
+
     const resolved = await this.activeEventsRepository.markResolved(
       eventId,
       bandId,
@@ -99,13 +105,17 @@ export class ResolveActiveEventUseCase {
     );
 
     this.logger.log(
-      `Resolved event ${eventId} (option ${optionId}) for band ${bandId}`,
+      `Resolved event ${eventId} (option ${optionId}) for band ${bandId}` +
+        (fameChange.leveledUp
+          ? ` — fame up to level ${fameChange.newLevel} "${fameChange.milestones.at(-1)?.title}"`
+          : ""),
     );
 
     return {
       event: toActiveEventView(resolved ?? event),
       outcome,
       applied,
+      fameChange,
     };
   }
 }

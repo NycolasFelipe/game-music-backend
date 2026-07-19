@@ -12,6 +12,25 @@ export class AppliedBandChanges {
   }>;
 }
 
+/** A fame level reached while resolving an event. */
+export class FameMilestoneView {
+  level: number;
+  title: string;
+  subtitle: string;
+}
+
+/** How resolving the event moved the band's fame standing. */
+export class FameChangeView {
+  previousLevel: number;
+  newLevel: number;
+  /** `true` when the resolution raised the band's fame level. */
+  leveledUp: boolean;
+  /** Number of fame levels gained (`0` when unchanged or decreased). */
+  gainedLevels: number;
+  /** One milestone per level gained, ascending (empty when none). */
+  milestones: FameMilestoneView[];
+}
+
 /**
  * Result of resolving an active event: the resolved event, the rolled outcome,
  * and the concrete changes applied to the band.
@@ -20,4 +39,6 @@ export class EventResolutionView {
   event: ActiveEventView;
   outcome: EventConsequence;
   applied: AppliedBandChanges;
+  /** The fame progression caused by the applied fan-count change. */
+  fameChange: FameChangeView;
 }
