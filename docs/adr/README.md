@@ -18,3 +18,4 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | [0002](0002-modulos-bands-e-band-members.md) | Módulos `bands` e `band-members` | Aceita (concluída) |
 | [0003](0003-relacionamentos-entre-membros.md) | Relacionamentos entre membros | Aceita |
 | [0004](0004-eventos-ativos.md) | Eventos ativos | Aceita |
+| [0005](0005-eventos-passivos.md) | Eventos passivos (timeline) | Aceita |
