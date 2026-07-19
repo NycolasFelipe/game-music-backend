@@ -2,6 +2,7 @@ import { generateActiveEvent } from "@/modules/events/domain/generation/active-e
 import type {
   EventCharacter,
   EventRelationship,
+  GeneratedActiveEvent,
 } from "@/modules/events/domain/generation/generated-active-event";
 
 const characters: EventCharacter[] = [
@@ -12,8 +13,11 @@ const relationships: EventRelationship[] = [
   { memberAId: "m1", memberBId: "m2", level: 0 },
 ];
 
-function generateMany(overrides?: { fanCount?: number; recent?: Set<string> }) {
-  const results = [];
+function generateMany(overrides?: {
+  fanCount?: number;
+  recent?: Set<string>;
+}): GeneratedActiveEvent[] {
+  const results: GeneratedActiveEvent[] = [];
   for (let i = 0; i < 100; i++) {
     const e = generateActiveEvent({
       year: 2003,
