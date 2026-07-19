@@ -4,13 +4,16 @@ import { DataSource, Repository } from "typeorm";
 import { toBandMemberDomain } from "@/modules/band-members/infrastructure/persistence/typeorm/band-member.mapper";
 import { BandMemberOrmEntity } from "@/modules/band-members/infrastructure/persistence/typeorm/band-member.orm-entity";
 import { BandWithMembers } from "@/modules/bands/domain/entities/band-with-members";
+import { MemberRelationshipEntity } from "@/modules/bands/domain/entities/member-relationship.entity";
 import { BandEntity } from "@/modules/bands/domain/entities/band.entity";
+import { generateRelationshipsForMembers } from "@/modules/bands/domain/generation/relationship.generator";
 import {
   BandsRepository,
   CreateBandData,
   CreateBandMemberSeed,
 } from "@/modules/bands/domain/repositories/bands.repository";
 import { BandOrmEntity } from "@/modules/bands/infrastructure/persistence/typeorm/band.orm-entity";
+import { MemberRelationshipOrmEntity } from "@/modules/bands/infrastructure/persistence/typeorm/member-relationship.orm-entity";
 
 /**
  * TypeORM-backed implementation of {@link BandsRepository}. As the aggregate
@@ -70,9 +73,22 @@ export class BandsTypeormRepository implements BandsRepository {
         ? await memberRepo.save(memberOrms)
         : [];
 
+      const relationshipRepo = manager.getRepository(
+        MemberRelationshipOrmEntity,
+      );
+      const relationshipOrms = generateRelationshipsForMembers(
+        savedMembers.map((m) => m.id),
+      ).map((rel) => relationshipRepo.create({ bandId: savedBand.id, ...rel }));
+      const savedRelationships = relationshipOrms.length
+        ? await relationshipRepo.save(relationshipOrms)
+        : [];
+
       return {
         band: this.toDomain(savedBand),
         members: savedMembers.map(toBandMemberDomain),
+        relationships: savedRelationships.map((r) =>
+          this.relationshipToDomain(r),
+        ),
       };
     });
   }
@@ -112,9 +128,14 @@ export class BandsTypeormRepository implements BandsRepository {
       .getRepository(BandMemberOrmEntity)
       .find({ where: { bandId: id }, order: { createdAt: "ASC" } });
 
+    const relationshipOrms = await this.dataSource
+      .getRepository(MemberRelationshipOrmEntity)
+      .find({ where: { bandId: id }, order: { createdAt: "ASC" } });
+
     return {
       band: this.toDomain(orm),
       members: memberOrms.map(toBandMemberDomain),
+      relationships: relationshipOrms.map((r) => this.relationshipToDomain(r)),
     };
   }
 
@@ -159,6 +180,26 @@ export class BandsTypeormRepository implements BandsRepository {
       orm.origin,
       orm.foundationYear,
       orm.fanCount,
+      orm.createdAt,
+      orm.updatedAt,
+    );
+  }
+
+  /**
+   * Maps a raw relationship ORM record to its domain entity.
+   *
+   * @param orm - The persistence model.
+   * @returns The corresponding {@link MemberRelationshipEntity}.
+   */
+  private relationshipToDomain(
+    orm: MemberRelationshipOrmEntity,
+  ): MemberRelationshipEntity {
+    return new MemberRelationshipEntity(
+      orm.id,
+      orm.bandId,
+      orm.memberAId,
+      orm.memberBId,
+      orm.level,
       orm.createdAt,
       orm.updatedAt,
     );

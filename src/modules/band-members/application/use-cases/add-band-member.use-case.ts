@@ -12,6 +12,8 @@ import { toBandMemberView } from "@/modules/bands/application/mappers/band.mappe
 import { BAND_MEMBERS_MAX } from "@/modules/bands/domain/constants/band.constant";
 import { BANDS_REPOSITORY } from "@/modules/bands/domain/repositories/bands.repository";
 import type { BandsRepository } from "@/modules/bands/domain/repositories/bands.repository";
+import { MEMBER_RELATIONSHIPS_REPOSITORY } from "@/modules/bands/domain/repositories/member-relationships.repository";
+import type { MemberRelationshipsRepository } from "@/modules/bands/domain/repositories/member-relationships.repository";
 import { AddBandMemberInput } from "@/modules/band-members/application/dto/add-band-member.input";
 import { getUnknownCharacteristicIds } from "@/modules/band-members/domain/data/characteristics";
 import { BAND_MEMBERS_REPOSITORY } from "@/modules/band-members/domain/repositories/band-members.repository";
@@ -29,6 +31,8 @@ export class AddBandMemberUseCase {
     private readonly bandsRepository: BandsRepository,
     @Inject(BAND_MEMBERS_REPOSITORY)
     private readonly bandMembersRepository: BandMembersRepository,
+    @Inject(MEMBER_RELATIONSHIPS_REPOSITORY)
+    private readonly relationshipsRepository: MemberRelationshipsRepository,
   ) {}
 
   /**
@@ -71,6 +75,9 @@ export class AddBandMemberUseCase {
       bandId,
       ...input,
     });
+
+    // Generate relationships between the new member and the existing ones.
+    await this.relationshipsRepository.syncForMember(bandId, member.id);
 
     this.logger.log(`Member "${member.name}" added to band ${bandId}`);
 

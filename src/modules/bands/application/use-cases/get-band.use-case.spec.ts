@@ -37,6 +37,7 @@ describe("GetBandUseCase", () => {
     bandsRepository.findByIdAndOwnerWithMembers.mockResolvedValue({
       band,
       members: [],
+      relationships: [],
     });
 
     const result = await useCase.execute(actor, "band-1");

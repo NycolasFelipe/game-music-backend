@@ -56,7 +56,11 @@ describe("CreateBandUseCase", () => {
       new Date("2026-01-01T00:00:00Z"),
       new Date("2026-01-01T00:00:00Z"),
     );
-    bandsRepository.createWithMembers.mockResolvedValue({ band, members: [] });
+    bandsRepository.createWithMembers.mockResolvedValue({
+      band,
+      members: [],
+      relationships: [],
+    });
 
     const result = await useCase.execute(actor, input(3));
 

@@ -6,6 +6,7 @@ import {
 import { Test } from "@nestjs/testing";
 import { AuthenticatedUserEntity } from "@/common/entities/authenticated-user.entity";
 import { BANDS_REPOSITORY } from "@/modules/bands/domain/repositories/bands.repository";
+import { MEMBER_RELATIONSHIPS_REPOSITORY } from "@/modules/bands/domain/repositories/member-relationships.repository";
 import { AddBandMemberUseCase } from "@/modules/band-members/application/use-cases/add-band-member.use-case";
 import { BandMemberEntity } from "@/modules/band-members/domain/entities/band-member.entity";
 import { BAND_MEMBERS_REPOSITORY } from "@/modules/band-members/domain/repositories/band-members.repository";
@@ -29,15 +30,21 @@ describe("AddBandMemberUseCase", () => {
   let useCase: AddBandMemberUseCase;
   let bandsRepository: { findByIdAndOwner: jest.Mock };
   let membersRepository: { countByBandId: jest.Mock; create: jest.Mock };
+  let relationshipsRepository: { syncForMember: jest.Mock };
 
   beforeEach(async () => {
     bandsRepository = { findByIdAndOwner: jest.fn() };
     membersRepository = { countByBandId: jest.fn(), create: jest.fn() };
+    relationshipsRepository = { syncForMember: jest.fn() };
     const moduleRef = await Test.createTestingModule({
       providers: [
         AddBandMemberUseCase,
         { provide: BANDS_REPOSITORY, useValue: bandsRepository },
         { provide: BAND_MEMBERS_REPOSITORY, useValue: membersRepository },
+        {
+          provide: MEMBER_RELATIONSHIPS_REPOSITORY,
+          useValue: relationshipsRepository,
+        },
       ],
     }).compile();
     useCase = moduleRef.get(AddBandMemberUseCase);
