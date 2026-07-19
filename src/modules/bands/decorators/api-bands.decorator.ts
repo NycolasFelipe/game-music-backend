@@ -25,6 +25,23 @@ export function ApiGenerateBandName() {
 }
 
 /**
+ * Swagger docs for listing band creation options.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiBandOptions() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiOperation({
+      summary: "List band creation options (themes, origins, decades)",
+    }),
+    ApiOkResponse({
+      description: "The available options with display labels.",
+    }),
+  );
+}
+
+/**
  * Swagger docs for creating a band.
  *
  * @returns The composed set of Swagger decorators.

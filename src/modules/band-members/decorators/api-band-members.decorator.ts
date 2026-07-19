@@ -39,6 +39,19 @@ export function ApiGenerateCandidates() {
 }
 
 /**
+ * Swagger docs for listing the characteristic (trait) catalog.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiListCharacteristics() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiOperation({ summary: "List the member characteristic (trait) catalog" }),
+    ApiOkResponse({ description: "The trait catalog with display data." }),
+  );
+}
+
+/**
  * Swagger docs for adding a member to a band.
  *
  * @returns The composed set of Swagger decorators.

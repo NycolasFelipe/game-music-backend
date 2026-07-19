@@ -27,6 +27,12 @@ import { GetBandFameUseCase } from "@/modules/bands/application/use-cases/get-ba
 import { GetBandUseCase } from "@/modules/bands/application/use-cases/get-band.use-case";
 import { ListBandsUseCase } from "@/modules/bands/application/use-cases/list-bands.use-case";
 import {
+  BAND_THEMES,
+  FOUNDATION_YEARS,
+  ORIGIN_CITIES,
+} from "@/modules/bands/domain/constants/band.constant";
+import {
+  ApiBandOptions,
   ApiCreateBand,
   ApiDeleteBand,
   ApiGenerateBandName,
@@ -34,6 +40,11 @@ import {
   ApiGetBandFame,
   ApiListBands,
 } from "@/modules/bands/decorators/api-bands.decorator";
+import {
+  ORIGIN_LABELS,
+  THEME_LABELS,
+} from "@/modules/bands/presentation/http/constants/band-labels.constant";
+import { BandOptionsView } from "@/modules/bands/presentation/http/dto/band-options.view";
 import { CreateBandDto } from "@/modules/bands/presentation/http/dto/create-band.dto";
 
 /**
@@ -62,6 +73,21 @@ export class BandsController {
   @ApiGenerateBandName()
   generateName(): GeneratedBandName {
     return this.generateBandNameUseCase.execute();
+  }
+
+  /**
+   * Lists the options available when creating a band (with display labels).
+   *
+   * @returns The available themes, origins and foundation decades.
+   */
+  @Get("options")
+  @ApiBandOptions()
+  options(): BandOptionsView {
+    return {
+      themes: BAND_THEMES.map((id) => ({ id, label: THEME_LABELS[id] })),
+      origins: ORIGIN_CITIES.map((id) => ({ id, label: ORIGIN_LABELS[id] })),
+      foundationYears: [...FOUNDATION_YEARS],
+    };
   }
 
   /**

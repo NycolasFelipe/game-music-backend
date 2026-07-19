@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -10,8 +11,13 @@ import { ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "@/common/guards/jwt-auth.guard";
 import { BandMemberCandidateView } from "@/modules/band-members/application/dto/band-member-candidate.view";
 import { GenerateMemberCandidatesUseCase } from "@/modules/band-members/application/use-cases/generate-member-candidates.use-case";
-import { ApiGenerateCandidates } from "@/modules/band-members/decorators/api-band-members.decorator";
+import {
+  ApiGenerateCandidates,
+  ApiListCharacteristics,
+} from "@/modules/band-members/decorators/api-band-members.decorator";
+import { CHARACTERISTICS } from "@/modules/band-members/domain/data/characteristics";
 import { GenerateCandidatesDto } from "@/modules/band-members/presentation/http/dto/generate-candidates.dto";
+import { CharacteristicView } from "@/modules/band-members/presentation/http/dto/characteristic.view";
 
 /**
  * HTTP endpoint for generating (stateless) member candidates.
@@ -35,5 +41,22 @@ export class MemberCandidatesController {
   @ApiGenerateCandidates()
   generate(@Body() dto: GenerateCandidatesDto): BandMemberCandidateView[] {
     return this.generateMemberCandidatesUseCase.execute(dto.count);
+  }
+
+  /**
+   * Lists the characteristic (trait) catalog with display data, so clients can
+   * render trait names/descriptions without duplicating the game data.
+   *
+   * @returns The trait catalog.
+   */
+  @Get("characteristics")
+  @ApiListCharacteristics()
+  characteristics(): CharacteristicView[] {
+    return Object.values(CHARACTERISTICS).map((c) => ({
+      id: c.id,
+      name: c.name,
+      description: c.description,
+      category: c.category,
+    }));
   }
 }
