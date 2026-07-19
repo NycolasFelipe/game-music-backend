@@ -1,6 +1,6 @@
 # 0002 — Módulos `bands` e `band-members`
 
-- **Status:** Aceita (implementação em fases — Fases 1 e 2 concluídas)
+- **Status:** Aceita (implementação em fases — Fases 1 a 4 concluídas)
 - **Data:** 2026-07-18
 - **Decisores:** Equipe de backend
 - **Relacionada:** [0001 — Módulos iniciais: Usuários e Autenticação básica](0001-modulos-iniciais-usuarios-e-autenticacao.md)
@@ -129,9 +129,17 @@ Todos sob `@UseGuards(JwtAuthGuard)` e escopados por `@CurrentUser()`.
 2. **`bands`** — use cases (create transacional, list, get, delete, generate
    name) + controller + DTOs + Swagger. **✅ Concluída.**
 3. **`band-members`** — portar dados + gerador (funções puras) → candidates +
-   add/list/get/update/remove.
+   add/list/get/update/remove. **✅ Concluída.**
 4. **Testes + Swagger** — unit tests dos use cases (incl. invariantes do
-   gerador) e, opcionalmente, integração do fluxo de criação.
+   gerador) e, opcionalmente, integração do fluxo de criação. **✅ Concluída**
+   (32 testes unitários; decorators Swagger em todos os endpoints).
+
+## Validação da característica no catálogo
+A validação estrutural (faixas/enums/tamanhos) é feita nos DTOs. A validação de
+**catálogo** (ids de características existem) é aplicada em `AddBandMember` via
+`getUnknownCharacteristicIds`. Em `CreateBand`, os membros vêm do gerador
+server-side (sempre válidos); a validação de catálogo pode ser adicionada lá
+como reforço numa iteração futura.
 
 ## Referências
 - Convenções: [AGENTS.md](../../AGENTS.md)
