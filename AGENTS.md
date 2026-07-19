@@ -5,9 +5,9 @@
 - Language: TypeScript
 - Primary Database: PostgreSQL
 - Architecture: Single-tenant application.
-- Package Manager: npm (Always run `npm run lint` before finishing)
-- Testing: Run `npm run test:unit -- --testPathPatterns="<affected-module>"` with the pattern of the module you changed (e.g. `auth`, `users`).
-  Never run the full `npm test` unless explicitly requested.
+- Package Manager: npm
+- Validation (mandatory): always run `npm run check` before finishing. It runs, in order, `typecheck` (`tsc --noEmit` over the whole project — src **and** tests), `lint` and the unit tests. The task is **not done** until `npm run check` passes.
+- Testing (iterative): while developing, run `npm run test:unit -- --testPathPatterns="<affected-module>"` for the module you changed (e.g. `auth`, `bands`). Never run the full `npm test` unless explicitly requested. The final `npm run check` still runs the whole unit suite.
 
 ## 2. Core NestJS Architecture & Conventions
 - Modularity: Keep modules encapsulated. Export explicitly via `exports`. Never use global modules unless strictly necessary.
@@ -94,7 +94,8 @@
 - Test setup: Use `Test.createTestingModule()` from `@nestjs/testing` to create the test module.
 - Never hit the database in unit tests.
 - Integration tests: Use `supertest` for HTTP calls, a shared integration context helper for seeding, and Testcontainers for a real PostgreSQL database. Set `jest.setTimeout(120000)` for long-running integration tests.
-- Command: Run `npm run test:unit -- --testPathPatterns="<affected-module>"` to check compliance. Do not run the full `npm test` unless explicitly requested.
+- Command (iterative): Run `npm run test:unit -- --testPathPatterns="<affected-module>"` to check the module you changed. Do not run the full `npm test` unless explicitly requested.
+- Final validation: `npm run check` (typecheck + lint + unit tests) must pass before finishing — see section 1.
 
 ## 6. Guards & Permissions
 - **JwtAuthGuard**: Applied globally or per-controller with `@UseGuards(JwtAuthGuard)`. Extracts the Bearer token, verifies the JWT, and populates `request.user`.
