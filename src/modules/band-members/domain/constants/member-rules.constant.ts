@@ -9,3 +9,8 @@ export const HAPPINESS_MAX = 5;
 /** Number of characteristics (traits) a member has. */
 export const CHARACTERISTICS_MIN = 2;
 export const CHARACTERISTICS_MAX = 4;
+
+/** Bounds and default for the number of generated member candidates. */
+export const CANDIDATES_MIN = 6;
+export const CANDIDATES_MAX = 10;
+export const CANDIDATES_DEFAULT = 9;
