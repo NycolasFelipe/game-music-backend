@@ -54,6 +54,20 @@ describe("generateActiveEvent", () => {
     expect(events).toHaveLength(0);
   });
 
+  it("excludes a pair whose relationship level exceeds maxRelationshipLevel", () => {
+    // At fanCount 200 only template 0001 is eligible, and it requires the pair's
+    // relationship level <= 3. A level of 4 must make it ineligible.
+    for (let i = 0; i < 100; i++) {
+      const e = generateActiveEvent({
+        year: 2003,
+        characters,
+        relationships: [{ memberAId: "m1", memberBId: "m2", level: 4 }],
+        fanCount: 200,
+      });
+      expect(e).toBeNull();
+    }
+  });
+
   it("returns null when there are no characters", () => {
     expect(
       generateActiveEvent({

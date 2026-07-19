@@ -60,6 +60,14 @@ Tudo é aplicado **atomicamente** por `BANDS_REPOSITORY.applyBandStateChanges`
 A view de evento devolve só `id/label/description` das opções — as consequências
 (e probabilidades) ficam no servidor, evitando spoiler antes da escolha.
 
+### 8. Restrições de nível de relacionamento são aplicadas
+Diferentemente do frontend (que declara `min/maxRelationshipLevel` nos templates
+mas **não** as usa), a geração **aplica** essas restrições: em eventos de par, só
+seleciona uma dupla cujo nível de relacionamento esteja dentro de
+`[minRelationshipLevel, maxRelationshipLevel]`. É uma divergência **intencional**
+do frontend (correção de um comportamento incompleto). Para eventos individuais
+(1 personagem) não há par, então a restrição não se aplica.
+
 ## Persistência (`active_events`)
 `id`, `band_id` (FK→bands, cascade), `template_id`, `year` (numeric),
 `type`, `title`, `description`, `involved_character_ids` (text[]),
@@ -96,10 +104,6 @@ Todos sob `@UseGuards(JwtAuthGuard)`, escopados por dono.
 - Sem ciclos de módulo; gerador/resolvedor puros e cobertos por testes.
 
 **Negativas / trade-offs**
-- As restrições de **nível de relacionamento** dos templates
-  (`min/maxRelationshipLevel`) foram portadas nos dados mas **não são
-  aplicadas** na geração — replicando fielmente o comportamento atual do
-  frontend (que as declara mas não as usa). Candidato a correção futura.
 - Sem turnos: o `year` é responsabilidade do cliente.
 - `options` em `jsonb` são pouco consultáveis (aceitável; são conteúdo servido).
 

@@ -225,6 +225,30 @@ function orderPair(
   return [a, b];
 }
 
+/**
+ * Checks whether a relationship level satisfies a template's
+ * `min/maxRelationshipLevel` bounds (when declared). When a bound is present but
+ * no relationship exists, the pair is rejected.
+ *
+ * @param template - The template carrying the optional bounds.
+ * @param level - The pair's current relationship level (or `null`).
+ * @returns `true` when within bounds (or no bounds declared).
+ */
+function relationshipWithinBounds(
+  template: Pick<
+    ActiveEventTemplate,
+    "minRelationshipLevel" | "maxRelationshipLevel"
+  >,
+  level: number | null,
+): boolean {
+  const { minRelationshipLevel: min, maxRelationshipLevel: max } = template;
+  if (min === undefined && max === undefined) return true;
+  if (level === null) return false;
+  if (min !== undefined && level < min) return false;
+  if (max !== undefined && level > max) return false;
+  return true;
+}
+
 function selectPair(
   template: ActiveEventTemplate,
   characters: EventCharacter[],
@@ -250,6 +274,8 @@ function selectPair(
       if (!pairSatisfiesPositions(template, a, b)) continue;
 
       const level = relationshipLevelOf(relationships, a.id, b.id);
+      // Enforce the template's relationship-level bounds (between the pair).
+      if (!relationshipWithinBounds(template, level)) continue;
       if (level !== null && level <= 0) problematic.push([a, b]);
       else any.push([a, b]);
     }
