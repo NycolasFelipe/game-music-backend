@@ -21,7 +21,7 @@ import { CreateBandUseCase } from "@/modules/bands/application/use-cases/create-
 import { DeleteBandUseCase } from "@/modules/bands/application/use-cases/delete-band.use-case";
 import {
   GenerateBandNameUseCase,
-  type GeneratedBandName,
+  type GeneratedBandNames,
 } from "@/modules/bands/application/use-cases/generate-band-name.use-case";
 import { GetBandFameUseCase } from "@/modules/bands/application/use-cases/get-band-fame.use-case";
 import { GetBandUseCase } from "@/modules/bands/application/use-cases/get-band.use-case";
@@ -46,6 +46,7 @@ import {
 } from "@/modules/bands/presentation/http/constants/band-labels.constant";
 import { BandOptionsView } from "@/modules/bands/presentation/http/dto/band-options.view";
 import { CreateBandDto } from "@/modules/bands/presentation/http/dto/create-band.dto";
+import { GenerateBandNameDto } from "@/modules/bands/presentation/http/dto/generate-band-name.dto";
 
 /**
  * HTTP endpoints for bands. All routes require authentication and are scoped
@@ -69,10 +70,11 @@ export class BandsController {
    *
    * @returns The generated name.
    */
-  @Get("generate-name")
+  @Post("generate-name")
+  @HttpCode(HttpStatus.OK)
   @ApiGenerateBandName()
-  generateName(): GeneratedBandName {
-    return this.generateBandNameUseCase.execute();
+  generateName(@Body() dto: GenerateBandNameDto): GeneratedBandNames {
+    return this.generateBandNameUseCase.execute(dto);
   }
 
   /**

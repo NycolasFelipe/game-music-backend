@@ -10,6 +10,7 @@ import {
   ApiParam,
 } from "@nestjs/swagger";
 import { CreateBandDto } from "@/modules/bands/presentation/http/dto/create-band.dto";
+import { GenerateBandNameDto } from "@/modules/bands/presentation/http/dto/generate-band-name.dto";
 
 /**
  * Swagger docs for generating a band name.
@@ -19,8 +20,11 @@ import { CreateBandDto } from "@/modules/bands/presentation/http/dto/create-band
 export function ApiGenerateBandName() {
   return applyDecorators(
     ApiBearerAuth(),
-    ApiOperation({ summary: "Generate a random band name suggestion" }),
-    ApiOkResponse({ description: "A generated band name." }),
+    ApiOperation({
+      summary: "Generate band name suggestions (language/article/genre)",
+    }),
+    ApiBody({ type: GenerateBandNameDto }),
+    ApiOkResponse({ description: "The generated name suggestions." }),
   );
 }
 
