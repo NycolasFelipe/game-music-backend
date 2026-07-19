@@ -55,6 +55,39 @@ function generateName(gender: Gender): string {
   return `${pick(firstNames)} ${pick(LAST_NAMES)}`;
 }
 
+/** Fitzpatrick skin-tone modifiers. */
+const SKIN_TONES = [
+  "\u{1F3FB}",
+  "\u{1F3FC}",
+  "\u{1F3FD}",
+  "\u{1F3FE}",
+  "\u{1F3FF}",
+];
+
+/** Zero-width joiner used to attach a hair component to the person emoji. */
+const ZWJ = "‍";
+
+/** Hair components appended after the skin tone (empty = default hair). */
+const HAIR = [
+  "",
+  `${ZWJ}\u{1F9B0}`, // red
+  `${ZWJ}\u{1F9B1}`, // curly
+  `${ZWJ}\u{1F9B3}`, // white
+  `${ZWJ}\u{1F9B2}`, // bald
+];
+
+/**
+ * Generates a persistent person emoji (gender + random skin tone + random hair)
+ * so a member is identifiable by appearance.
+ *
+ * @param gender - The member's gender.
+ * @returns The composed emoji string.
+ */
+function generateAvatar(gender: Gender): string {
+  const base = gender === "male" ? "\u{1F468}" : "\u{1F469}";
+  return `${base}${pick(SKIN_TONES)}${pick(HAIR)}`;
+}
+
 /**
  * Generates the skill set (each 0..3), guaranteeing at least one skill at 3.
  *
@@ -278,6 +311,7 @@ export function generateBandMember(): GeneratedBandMember {
     name,
     age: randomInt(16, 30),
     gender,
+    avatar: generateAvatar(gender),
     happiness: generateInitialHappiness(),
     characteristics: generateCharacteristics(),
     skills,

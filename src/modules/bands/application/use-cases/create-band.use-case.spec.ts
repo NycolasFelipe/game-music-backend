@@ -13,6 +13,7 @@ const member = (name: string): CreateBandMemberSeed => ({
   name,
   age: 24,
   gender: "male",
+  avatar: "👨🏽",
   happiness: 1,
   characteristics: ["creative", "professional"],
   skills: { vocal: 1, guitar: 3, bass: 2, drums: 0, piano: 1, lyrics: 2 },

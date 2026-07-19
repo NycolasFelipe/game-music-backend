@@ -9,6 +9,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Length,
   Max,
   Min,
   MinLength,
@@ -55,6 +56,11 @@ export class CreateBandMemberSeedDto {
   @ApiProperty({ enum: GENDERS, example: "male" })
   @IsIn([...GENDERS])
   gender: Gender;
+
+  @ApiProperty({ example: "👨🏽‍🦱" })
+  @IsString()
+  @Length(1, 32)
+  avatar: string;
 
   @ApiProperty({ minimum: HAPPINESS_MIN, maximum: HAPPINESS_MAX, example: 1 })
   @IsNumber({ maxDecimalPlaces: 2 })

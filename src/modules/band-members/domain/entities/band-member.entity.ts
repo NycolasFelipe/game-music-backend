@@ -17,6 +17,8 @@ export class BandMemberEntity {
     /** Age in years (16..30). */
     public readonly age: number,
     public readonly gender: Gender,
+    /** Persisted person emoji (gender + skin tone + hair) identifying the member. */
+    public readonly avatar: string,
     /** Individual happiness, -5..5 (up to 2 decimals). */
     public readonly happiness: number,
     /** IDs of characteristics/traits (2..4), referencing the static catalog. */

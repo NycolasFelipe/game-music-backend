@@ -12,6 +12,8 @@ export interface GeneratedBandMember {
   name: string;
   age: number;
   gender: Gender;
+  /** Persisted person emoji (gender + skin tone + hair) identifying the member. */
+  avatar: string;
   happiness: number;
   characteristics: string[];
   skills: Skills;

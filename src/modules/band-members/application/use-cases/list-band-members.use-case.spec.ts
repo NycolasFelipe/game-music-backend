@@ -36,6 +36,7 @@ describe("ListBandMembersUseCase", () => {
         "João",
         24,
         "male",
+        "👨🏽",
         1,
         ["creative"],
         { vocal: 1, guitar: 3, bass: 2, drums: 0, piano: 1, lyrics: 2 },

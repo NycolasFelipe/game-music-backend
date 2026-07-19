@@ -47,6 +47,7 @@ describe("generateBandMember", () => {
       expect(member.age).toBeGreaterThanOrEqual(16);
       expect(member.age).toBeLessThanOrEqual(30);
       expect(["male", "female"]).toContain(member.gender);
+      expect(member.avatar.length).toBeGreaterThan(0);
       expect(member.happiness).toBeGreaterThanOrEqual(-5);
       expect(member.happiness).toBeLessThanOrEqual(5);
     }

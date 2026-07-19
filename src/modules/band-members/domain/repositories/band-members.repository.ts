@@ -14,6 +14,7 @@ export interface CreateBandMemberData {
   name: string;
   age: number;
   gender: Gender;
+  avatar: string;
   happiness: number;
   characteristics: string[];
   skills: Skills;

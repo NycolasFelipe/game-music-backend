@@ -16,6 +16,7 @@ export function toBandMemberDomain(orm: BandMemberOrmEntity): BandMemberEntity {
     orm.name,
     orm.age,
     orm.gender,
+    orm.avatar,
     orm.happiness,
     orm.characteristics,
     orm.skills,

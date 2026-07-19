@@ -53,6 +53,7 @@ export function toBandMemberView(member: BandMemberEntity): BandMemberView {
     name: member.name,
     age: member.age,
     gender: member.gender,
+    avatar: member.avatar,
     happiness: member.happiness,
     characteristics: member.characteristics,
     skills: member.skills,

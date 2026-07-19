@@ -35,6 +35,9 @@ export class BandMemberOrmEntity {
   @Column({ type: "varchar", length: 16 })
   gender: Gender;
 
+  @Column({ type: "varchar", length: 32 })
+  avatar: string;
+
   @Column({
     type: "numeric",
     precision: 4,
