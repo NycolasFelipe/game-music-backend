@@ -10,9 +10,9 @@ const originalConsoleError: (...args: unknown[]) => void = console.error.bind(
 ) as (...args: unknown[]) => void;
 
 console.error = (...args: unknown[]) => {
-  const message = args.join(' ');
+  const message = args.join(" ");
 
-  if (message.includes('ECONNREFUSED') && message.includes('127.0.0.1:6379')) {
+  if (message.includes("ECONNREFUSED") && message.includes("127.0.0.1:6379")) {
     return;
   }
 
