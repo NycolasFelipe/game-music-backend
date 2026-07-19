@@ -53,6 +53,15 @@ export interface ActiveEventsRepository {
   ): Promise<ActiveEventEntity | null>;
 
   /**
+   * Counts a band's still-unresolved (pending) active events. Used to block a
+   * turn advance while the player has a decision outstanding.
+   *
+   * @param bandId - The band id.
+   * @returns The number of unresolved events for the band.
+   */
+  countUnresolved(bandId: string): Promise<number>;
+
+  /**
    * Returns the template ids used by a band's events within a year window,
    * to avoid repeating recent events.
    *

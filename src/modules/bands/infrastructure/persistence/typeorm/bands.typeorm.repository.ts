@@ -8,6 +8,7 @@ import { MemberRelationshipEntity } from "@/modules/bands/domain/entities/member
 import { BandEntity } from "@/modules/bands/domain/entities/band.entity";
 import { generateRelationshipsForMembers } from "@/modules/bands/domain/generation/relationship.generator";
 import {
+  AdvanceTurnInput,
   BandsRepository,
   BandStateChangesInput,
   CreateBandData,
@@ -53,6 +54,7 @@ export class BandsTypeormRepository implements BandsRepository {
           origin: data.origin,
           foundationYear: data.foundationYear,
           fanCount: data.fanCount ?? 0,
+          currentYear: data.foundationYear,
         }),
       );
 
@@ -206,6 +208,27 @@ export class BandsTypeormRepository implements BandsRepository {
   }
 
   /**
+   * Advances the band's live year and optionally ages its members, atomically.
+   *
+   * @param bandId - The band id.
+   * @param changes - The new year and whether to age members this step.
+   * @returns A promise that resolves once applied.
+   */
+  async advanceTurn(bandId: string, changes: AdvanceTurnInput): Promise<void> {
+    await this.dataSource.transaction(async (manager) => {
+      await manager
+        .getRepository(BandOrmEntity)
+        .update({ id: bandId }, { currentYear: changes.newYear });
+
+      if (changes.ageMembers) {
+        await manager
+          .getRepository(BandMemberOrmEntity)
+          .increment({ bandId }, "age", 1);
+      }
+    });
+  }
+
+  /**
    * Maps a raw ORM record to a clean domain entity.
    *
    * @param orm - The persistence model loaded from the database.
@@ -220,6 +243,7 @@ export class BandsTypeormRepository implements BandsRepository {
       orm.origin,
       orm.foundationYear,
       orm.fanCount,
+      orm.currentYear,
       orm.createdAt,
       orm.updatedAt,
     );

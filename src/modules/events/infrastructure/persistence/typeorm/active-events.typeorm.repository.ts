@@ -74,6 +74,16 @@ export class ActiveEventsTypeormRepository implements ActiveEventsRepository {
   }
 
   /**
+   * Counts a band's still-unresolved (pending) active events.
+   *
+   * @param bandId - The band id.
+   * @returns The number of unresolved events for the band.
+   */
+  async countUnresolved(bandId: string): Promise<number> {
+    return this.repository.count({ where: { bandId, resolved: false } });
+  }
+
+  /**
    * Returns the template ids used by a band's events within a year window.
    *
    * @param bandId - The band id.

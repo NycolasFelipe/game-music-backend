@@ -15,6 +15,8 @@ export class BandView {
   origin: OriginCity;
   foundationYear: FoundationYear;
   fanCount: number;
+  /** Live in-game year; advances by half-year steps per turn. */
+  currentYear: number;
   createdAt: Date;
   updatedAt: Date;
 }

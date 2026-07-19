@@ -6,6 +6,7 @@ import { AuthModule } from "@/modules/auth/auth.module";
 import { BandMembersModule } from "@/modules/band-members/band-members.module";
 import { BandsModule } from "@/modules/bands/bands.module";
 import { EventsModule } from "@/modules/events/events.module";
+import { TurnsModule } from "@/modules/turns/turns.module";
 import { UsersModule } from "@/modules/users/users.module";
 
 @Module({
@@ -17,6 +18,7 @@ import { UsersModule } from "@/modules/users/users.module";
     BandsModule,
     BandMembersModule,
     EventsModule,
+    TurnsModule,
   ],
   controllers: [],
   providers: [

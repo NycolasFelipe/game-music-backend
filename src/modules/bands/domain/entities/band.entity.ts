@@ -22,6 +22,12 @@ export class BandEntity {
     public readonly foundationYear: FoundationYear,
     /** Number of fans (treated as "fame" in parts of the game). */
     public readonly fanCount: number,
+    /**
+     * Live in-game year (the save's "clock"). Starts at {@link foundationYear}
+     * and advances by half-year steps as turns are taken. Fractional (`.5`)
+     * values denote the second semester of a calendar year.
+     */
+    public readonly currentYear: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
   ) {}

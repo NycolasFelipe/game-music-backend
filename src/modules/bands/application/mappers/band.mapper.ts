@@ -21,6 +21,7 @@ export function toBandView(band: BandEntity): BandView {
     origin: band.origin,
     foundationYear: band.foundationYear,
     fanCount: band.fanCount,
+    currentYear: band.currentYear,
     createdAt: band.createdAt,
     updatedAt: band.updatedAt,
   };

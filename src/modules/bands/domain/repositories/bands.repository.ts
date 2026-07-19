@@ -37,6 +37,14 @@ export interface BandStateChangesInput {
   }>;
 }
 
+/** State transition applied when a band takes a turn. */
+export interface AdvanceTurnInput {
+  /** The band's new live year after the step. */
+  newYear: number;
+  /** When `true`, every member's age is incremented by one. */
+  ageMembers: boolean;
+}
+
 /**
  * Persistence contract for bands. All lookups are scoped by owner so a user
  * can only ever reach their own bands.
@@ -104,4 +112,14 @@ export interface BandsRepository {
     bandId: string,
     changes: BandStateChangesInput,
   ): Promise<void>;
+
+  /**
+   * Advances the band's live clock to a new year and, when crossing into a new
+   * calendar year, ages every member by one, atomically.
+   *
+   * @param bandId - The band id.
+   * @param changes - The new year and whether to age members this step.
+   * @returns A promise that resolves once applied.
+   */
+  advanceTurn(bandId: string, changes: AdvanceTurnInput): Promise<void>;
 }

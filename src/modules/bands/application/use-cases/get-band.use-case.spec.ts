@@ -31,6 +31,7 @@ describe("GetBandUseCase", () => {
       "seattle",
       1990,
       12,
+      1990,
       new Date("2026-01-01T00:00:00Z"),
       new Date("2026-01-01T00:00:00Z"),
     );

@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { numericTransformer } from "@/common/persistence/numeric.transformer";
 import type {
   BandTheme,
   FoundationYear,
@@ -39,6 +40,15 @@ export class BandOrmEntity {
 
   @Column({ name: "fan_count", type: "integer", default: 0 })
   fanCount: number;
+
+  @Column({
+    name: "current_year",
+    type: "numeric",
+    precision: 6,
+    scale: 1,
+    transformer: numericTransformer,
+  })
+  currentYear: number;
 
   @CreateDateColumn({ name: "created_at", type: "timestamptz" })
   createdAt: Date;

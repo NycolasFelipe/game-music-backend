@@ -3,6 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { BandsModule } from "@/modules/bands/bands.module";
 import { GenerateActiveEventUseCase } from "@/modules/events/application/use-cases/generate-active-event.use-case";
 import { GeneratePassiveEventsUseCase } from "@/modules/events/application/use-cases/generate-passive-events.use-case";
+import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
 import { GetActiveEventUseCase } from "@/modules/events/application/use-cases/get-active-event.use-case";
 import { ListActiveEventsUseCase } from "@/modules/events/application/use-cases/list-active-events.use-case";
 import { ListPassiveEventsUseCase } from "@/modules/events/application/use-cases/list-passive-events.use-case";
@@ -34,6 +35,12 @@ import { PassiveEventsController } from "@/modules/events/presentation/http/cont
     ResolveActiveEventUseCase,
     GeneratePassiveEventsUseCase,
     ListPassiveEventsUseCase,
+  ],
+  exports: [
+    // Consumed by the turns module to run the per-turn event tick.
+    GenerateActiveEventUseCase,
+    GeneratePassiveEventsUseCase,
+    ACTIVE_EVENTS_REPOSITORY,
   ],
 })
 export class EventsModule {}
