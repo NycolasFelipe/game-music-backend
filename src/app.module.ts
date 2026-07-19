@@ -3,6 +3,8 @@ import { ConfigModule } from "@nestjs/config";
 import { APP_PIPE } from "@nestjs/core";
 import { DatabaseModule } from "@/database/database.module";
 import { AuthModule } from "@/modules/auth/auth.module";
+import { BandMembersModule } from "@/modules/band-members/band-members.module";
+import { BandsModule } from "@/modules/bands/bands.module";
 import { UsersModule } from "@/modules/users/users.module";
 
 @Module({
@@ -11,6 +13,8 @@ import { UsersModule } from "@/modules/users/users.module";
     DatabaseModule,
     UsersModule,
     AuthModule,
+    BandsModule,
+    BandMembersModule,
   ],
   controllers: [],
   providers: [
