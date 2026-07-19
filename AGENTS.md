@@ -107,3 +107,4 @@
 ## 7. Security & Constraints
 - Environment Variables: Never hardcode secrets. Inject environment configurations exclusively via the NestJS `@nestjs/config` module.
 - Prohibited Actions: Do not modify `main.ts` unless explicitly directed. Do not delete existing configuration files (`tsconfig.json`, `nest-cli.json`).
+- **Frontend `game-music` is read-only reference**: The `game-music` frontend repository will be **completely rebuilt** in the future. Never modify it — use it **only** as a domain/reference base (types, game rules, data) when designing the backend.
