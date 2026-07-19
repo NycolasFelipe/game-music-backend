@@ -7,6 +7,7 @@ import {
   CreateBandMemberData,
   UpdateBandMemberData,
 } from "@/modules/band-members/domain/repositories/band-members.repository";
+import { toBandMemberDomain } from "@/modules/band-members/infrastructure/persistence/typeorm/band-member.mapper";
 import { BandMemberOrmEntity } from "@/modules/band-members/infrastructure/persistence/typeorm/band-member.orm-entity";
 
 /**
@@ -117,26 +118,12 @@ export class BandMembersTypeormRepository implements BandMembersRepository {
   }
 
   /**
-   * Maps a raw ORM record to a clean domain entity.
+   * Maps a raw ORM record to a clean domain entity via the shared mapper.
    *
    * @param orm - The persistence model loaded from the database.
    * @returns The corresponding {@link BandMemberEntity}.
    */
   private toDomain(orm: BandMemberOrmEntity): BandMemberEntity {
-    return new BandMemberEntity(
-      orm.id,
-      orm.bandId,
-      orm.name,
-      orm.age,
-      orm.gender,
-      orm.happiness,
-      orm.characteristics,
-      orm.skills,
-      orm.biography,
-      orm.primarySkill,
-      orm.joinYear,
-      orm.createdAt,
-      orm.updatedAt,
-    );
+    return toBandMemberDomain(orm);
   }
 }

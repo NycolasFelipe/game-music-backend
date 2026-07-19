@@ -1,8 +1,10 @@
+import type { CreateBandMemberData } from "@/modules/band-members/domain/repositories/band-members.repository";
 import type {
   BandTheme,
   FoundationYear,
   OriginCity,
 } from "@/modules/bands/domain/constants/band.constant";
+import type { BandWithMembers } from "@/modules/bands/domain/entities/band-with-members";
 import type { BandEntity } from "@/modules/bands/domain/entities/band.entity";
 
 /** DI token for the bands repository implementation. */
@@ -18,27 +20,46 @@ export interface CreateBandData {
   fanCount?: number;
 }
 
+/** A member to create alongside a band (band id assigned during the insert). */
+export type CreateBandMemberSeed = Omit<CreateBandMemberData, "bandId">;
+
 /**
  * Persistence contract for bands. All lookups are scoped by owner so a user
  * can only ever reach their own bands.
  */
 export interface BandsRepository {
   /**
-   * Persists a new band.
+   * Persists a new band together with its members, atomically.
    *
    * @param data - The band scalar data, including the owner id.
-   * @returns The newly created band.
+   * @param members - The members to create for the band.
+   * @returns The created band composed with its persisted members.
    */
-  create(data: CreateBandData): Promise<BandEntity>;
+  createWithMembers(
+    data: CreateBandData,
+    members: CreateBandMemberSeed[],
+  ): Promise<BandWithMembers>;
 
   /**
-   * Finds a band by id, scoped to its owner.
+   * Finds a band by id, scoped to its owner (scalars only).
    *
    * @param id - The band id.
    * @param ownerId - The owning user's id.
    * @returns The band, or `null` when not found for this owner.
    */
   findByIdAndOwner(id: string, ownerId: string): Promise<BandEntity | null>;
+
+  /**
+   * Finds a band by id (scoped to its owner) composed with its members.
+   *
+   * @param id - The band id.
+   * @param ownerId - The owning user's id.
+   * @returns The band with members, or `null` when not found for this owner.
+   */
+  findByIdAndOwnerWithMembers(
+    id: string,
+    ownerId: string,
+  ): Promise<BandWithMembers | null>;
 
   /**
    * Lists all bands belonging to an owner.
