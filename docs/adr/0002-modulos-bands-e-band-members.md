@@ -52,6 +52,9 @@ antes de persistir. Assim não há estado de candidatos no servidor.
 ### 5. Relacionamentos entre membros: fora de escopo agora
 Os `relationships` (pares −5..5, A-B == B-A) ficam para uma etapa/ADR futura.
 
+> **Atualização:** implementados na
+> [ADR-0003 — Relacionamentos entre membros](0003-relacionamentos-entre-membros.md).
+
 ### 6. Persistência (TypeORM + migrations)
 - `bands`: scalars + `owner_id` (FK/índice), `fan_count` default 0.
 - `band_members`: `band_id` (FK/índice, cascade), `skills` como **`jsonb`**,
