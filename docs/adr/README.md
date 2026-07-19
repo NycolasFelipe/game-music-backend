@@ -15,3 +15,4 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | # | Título | Status |
 |---|--------|--------|
 | [0001](0001-modulos-iniciais-usuarios-e-autenticacao.md) | Módulos iniciais: Usuários e Autenticação básica | Aceita |
+| [0002](0002-modulos-bands-e-band-members.md) | Módulos `bands` e `band-members` | Aceita (Fase 1 concluída) |
