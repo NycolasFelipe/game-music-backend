@@ -59,7 +59,9 @@ export function ApiListCharacteristics() {
 export function ApiListSkillDescriptions() {
   return applyDecorators(
     ApiBearerAuth(),
-    ApiOperation({ summary: "List per-skill level descriptions (flavor text)" }),
+    ApiOperation({
+      summary: "List per-skill level descriptions (flavor text)",
+    }),
     ApiOkResponse({ description: "The level descriptions keyed by skill." }),
   );
 }
