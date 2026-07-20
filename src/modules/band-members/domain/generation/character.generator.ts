@@ -67,14 +67,36 @@ const SKIN_TONES = [
 /** Zero-width joiner used to attach a hair component to the person emoji. */
 const ZWJ = "‍";
 
-/** Hair components appended after the skin tone (empty = default hair). */
-const HAIR = [
-  "",
-  `${ZWJ}\u{1F9B0}`, // red
-  `${ZWJ}\u{1F9B1}`, // curly
-  `${ZWJ}\u{1F9B3}`, // white
-  `${ZWJ}\u{1F9B2}`, // bald
+/**
+ * Hair options appended after the skin tone, weighted so natural styles are
+ * common and the "exotic" ones (red, white) are rare. Emoji only supports these
+ * four hair components — there is no blue/green/purple person emoji.
+ */
+const HAIR_OPTIONS: Array<{ value: string; weight: number }> = [
+  { value: "", weight: 48 }, // default (natural dark)
+  { value: `${ZWJ}\u{1F9B1}`, weight: 28 }, // curly (natural)
+  { value: `${ZWJ}\u{1F9B2}`, weight: 12 }, // bald
+  { value: `${ZWJ}\u{1F9B0}`, weight: 8 }, // red (uncommon)
+  { value: `${ZWJ}\u{1F9B3}`, weight: 4 }, // white (rare/exotic)
 ];
+
+/**
+ * Picks a value from weighted options (higher weight = more likely).
+ *
+ * @param options - The `{ value, weight }` options.
+ * @returns The chosen value.
+ */
+function weightedPick<T>(options: Array<{ value: T; weight: number }>): T {
+  const total = options.reduce((sum, option) => sum + option.weight, 0);
+  let roll = Math.random() * total;
+  for (const option of options) {
+    roll -= option.weight;
+    if (roll < 0) {
+      return option.value;
+    }
+  }
+  return options[options.length - 1].value;
+}
 
 /**
  * Generates a persistent person emoji (gender + random skin tone + random hair)
@@ -83,9 +105,9 @@ const HAIR = [
  * @param gender - The member's gender.
  * @returns The composed emoji string.
  */
-function generateAvatar(gender: Gender): string {
+export function generateAvatar(gender: Gender): string {
   const base = gender === "male" ? "\u{1F468}" : "\u{1F469}";
-  return `${base}${pick(SKIN_TONES)}${pick(HAIR)}`;
+  return `${base}${pick(SKIN_TONES)}${weightedPick(HAIR_OPTIONS)}`;
 }
 
 /**

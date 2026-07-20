@@ -11,6 +11,7 @@ import {
   ApiParam,
 } from "@nestjs/swagger";
 import { CreateBandMemberSeedDto } from "@/modules/bands/presentation/http/dto/create-band-member-seed.dto";
+import { GenerateAvatarDto } from "@/modules/band-members/presentation/http/dto/generate-avatar.dto";
 import { GenerateCandidatesDto } from "@/modules/band-members/presentation/http/dto/generate-candidates.dto";
 import { UpdateBandMemberDto } from "@/modules/band-members/presentation/http/dto/update-band-member.dto";
 
@@ -48,6 +49,20 @@ export function ApiListCharacteristics() {
     ApiBearerAuth(),
     ApiOperation({ summary: "List the member characteristic (trait) catalog" }),
     ApiOkResponse({ description: "The trait catalog with display data." }),
+  );
+}
+
+/**
+ * Swagger docs for regenerating a single member avatar.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiGenerateAvatar() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiOperation({ summary: "Generate a single avatar emoji for a gender" }),
+    ApiBody({ type: GenerateAvatarDto }),
+    ApiOkResponse({ description: "The generated avatar emoji." }),
   );
 }
 

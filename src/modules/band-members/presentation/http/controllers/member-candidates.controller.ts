@@ -12,6 +12,7 @@ import { JwtAuthGuard } from "@/common/guards/jwt-auth.guard";
 import { BandMemberCandidateView } from "@/modules/band-members/application/dto/band-member-candidate.view";
 import { GenerateMemberCandidatesUseCase } from "@/modules/band-members/application/use-cases/generate-member-candidates.use-case";
 import {
+  ApiGenerateAvatar,
   ApiGenerateCandidates,
   ApiListCharacteristics,
   ApiListSkillDescriptions,
@@ -21,6 +22,8 @@ import {
   SKILL_DESCRIPTIONS,
   type SkillLevelDescription,
 } from "@/modules/band-members/domain/data/skill-descriptions";
+import { generateAvatar } from "@/modules/band-members/domain/generation/character.generator";
+import { GenerateAvatarDto } from "@/modules/band-members/presentation/http/dto/generate-avatar.dto";
 import { GenerateCandidatesDto } from "@/modules/band-members/presentation/http/dto/generate-candidates.dto";
 import { CharacteristicView } from "@/modules/band-members/presentation/http/dto/characteristic.view";
 
@@ -46,6 +49,20 @@ export class MemberCandidatesController {
   @ApiGenerateCandidates()
   generate(@Body() dto: GenerateCandidatesDto): BandMemberCandidateView[] {
     return this.generateMemberCandidatesUseCase.execute(dto.count);
+  }
+
+  /**
+   * Generates a single avatar emoji for a gender (to regenerate one member's
+   * appearance without changing anything else).
+   *
+   * @param dto - The gender to generate an avatar for.
+   * @returns The generated avatar emoji.
+   */
+  @Post("avatar")
+  @HttpCode(HttpStatus.OK)
+  @ApiGenerateAvatar()
+  avatar(@Body() dto: GenerateAvatarDto): { avatar: string } {
+    return { avatar: generateAvatar(dto.gender) };
   }
 
   /**
