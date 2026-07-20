@@ -46,6 +46,23 @@ export function ApiBandOptions() {
 }
 
 /**
+ * Swagger docs for listing relationship-level metadata.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiRelationshipLevels() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiOperation({
+      summary: "List relationship-level display metadata (-5..5)",
+    }),
+    ApiOkResponse({
+      description: "The relationship levels with display data.",
+    }),
+  );
+}
+
+/**
  * Swagger docs for creating a band.
  *
  * @returns The composed set of Swagger decorators.

@@ -31,6 +31,7 @@ import {
   FOUNDATION_YEARS,
   ORIGIN_CITIES,
 } from "@/modules/bands/domain/constants/band.constant";
+import { RELATIONSHIP_LEVELS } from "@/modules/bands/domain/data/relationship-levels";
 import {
   ApiBandOptions,
   ApiCreateBand,
@@ -39,6 +40,7 @@ import {
   ApiGetBand,
   ApiGetBandFame,
   ApiListBands,
+  ApiRelationshipLevels,
 } from "@/modules/bands/decorators/api-bands.decorator";
 import {
   ORIGIN_LABELS,
@@ -47,6 +49,7 @@ import {
 import { BandOptionsView } from "@/modules/bands/presentation/http/dto/band-options.view";
 import { CreateBandDto } from "@/modules/bands/presentation/http/dto/create-band.dto";
 import { GenerateBandNameDto } from "@/modules/bands/presentation/http/dto/generate-band-name.dto";
+import { RelationshipLevelView } from "@/modules/bands/presentation/http/dto/relationship-level.view";
 
 /**
  * HTTP endpoints for bands. All routes require authentication and are scoped
@@ -90,6 +93,17 @@ export class BandsController {
       origins: ORIGIN_CITIES.map((id) => ({ id, label: ORIGIN_LABELS[id] })),
       foundationYears: [...FOUNDATION_YEARS],
     };
+  }
+
+  /**
+   * Lists the relationship-level display metadata (emoji, name, description).
+   *
+   * @returns The relationship levels (-5..5) with display data.
+   */
+  @Get("relationship-levels")
+  @ApiRelationshipLevels()
+  relationshipLevels(): RelationshipLevelView[] {
+    return RELATIONSHIP_LEVELS;
   }
 
   /**
