@@ -120,9 +120,9 @@ Gravadoras são **dado de domínio** (sem tabela). Novas tabelas:
   (`pendente`|`aceita`|`recusada`|`expirada`), `created_at`, `expires_at_year`
   (`numeric(6,1)`). Índice em `band_id`.
 
-Migrations previstas (próximos números livres): `...014000-CreateContractsTable`,
-`...015000-CreateLabelOffersTable` (a `013000` foi usada por
-`AddBalanceSnapshotToTurns`). Sem novas colunas em `bands` (o recoupment mora no
+Migrations: `CreateContractsTable` + `CreateLabelOffersTable`, com os **próximos
+números livres na época da implementação** (as `013000`/`014000` já foram usadas
+por snapshots de turno). Sem novas colunas em `bands` (o recoupment mora no
 contrato).
 
 ## Endpoints

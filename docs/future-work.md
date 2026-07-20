@@ -206,6 +206,39 @@ UI da parada.
 
 ---
 
+## 8. Mudança dinâmica dos traços com o tempo
+
+**Motivação.** Hoje os traços (características) são **fixos** desde a criação. Na
+vida real a personalidade muda com as experiências — sucesso, fracasso, brigas,
+fama. Traços **dinâmicos** geram narrativa emergente e fazem o elenco "viver":
+aquele membro humilde que a fama transformou num **Deslumbrado**, o amigo que
+tanto brigou e virou **Invejoso**.
+
+**Esboço.**
+- Traços mudam por **gatilhos**:
+  - **Fama/sucesso** — subir de nível (ADR-0007) arrisca ganhar `dazzled`/`greedy`.
+  - **Humor prolongado** — muito infeliz por vários turnos → `hothead`/`envious`;
+    muito feliz → `friendly`/`stable`.
+  - **Relações** — conflitos crônicos → `jealous`/`envious`; laços fortes → `loyal`.
+  - **Eventos** (ADR-0004) — uma decisão pode marcar um traço.
+- **Respeitar os opostos** — o catálogo de características já traz `opposites`:
+  ganhar um traço **remove o oposto** (não coexistem). Ganho/perda com
+  probabilidade ligada à raridade.
+- Onde roda: chance baixa no **tick do turno** e/ou na resolução de eventos.
+  `characteristics` passa a ser **estado mutável** (persistir a mudança).
+- UI: a aba **Integrantes** já mostra os traços; sinalizar a mudança (ex.:
+  notificação "Fulano agora é Ganancioso").
+
+**Integração.** band-members (`characteristics` + `opposites` + `rarity`), fama
+(ADR-0007), humor, relacionamentos (ADR-0003), eventos (ADR-0004), turnos
+(ADR-0006). Forte sinergia com o item 1 (um membro que virou `greedy` passa a
+exigir salário maior) e com o rastreamento de clima já implementado.
+
+**Dependências.** band-members (feito). ADR + método p/ persistir mudança de
+`characteristics` + as regras de transição.
+
+---
+
 ## Ordem sugerida (não vinculante)
 
 1. **Shows ao vivo** (item 5) — renda de base do início; destrava o começo do jogo
@@ -222,6 +255,8 @@ UI da parada.
    demais, pode entrar a qualquer momento.
 7. **Chart global de artistas** (item 7) — contexto competitivo; maior por exigir
    rivais/NPCs e sua progressão, mas muito bom para dar sensação de progresso.
+8. **Traços dinâmicos** (item 8) — narrativa emergente; entra bem depois de humor,
+   relações e fama já influenciarem o jogo (sinergia com salários).
 
 Antes de implementar qualquer um: abrir um ADR (`NNNN-titulo.md`), travar as
 decisões com o produto (como feito para obras/gravadoras) e só então codar.
