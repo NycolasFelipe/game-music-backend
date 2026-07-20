@@ -107,9 +107,10 @@ export class AdvanceTurnUseCase {
     // only band-state change the tick makes (ADR-0008 emenda to ADR-0006 §6);
     // fans/happiness/relationships still only change via event resolution.
     const royalties = await this.accrueReleaseRoyalties.execute(bandId);
+    const balanceAfter = Math.round((band.balance + royalties) * 100) / 100;
     if (royalties > 0) {
       await this.bandsRepository.applyBandStateChanges(bandId, {
-        balance: Math.round((band.balance + royalties) * 100) / 100,
+        balance: balanceAfter,
       });
     }
 
@@ -122,6 +123,7 @@ export class AdvanceTurnUseCase {
       bandId,
       year: newYear,
       fanCountSnapshot: band.fanCount,
+      balanceSnapshot: balanceAfter,
       passiveEventId: passiveEvent?.id ?? null,
       activeEventId: activeEvent?.id ?? null,
     });

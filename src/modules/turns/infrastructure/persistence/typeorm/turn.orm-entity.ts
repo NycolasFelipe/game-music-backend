@@ -30,6 +30,16 @@ export class TurnOrmEntity {
   @Column({ name: "fan_count_snapshot", type: "integer" })
   fanCountSnapshot: number;
 
+  @Column({
+    name: "balance_snapshot",
+    type: "numeric",
+    precision: 12,
+    scale: 2,
+    nullable: true,
+    transformer: numericTransformer,
+  })
+  balanceSnapshot: number | null;
+
   @Column({ name: "passive_event_id", type: "uuid", nullable: true })
   passiveEventId: string | null;
 

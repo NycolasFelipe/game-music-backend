@@ -12,6 +12,8 @@ export class TurnEntity {
     public readonly year: number,
     /** Fan count captured when the turn was taken. */
     public readonly fanCountSnapshot: number,
+    /** Cash balance captured after this turn (null for turns before it was tracked). */
+    public readonly balanceSnapshot: number | null,
     /** Id of the passive event generated this turn, if any. */
     public readonly passiveEventId: string | null,
     /** Id of the active event generated this turn, if any. */

@@ -29,6 +29,7 @@ export class TurnsTypeormRepository implements TurnsRepository {
       bandId: data.bandId,
       year: data.year,
       fanCountSnapshot: data.fanCountSnapshot,
+      balanceSnapshot: data.balanceSnapshot,
       passiveEventId: data.passiveEventId,
       activeEventId: data.activeEventId,
     });
@@ -62,6 +63,7 @@ export class TurnsTypeormRepository implements TurnsRepository {
       orm.bandId,
       orm.year,
       orm.fanCountSnapshot,
+      orm.balanceSnapshot,
       orm.passiveEventId,
       orm.activeEventId,
       orm.createdAt,

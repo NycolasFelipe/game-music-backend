@@ -8,6 +8,7 @@ export interface CreateTurnData {
   bandId: string;
   year: number;
   fanCountSnapshot: number;
+  balanceSnapshot: number | null;
   passiveEventId: string | null;
   activeEventId: string | null;
 }

@@ -30,7 +30,16 @@ describe("ListTurnsUseCase", () => {
   it("returns the band's turns as views with a formatted period", async () => {
     bandsRepository.findByIdAndOwner.mockResolvedValue({ id: BAND_ID });
     turnsRepository.findByBandId.mockResolvedValue([
-      new TurnEntity("t1", BAND_ID, 2003.5, 500, "pe-1", null, new Date()),
+      new TurnEntity(
+        "t1",
+        BAND_ID,
+        2003.5,
+        500,
+        3200,
+        "pe-1",
+        null,
+        new Date(),
+      ),
     ]);
 
     const result = await useCase.execute(actor, BAND_ID);
