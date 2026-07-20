@@ -13,6 +13,9 @@ import { GenerateActiveEventUseCase } from "@/modules/events/application/use-cas
 import { GeneratePassiveEventsUseCase } from "@/modules/events/application/use-cases/generate-passive-events.use-case";
 import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
 import type { ActiveEventsRepository } from "@/modules/events/domain/repositories/active-events.repository";
+import { AccrueReleaseRoyaltiesUseCase } from "@/modules/releases/application/use-cases/accrue-release-royalties.use-case";
+import { RELEASES_REPOSITORY } from "@/modules/releases/domain/repositories/releases.repository";
+import type { ReleasesRepository } from "@/modules/releases/domain/repositories/releases.repository";
 import { AdvanceTurnView } from "@/modules/turns/application/dto/advance-turn.view";
 import { formatPeriod } from "@/modules/turns/application/mappers/turn.mapper";
 import {
@@ -41,8 +44,11 @@ export class AdvanceTurnUseCase {
     private readonly activeEventsRepository: ActiveEventsRepository,
     @Inject(TURNS_REPOSITORY)
     private readonly turnsRepository: TurnsRepository,
+    @Inject(RELEASES_REPOSITORY)
+    private readonly releasesRepository: ReleasesRepository,
     private readonly generatePassiveEvents: GeneratePassiveEventsUseCase,
     private readonly generateActiveEvent: GenerateActiveEventUseCase,
+    private readonly accrueReleaseRoyalties: AccrueReleaseRoyaltiesUseCase,
   ) {}
 
   /**
@@ -71,6 +77,13 @@ export class AdvanceTurnUseCase {
       );
     }
 
+    const inCreation = await this.releasesRepository.countInCreation(bandId);
+    if (inCreation > 0) {
+      throw new ConflictException(
+        "Finish or discard the release in creation before advancing the turn",
+      );
+    }
+
     const previousYear = band.currentYear;
     const newYear = previousYear + TURN_STEP;
     const agedMembers = Math.floor(newYear) !== Math.floor(previousYear);
@@ -89,6 +102,16 @@ export class AdvanceTurnUseCase {
       newYear,
       ageMembers: agedMembers,
     });
+
+    // Accrue this turn's release royalties into the band's balance. This is the
+    // only band-state change the tick makes (ADR-0008 emenda to ADR-0006 §6);
+    // fans/happiness/relationships still only change via event resolution.
+    const royalties = await this.accrueReleaseRoyalties.execute(bandId);
+    if (royalties > 0) {
+      await this.bandsRepository.applyBandStateChanges(bandId, {
+        balance: Math.round((band.balance + royalties) * 100) / 100,
+      });
+    }
 
     // Chance to spawn a blocking decision event for the player.
     const activeEvent = this.rollActiveEvent()

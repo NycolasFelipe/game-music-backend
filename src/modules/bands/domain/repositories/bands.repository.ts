@@ -18,6 +18,8 @@ export interface CreateBandData {
   origin: OriginCity;
   foundationYear: FoundationYear;
   fanCount?: number;
+  /** Starting cash balance (defaults to `STARTING_CAPITAL`). */
+  balance?: number;
 }
 
 /** A member to create alongside a band (band id assigned during the insert). */
@@ -27,6 +29,8 @@ export type CreateBandMemberSeed = Omit<CreateBandMemberData, "bandId">;
 export interface BandStateChangesInput {
   /** New absolute fan count. */
   fanCount?: number;
+  /** New absolute cash balance. */
+  balance?: number;
   /** New absolute happiness per member. */
   memberHappiness?: Array<{ memberId: string; happiness: number }>;
   /** New absolute level per canonical member pair (upserted). */

@@ -55,6 +55,7 @@ describe("CreateBandUseCase", () => {
       1990,
       0,
       1990,
+      5000,
       new Date("2026-01-01T00:00:00Z"),
       new Date("2026-01-01T00:00:00Z"),
     );

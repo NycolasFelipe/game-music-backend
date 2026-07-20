@@ -6,6 +6,7 @@ import { BandMemberOrmEntity } from "@/modules/band-members/infrastructure/persi
 import { BandWithMembers } from "@/modules/bands/domain/entities/band-with-members";
 import { MemberRelationshipEntity } from "@/modules/bands/domain/entities/member-relationship.entity";
 import { BandEntity } from "@/modules/bands/domain/entities/band.entity";
+import { STARTING_CAPITAL } from "@/modules/bands/domain/constants/band.constant";
 import { generateRelationshipsForMembers } from "@/modules/bands/domain/generation/relationship.generator";
 import {
   AdvanceTurnInput,
@@ -55,6 +56,7 @@ export class BandsTypeormRepository implements BandsRepository {
           foundationYear: data.foundationYear,
           fanCount: data.fanCount ?? 0,
           currentYear: data.foundationYear,
+          balance: data.balance ?? STARTING_CAPITAL,
         }),
       );
 
@@ -188,6 +190,12 @@ export class BandsTypeormRepository implements BandsRepository {
           .update({ id: bandId }, { fanCount: changes.fanCount });
       }
 
+      if (changes.balance !== undefined) {
+        await manager
+          .getRepository(BandOrmEntity)
+          .update({ id: bandId }, { balance: changes.balance });
+      }
+
       for (const change of changes.memberHappiness ?? []) {
         await manager
           .getRepository(BandMemberOrmEntity)
@@ -245,6 +253,7 @@ export class BandsTypeormRepository implements BandsRepository {
       orm.foundationYear,
       orm.fanCount,
       orm.currentYear,
+      orm.balance,
       orm.createdAt,
       orm.updatedAt,
     );

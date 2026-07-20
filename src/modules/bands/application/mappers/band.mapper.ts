@@ -35,6 +35,7 @@ export function toBandView(band: BandEntity): BandView {
     fanCount: band.fanCount,
     fame: toFameView(band.fanCount),
     currentYear: band.currentYear,
+    balance: band.balance,
     createdAt: band.createdAt,
     updatedAt: band.updatedAt,
   };

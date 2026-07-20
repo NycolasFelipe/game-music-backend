@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { BandsModule } from "@/modules/bands/bands.module";
 import { EventsModule } from "@/modules/events/events.module";
+import { ReleasesModule } from "@/modules/releases/releases.module";
 import { AdvanceTurnUseCase } from "@/modules/turns/application/use-cases/advance-turn.use-case";
 import { ListTurnsUseCase } from "@/modules/turns/application/use-cases/list-turns.use-case";
 import { turnsProviders } from "@/modules/turns/infrastructure/persistence/providers/turns.providers";
@@ -19,6 +20,7 @@ import { TurnsController } from "@/modules/turns/presentation/http/controllers/t
     TypeOrmModule.forFeature([TurnOrmEntity]),
     BandsModule,
     EventsModule,
+    ReleasesModule,
   ],
   controllers: [TurnsController],
   providers: [...turnsProviders, AdvanceTurnUseCase, ListTurnsUseCase],

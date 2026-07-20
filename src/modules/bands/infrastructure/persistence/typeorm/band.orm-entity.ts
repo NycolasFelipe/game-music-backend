@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { numericTransformer } from "@/common/persistence/numeric.transformer";
+import { STARTING_CAPITAL } from "@/modules/bands/domain/constants/band.constant";
 import type {
   BandTheme,
   FoundationYear,
@@ -49,6 +50,16 @@ export class BandOrmEntity {
     transformer: numericTransformer,
   })
   currentYear: number;
+
+  @Column({
+    name: "balance",
+    type: "numeric",
+    precision: 12,
+    scale: 2,
+    default: STARTING_CAPITAL,
+    transformer: numericTransformer,
+  })
+  balance: number;
 
   @CreateDateColumn({ name: "created_at", type: "timestamptz" })
   createdAt: Date;

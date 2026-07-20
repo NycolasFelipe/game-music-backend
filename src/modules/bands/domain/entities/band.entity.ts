@@ -28,6 +28,8 @@ export class BandEntity {
      * values denote the second semester of a calendar year.
      */
     public readonly currentYear: number,
+    /** The band's cash balance (money), in abstract currency units. */
+    public readonly balance: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
   ) {}

@@ -20,6 +20,8 @@ export class BandView {
   fame: FameView;
   /** Live in-game year; advances by half-year steps per turn. */
   currentYear: number;
+  /** The band's cash balance (money). */
+  balance: number;
   createdAt: Date;
   updatedAt: Date;
 }

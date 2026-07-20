@@ -71,3 +71,10 @@ export type FoundationYear = (typeof FOUNDATION_YEARS)[number];
 /** Band membership size bounds enforced at creation. */
 export const BAND_MEMBERS_MIN = 3;
 export const BAND_MEMBERS_MAX = 6;
+
+/**
+ * Cash a band starts with (abstract currency units), enough to self-finance a
+ * first modest release. Used as the default `balance` on creation and as the
+ * backfill value for the balance migration. Subject to playtesting balance.
+ */
+export const STARTING_CAPITAL = 5000;
