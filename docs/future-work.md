@@ -239,6 +239,38 @@ exigir salário maior) e com o rastreamento de clima já implementado.
 
 ---
 
+## 9. Repensar os critérios de sucesso × fracasso de uma obra
+
+**Motivação.** Hoje o **tier** de uma obra (`fracasso` … `obra-prima`) vem
+**só da qualidade técnica**. Mas sucesso é **multidimensional**: uma obra de
+qualidade baixa pode ser um **sucesso relativo** se **ganhou dinheiro e fãs** (o
+hit simples e comercial). O rótulo atual engana — uma "obra fraca" que rendeu
+muito não deveria aparecer só como "fracasso".
+
+**Esboço.**
+- **Separar duas dimensões**: **Qualidade** (técnica, já existe: `quality`/
+  `qualityTier`) e **Sucesso** (resultado: fãs ganhos + receita líquida, relativo
+  ao **investimento** e à **expectativa** dada pela fama/formato da banda).
+- **Índice de sucesso** combinando: fãs ganhos, receita líquida (`receita − cost`),
+  retorno sobre o custo, e comparação com a expectativa (uma banda grande "espera"
+  vender mais; superar/frustrar a expectativa importa).
+- **Rótulos próprios de sucesso**, independentes da qualidade — ex.: "Fiasco
+  comercial", "Sucesso underground", "Hit", "Fenômeno". Exibir no `ReleaseCard`
+  **ao lado** (não no lugar) do tier de qualidade.
+- Casos que passam a fazer sentido: *baixa qualidade + alto sucesso* (comercial
+  descartável que vendeu) e *alta qualidade + baixo sucesso* (obra-prima
+  incompreendida).
+
+**Integração.** Obras (ADR-0008, finalize: `quality`, `fansGained`, `cost`,
+receita), fama (ADR-0007, expectativa), economia. **Forte relação com o item 2**
+(crítica × público): qualidade ≈ crítica, sucesso ≈ público/comercial — podem ser
+projetados juntos num único ADR.
+
+**Dependências.** Obras (feito). ADR (possivelmente unificado com o item 2) +
+cálculo do índice + rótulos + `ReleaseCard`.
+
+---
+
 ## Ordem sugerida (não vinculante)
 
 1. **Shows ao vivo** (item 5) — renda de base do início; destrava o começo do jogo
@@ -251,8 +283,9 @@ exigir salário maior) e com o rastreamento de clima já implementado.
    minigame de entrevista é o de maior esforço de design.
 5. **Evolução dos integrantes** (item 3) — loop de progressão; sinergia com os
    itens 1 e 5.
-6. **Crítica × público** (item 2) — profundidade de feedback; independente dos
-   demais, pode entrar a qualquer momento.
+6. **Crítica × público** (item 2) + **Sucesso × fracasso** (item 9) — melhor
+   projetados juntos: separam qualidade de recepção/resultado comercial. Podem
+   entrar a qualquer momento.
 7. **Chart global de artistas** (item 7) — contexto competitivo; maior por exigir
    rivais/NPCs e sua progressão, mas muito bom para dar sensação de progresso.
 8. **Traços dinâmicos** (item 8) — narrativa emergente; entra bem depois de humor,
