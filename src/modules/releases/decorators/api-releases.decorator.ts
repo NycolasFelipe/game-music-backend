@@ -45,6 +45,19 @@ export function ApiListBudgetTiers() {
 }
 
 /**
+ * Swagger docs for listing quality tiers.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiListQualityTiers() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiOperation({ summary: "List quality tiers (labels/emoji for a work)" }),
+    ApiOkResponse({ description: "The quality-tier ladder." }),
+  );
+}
+
+/**
  * Swagger docs for generating release titles.
  *
  * @returns The composed set of Swagger decorators.

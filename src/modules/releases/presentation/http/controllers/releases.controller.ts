@@ -27,9 +27,14 @@ import {
   type ReleaseFormat,
 } from "@/modules/releases/domain/data/release-formats";
 import {
+  QUALITY_TIERS,
+  type QualityTier,
+} from "@/modules/releases/domain/data/quality-tiers";
+import {
   ApiGenerateReleaseConcept,
   ApiGenerateReleaseTitle,
   ApiListBudgetTiers,
+  ApiListQualityTiers,
   ApiListReleaseFormats,
 } from "@/modules/releases/decorators/api-releases.decorator";
 import { GenerateReleaseConceptDto } from "@/modules/releases/presentation/http/dto/generate-release-concept.dto";
@@ -68,6 +73,17 @@ export class ReleasesController {
   @ApiListBudgetTiers()
   budgetTiers(): BudgetTier[] {
     return BUDGET_TIERS;
+  }
+
+  /**
+   * Lists the quality-tier ladder (labels/emoji for a finished work).
+   *
+   * @returns The quality tiers.
+   */
+  @Get("quality-tiers")
+  @ApiListQualityTiers()
+  qualityTiers(): QualityTier[] {
+    return QUALITY_TIERS;
   }
 
   /**
