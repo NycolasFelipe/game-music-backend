@@ -15,9 +15,11 @@ import {
   ApiGenerateAvatar,
   ApiGenerateCandidates,
   ApiListCharacteristics,
+  ApiListHappinessLevels,
   ApiListSkillDescriptions,
 } from "@/modules/band-members/decorators/api-band-members.decorator";
 import { CHARACTERISTICS } from "@/modules/band-members/domain/data/characteristics";
+import { HAPPINESS_LEVELS } from "@/modules/band-members/domain/data/happiness-levels";
 import {
   SKILL_DESCRIPTIONS,
   type SkillLevelDescription,
@@ -26,6 +28,7 @@ import { generateAvatar } from "@/modules/band-members/domain/generation/charact
 import { GenerateAvatarDto } from "@/modules/band-members/presentation/http/dto/generate-avatar.dto";
 import { GenerateCandidatesDto } from "@/modules/band-members/presentation/http/dto/generate-candidates.dto";
 import { CharacteristicView } from "@/modules/band-members/presentation/http/dto/characteristic.view";
+import { HappinessLevelView } from "@/modules/band-members/presentation/http/dto/happiness-level.view";
 
 /**
  * HTTP endpoint for generating (stateless) member candidates.
@@ -93,5 +96,16 @@ export class MemberCandidatesController {
   @ApiListSkillDescriptions()
   skillDescriptions(): Record<string, SkillLevelDescription[]> {
     return SKILL_DESCRIPTIONS;
+  }
+
+  /**
+   * Lists the happiness-level display metadata (emoji, name, description).
+   *
+   * @returns The happiness levels (-5..5) with display data.
+   */
+  @Get("happiness-levels")
+  @ApiListHappinessLevels()
+  happinessLevels(): HappinessLevelView[] {
+    return HAPPINESS_LEVELS;
   }
 }

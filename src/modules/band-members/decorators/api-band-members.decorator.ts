@@ -67,6 +67,19 @@ export function ApiGenerateAvatar() {
 }
 
 /**
+ * Swagger docs for listing the happiness-level metadata.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiListHappinessLevels() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiOperation({ summary: "List happiness-level display metadata (-5..5)" }),
+    ApiOkResponse({ description: "The happiness levels with display data." }),
+  );
+}
+
+/**
  * Swagger docs for listing the per-skill level descriptions.
  *
  * @returns The composed set of Swagger decorators.
