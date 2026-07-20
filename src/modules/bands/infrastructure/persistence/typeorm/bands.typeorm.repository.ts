@@ -238,6 +238,36 @@ export class BandsTypeormRepository implements BandsRepository {
   }
 
   /**
+   * Averages the members' happiness and the relationship levels of a band.
+   *
+   * @param bandId - The band id.
+   * @returns The average happiness and average relationship level (null when empty).
+   */
+  async getBandMemberAverages(bandId: string): Promise<{
+    happinessAvg: number | null;
+    relationshipAvg: number | null;
+  }> {
+    const members = await this.dataSource
+      .getRepository(BandMemberOrmEntity)
+      .find({ where: { bandId } });
+    const relationships = await this.dataSource
+      .getRepository(MemberRelationshipOrmEntity)
+      .find({ where: { bandId } });
+
+    const average = (values: number[]): number | null =>
+      values.length
+        ? Math.round(
+            (values.reduce((sum, v) => sum + v, 0) / values.length) * 100,
+          ) / 100
+        : null;
+
+    return {
+      happinessAvg: average(members.map((m) => m.happiness)),
+      relationshipAvg: average(relationships.map((r) => r.level)),
+    };
+  }
+
+  /**
    * Maps a raw ORM record to a clean domain entity.
    *
    * @param orm - The persistence model loaded from the database.

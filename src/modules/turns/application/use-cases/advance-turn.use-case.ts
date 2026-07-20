@@ -119,11 +119,15 @@ export class AdvanceTurnUseCase {
       ? await this.tryGenerateActiveEvent(actor, bandId, newYear)
       : null;
 
+    const climate = await this.bandsRepository.getBandMemberAverages(bandId);
+
     await this.turnsRepository.create({
       bandId,
       year: newYear,
       fanCountSnapshot: band.fanCount,
       balanceSnapshot: balanceAfter,
+      happinessAvgSnapshot: climate.happinessAvg,
+      relationshipAvgSnapshot: climate.relationshipAvg,
       passiveEventId: passiveEvent?.id ?? null,
       activeEventId: activeEvent?.id ?? null,
     });

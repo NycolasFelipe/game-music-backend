@@ -26,6 +26,8 @@ export function toTurnView(turn: TurnEntity): TurnView {
     period: formatPeriod(turn.year),
     fanCount: turn.fanCountSnapshot,
     balance: turn.balanceSnapshot,
+    happinessAvg: turn.happinessAvgSnapshot,
+    relationshipAvg: turn.relationshipAvgSnapshot,
     passiveEventId: turn.passiveEventId,
     activeEventId: turn.activeEventId,
     createdAt: turn.createdAt,

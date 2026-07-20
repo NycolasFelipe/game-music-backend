@@ -9,6 +9,8 @@ export interface CreateTurnData {
   year: number;
   fanCountSnapshot: number;
   balanceSnapshot: number | null;
+  happinessAvgSnapshot: number | null;
+  relationshipAvgSnapshot: number | null;
   passiveEventId: string | null;
   activeEventId: string | null;
 }

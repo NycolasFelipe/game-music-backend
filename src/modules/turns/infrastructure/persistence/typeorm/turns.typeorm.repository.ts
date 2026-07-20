@@ -30,6 +30,8 @@ export class TurnsTypeormRepository implements TurnsRepository {
       year: data.year,
       fanCountSnapshot: data.fanCountSnapshot,
       balanceSnapshot: data.balanceSnapshot,
+      happinessAvgSnapshot: data.happinessAvgSnapshot,
+      relationshipAvgSnapshot: data.relationshipAvgSnapshot,
       passiveEventId: data.passiveEventId,
       activeEventId: data.activeEventId,
     });
@@ -64,6 +66,8 @@ export class TurnsTypeormRepository implements TurnsRepository {
       orm.year,
       orm.fanCountSnapshot,
       orm.balanceSnapshot,
+      orm.happinessAvgSnapshot,
+      orm.relationshipAvgSnapshot,
       orm.passiveEventId,
       orm.activeEventId,
       orm.createdAt,

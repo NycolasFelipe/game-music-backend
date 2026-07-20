@@ -40,6 +40,26 @@ export class TurnOrmEntity {
   })
   balanceSnapshot: number | null;
 
+  @Column({
+    name: "happiness_avg_snapshot",
+    type: "numeric",
+    precision: 4,
+    scale: 2,
+    nullable: true,
+    transformer: numericTransformer,
+  })
+  happinessAvgSnapshot: number | null;
+
+  @Column({
+    name: "relationship_avg_snapshot",
+    type: "numeric",
+    precision: 4,
+    scale: 2,
+    nullable: true,
+    transformer: numericTransformer,
+  })
+  relationshipAvgSnapshot: number | null;
+
   @Column({ name: "passive_event_id", type: "uuid", nullable: true })
   passiveEventId: string | null;
 

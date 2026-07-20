@@ -126,4 +126,17 @@ export interface BandsRepository {
    * @returns A promise that resolves once applied.
    */
   advanceTurn(bandId: string, changes: AdvanceTurnInput): Promise<void>;
+
+  /**
+   * Averages the members' happiness and the relationship levels of a band, for
+   * snapshotting the band's "climate" per turn. Each is `null` when there is
+   * nothing to average.
+   *
+   * @param bandId - The band id.
+   * @returns The average happiness and average relationship level.
+   */
+  getBandMemberAverages(bandId: string): Promise<{
+    happinessAvg: number | null;
+    relationshipAvg: number | null;
+  }>;
 }

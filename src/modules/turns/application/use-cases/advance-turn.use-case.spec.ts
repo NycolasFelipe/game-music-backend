@@ -19,6 +19,7 @@ describe("AdvanceTurnUseCase", () => {
     findByIdAndOwner: jest.Mock;
     advanceTurn: jest.Mock;
     applyBandStateChanges: jest.Mock;
+    getBandMemberAverages: jest.Mock;
   };
   let activeEventsRepository: { countUnresolved: jest.Mock };
   let releasesRepository: { countInCreation: jest.Mock };
@@ -33,6 +34,9 @@ describe("AdvanceTurnUseCase", () => {
       findByIdAndOwner: jest.fn(),
       advanceTurn: jest.fn().mockResolvedValue(undefined),
       applyBandStateChanges: jest.fn().mockResolvedValue(undefined),
+      getBandMemberAverages: jest
+        .fn()
+        .mockResolvedValue({ happinessAvg: 1.5, relationshipAvg: 0.5 }),
     };
     activeEventsRepository = {
       countUnresolved: jest.fn().mockResolvedValue(0),

@@ -36,6 +36,8 @@ describe("ListTurnsUseCase", () => {
         2003.5,
         500,
         3200,
+        1.5,
+        0.5,
         "pe-1",
         null,
         new Date(),
