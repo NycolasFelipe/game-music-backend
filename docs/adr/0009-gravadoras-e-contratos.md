@@ -120,9 +120,10 @@ Gravadoras são **dado de domínio** (sem tabela). Novas tabelas:
   (`pendente`|`aceita`|`recusada`|`expirada`), `created_at`, `expires_at_year`
   (`numeric(6,1)`). Índice em `band_id`.
 
-Migrations previstas (após as do 0008): `...013000-CreateContractsTable`,
-`...014000-CreateLabelOffersTable`. Sem novas colunas em `bands` (o recoupment
-mora no contrato).
+Migrations previstas (próximos números livres): `...014000-CreateContractsTable`,
+`...015000-CreateLabelOffersTable` (a `013000` foi usada por
+`AddBalanceSnapshotToTurns`). Sem novas colunas em `bands` (o recoupment mora no
+contrato).
 
 ## Endpoints
 | Método | Rota | Descrição |
