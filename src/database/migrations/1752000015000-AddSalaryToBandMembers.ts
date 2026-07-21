@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner, TableColumn } from "typeorm";
 /**
  * Adds the per-member salary (`salary`) and the arrears counter
  * (`salary_unpaid_turns`) to `band_members` (ADR-0010). Existing rows are
- * backfilled with `SALARY_BASE`; the literal `250` mirrors `SALARY_BASE` at the
+ * backfilled with `SALARY_BASE`; the literal `80` mirrors `SALARY_BASE` at the
  * time this migration was authored (migrations are immutable history, so the
  * value is inlined rather than imported). The per-member target is only computed
  * in application code, so legacy rows get a reasonable flat default.
@@ -29,7 +29,7 @@ export class AddSalaryToBandMembers1752000015000 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      `UPDATE "band_members" SET "salary" = 250 WHERE "salary" IS NULL`,
+      `UPDATE "band_members" SET "salary" = 80 WHERE "salary" IS NULL`,
     );
 
     await queryRunner.changeColumn(
