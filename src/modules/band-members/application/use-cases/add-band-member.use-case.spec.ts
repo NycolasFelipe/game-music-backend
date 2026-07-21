@@ -30,12 +30,20 @@ const input = (characteristics: string[]): AddBandMemberInput => ({
 describe("AddBandMemberUseCase", () => {
   let useCase: AddBandMemberUseCase;
   let bandsRepository: { findByIdAndOwner: jest.Mock };
-  let membersRepository: { countByBandId: jest.Mock; create: jest.Mock };
+  let membersRepository: {
+    countByBandId: jest.Mock;
+    create: jest.Mock;
+    setSalary: jest.Mock;
+  };
   let relationshipsRepository: { syncForMember: jest.Mock };
 
   beforeEach(async () => {
     bandsRepository = { findByIdAndOwner: jest.fn() };
-    membersRepository = { countByBandId: jest.fn(), create: jest.fn() };
+    membersRepository = {
+      countByBandId: jest.fn(),
+      create: jest.fn(),
+      setSalary: jest.fn(),
+    };
     relationshipsRepository = { syncForMember: jest.fn() };
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -51,27 +59,33 @@ describe("AddBandMemberUseCase", () => {
     useCase = moduleRef.get(AddBandMemberUseCase);
   });
 
-  it("adds a valid member and returns its view", async () => {
-    bandsRepository.findByIdAndOwner.mockResolvedValue({ id: BAND_ID });
+  it("adds a valid member, seeds its salary and returns its view", async () => {
+    bandsRepository.findByIdAndOwner.mockResolvedValue({
+      id: BAND_ID,
+      fanCount: 0,
+      currentYear: 2000,
+    });
     membersRepository.countByBandId.mockResolvedValue(3);
-    membersRepository.create.mockResolvedValue(
-      new BandMemberEntity(
-        "m-1",
-        BAND_ID,
-        "João",
-        24,
-        "male",
-        "👨🏽",
-        1,
-        ["creative", "professional"],
-        { vocal: 1, guitar: 3, bass: 2, drums: 0, piano: 1, lyrics: 2 },
-        "bio",
-        "guitar",
-        null,
-        new Date(),
-        new Date(),
-      ),
+    const created = new BandMemberEntity(
+      "m-1",
+      BAND_ID,
+      "João",
+      24,
+      "male",
+      "👨🏽",
+      1,
+      ["creative", "professional"],
+      { vocal: 1, guitar: 3, bass: 2, drums: 0, piano: 1, lyrics: 2 },
+      "bio",
+      "guitar",
+      null,
+      0,
+      0,
+      new Date(),
+      new Date(),
     );
+    membersRepository.create.mockResolvedValue(created);
+    membersRepository.setSalary.mockResolvedValue(created);
 
     const result = await useCase.execute(
       actor,
@@ -82,6 +96,11 @@ describe("AddBandMemberUseCase", () => {
     expect(result).toMatchObject({ id: "m-1", bandId: BAND_ID, name: "João" });
     expect(membersRepository.create).toHaveBeenCalledWith(
       expect.objectContaining({ bandId: BAND_ID, name: "João" }),
+    );
+    expect(membersRepository.setSalary).toHaveBeenCalledWith(
+      "m-1",
+      BAND_ID,
+      expect.objectContaining({ reason: "inicial", effectiveYear: 2000 }),
     );
   });
 

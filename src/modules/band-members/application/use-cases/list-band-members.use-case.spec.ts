@@ -28,7 +28,10 @@ describe("ListBandMembersUseCase", () => {
   });
 
   it("returns the band's members when owned by the actor", async () => {
-    bandsRepository.findByIdAndOwner.mockResolvedValue({ id: BAND_ID });
+    bandsRepository.findByIdAndOwner.mockResolvedValue({
+      id: BAND_ID,
+      fanCount: 0,
+    });
     membersRepository.findByBandId.mockResolvedValue([
       new BandMemberEntity(
         "m-1",
@@ -43,6 +46,8 @@ describe("ListBandMembersUseCase", () => {
         "bio",
         "guitar",
         null,
+        300,
+        0,
         new Date(),
         new Date(),
       ),

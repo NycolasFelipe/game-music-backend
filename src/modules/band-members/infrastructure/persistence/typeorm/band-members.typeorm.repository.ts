@@ -1,14 +1,20 @@
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { InjectDataSource, InjectRepository } from "@nestjs/typeorm";
+import { DataSource, Repository } from "typeorm";
 import { BandMemberEntity } from "@/modules/band-members/domain/entities/band-member.entity";
+import { SalaryAgreementEntity } from "@/modules/band-members/domain/entities/salary-agreement.entity";
 import {
   BandMembersRepository,
   CreateBandMemberData,
+  SetSalaryData,
   UpdateBandMemberData,
 } from "@/modules/band-members/domain/repositories/band-members.repository";
-import { toBandMemberDomain } from "@/modules/band-members/infrastructure/persistence/typeorm/band-member.mapper";
+import {
+  toBandMemberDomain,
+  toSalaryAgreementDomain,
+} from "@/modules/band-members/infrastructure/persistence/typeorm/band-member.mapper";
 import { BandMemberOrmEntity } from "@/modules/band-members/infrastructure/persistence/typeorm/band-member.orm-entity";
+import { MemberSalaryOrmEntity } from "@/modules/band-members/infrastructure/persistence/typeorm/member-salary.orm-entity";
 
 /**
  * TypeORM-backed implementation of {@link BandMembersRepository}.
@@ -18,6 +24,10 @@ export class BandMembersTypeormRepository implements BandMembersRepository {
   constructor(
     @InjectRepository(BandMemberOrmEntity)
     private readonly repository: Repository<BandMemberOrmEntity>,
+    @InjectRepository(MemberSalaryOrmEntity)
+    private readonly salariesRepository: Repository<MemberSalaryOrmEntity>,
+    @InjectDataSource()
+    private readonly dataSource: DataSource,
   ) {}
 
   /**
@@ -116,6 +126,62 @@ export class BandMembersTypeormRepository implements BandMembersRepository {
   async deleteByIdAndBandId(id: string, bandId: string): Promise<boolean> {
     const result = await this.repository.delete({ id, bandId });
     return (result.affected ?? 0) > 0;
+  }
+
+  /**
+   * Sets a member's salary atomically: updates the current `salary` column and
+   * appends the change to the salary history (ADR-0010 §1).
+   *
+   * @param id - The member id.
+   * @param bandId - The band id the member must belong to.
+   * @param data - The new amount, effective year and reason.
+   * @returns The updated domain member, or `null` when not found in that band.
+   */
+  async setSalary(
+    id: string,
+    bandId: string,
+    data: SetSalaryData,
+  ): Promise<BandMemberEntity | null> {
+    return this.dataSource.transaction(async (manager) => {
+      const memberRepo = manager.getRepository(BandMemberOrmEntity);
+      const orm = await memberRepo.findOne({ where: { id, bandId } });
+      if (!orm) {
+        return null;
+      }
+
+      orm.salary = data.amount;
+      const saved = await memberRepo.save(orm);
+
+      await manager.getRepository(MemberSalaryOrmEntity).save(
+        manager.getRepository(MemberSalaryOrmEntity).create({
+          memberId: id,
+          bandId,
+          amount: data.amount,
+          effectiveYear: data.effectiveYear,
+          reason: data.reason,
+        }),
+      );
+
+      return this.toDomain(saved);
+    });
+  }
+
+  /**
+   * Lists a member's salary history (newest first).
+   *
+   * @param id - The member id.
+   * @param bandId - The band id the member must belong to.
+   * @returns The member's salary agreements (empty when none).
+   */
+  async findSalaryHistory(
+    id: string,
+    bandId: string,
+  ): Promise<SalaryAgreementEntity[]> {
+    const orms = await this.salariesRepository.find({
+      where: { memberId: id, bandId },
+      order: { createdAt: "DESC" },
+    });
+    return orms.map(toSalaryAgreementDomain);
   }
 
   /**

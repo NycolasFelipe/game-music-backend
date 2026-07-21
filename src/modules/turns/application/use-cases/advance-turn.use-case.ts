@@ -13,6 +13,7 @@ import { GenerateActiveEventUseCase } from "@/modules/events/application/use-cas
 import { GeneratePassiveEventsUseCase } from "@/modules/events/application/use-cases/generate-passive-events.use-case";
 import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
 import type { ActiveEventsRepository } from "@/modules/events/domain/repositories/active-events.repository";
+import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
 import { AccrueReleaseRoyaltiesUseCase } from "@/modules/releases/application/use-cases/accrue-release-royalties.use-case";
 import { RELEASES_REPOSITORY } from "@/modules/releases/domain/repositories/releases.repository";
 import type { ReleasesRepository } from "@/modules/releases/domain/repositories/releases.repository";
@@ -49,6 +50,7 @@ export class AdvanceTurnUseCase {
     private readonly generatePassiveEvents: GeneratePassiveEventsUseCase,
     private readonly generateActiveEvent: GenerateActiveEventUseCase,
     private readonly accrueReleaseRoyalties: AccrueReleaseRoyaltiesUseCase,
+    private readonly paySalaries: PaySalariesUseCase,
   ) {}
 
   /**
@@ -103,14 +105,41 @@ export class AdvanceTurnUseCase {
       ageMembers: agedMembers,
     });
 
-    // Accrue this turn's release royalties into the band's balance. This is the
-    // only band-state change the tick makes (ADR-0008 emenda to ADR-0006 §6);
-    // fans/happiness/relationships still only change via event resolution.
+    // Accrue this turn's release royalties (income), then pay salaries (expense)
+    // from the resulting cash. Money, happiness (salary satisfaction/arrears) and
+    // member departures over unpaid salary are the band-state the tick moves
+    // (ADR-0008 + ADR-0010 emendas to ADR-0006 §6); fans and relationships still
+    // only change via event resolution.
     const royalties = await this.accrueReleaseRoyalties.execute(bandId);
-    const balanceAfter = Math.round((band.balance + royalties) * 100) / 100;
-    if (royalties > 0) {
+    const cashBeforePayroll =
+      Math.round((band.balance + royalties) * 100) / 100;
+    const payroll = await this.paySalaries.execute(
+      bandId,
+      band.fanCount,
+      cashBeforePayroll,
+    );
+    const balanceAfter =
+      Math.round((cashBeforePayroll - payroll.totalPaid) * 100) / 100;
+
+    const survivors = payroll.outcomes.filter((o) => !o.departed);
+    const departedMemberIds = payroll.outcomes
+      .filter((o) => o.departed)
+      .map((o) => o.memberId);
+
+    if (balanceAfter !== band.balance || payroll.outcomes.length > 0) {
       await this.bandsRepository.applyBandStateChanges(bandId, {
         balance: balanceAfter,
+        memberHappiness: survivors.map((o) => ({
+          memberId: o.memberId,
+          happiness: o.newHappiness,
+        })),
+        memberSalaryArrears: survivors.map((o) => ({
+          memberId: o.memberId,
+          unpaidTurns: o.newUnpaidTurns,
+        })),
+        removedMemberIds: departedMemberIds.length
+          ? departedMemberIds
+          : undefined,
       });
     }
 
@@ -135,7 +164,9 @@ export class AdvanceTurnUseCase {
     this.logger.log(
       `Band ${bandId} advanced to ${formatPeriod(newYear)}` +
         `${agedMembers ? " (members aged)" : ""}` +
-        `${activeEvent ? ` — active event "${activeEvent.templateId}"` : ""}`,
+        `${activeEvent ? ` — active event "${activeEvent.templateId}"` : ""}` +
+        `${payroll.totalPaid > 0 ? ` — paid ${payroll.totalPaid} in salaries` : ""}` +
+        `${departedMemberIds.length ? ` — ${departedMemberIds.length} member(s) left over unpaid salary` : ""}`,
     );
 
     return {
@@ -145,6 +176,10 @@ export class AdvanceTurnUseCase {
       agedMembers,
       passiveEvent,
       activeEvent,
+      salariesDue: payroll.totalDue,
+      salariesPaid: payroll.totalPaid,
+      salariesFullyPaid: payroll.fullyPaid,
+      departedMemberIds,
     };
   }
 

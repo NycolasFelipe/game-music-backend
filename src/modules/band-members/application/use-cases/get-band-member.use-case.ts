@@ -46,6 +46,6 @@ export class GetBandMemberUseCase {
       throw new NotFoundException("Member not found");
     }
 
-    return toBandMemberView(member);
+    return toBandMemberView(member, band.fanCount);
   }
 }

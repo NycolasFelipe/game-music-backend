@@ -29,6 +29,10 @@ export class BandMemberEntity {
     public readonly primarySkill: SkillType,
     /** Year the member joined the band (null when unset). */
     public readonly joinYear: number | null,
+    /** Current salary paid per turn (ADR-0010). */
+    public readonly salary: number,
+    /** Consecutive turns the member went unpaid (arrears counter, ADR-0010). */
+    public readonly salaryUnpaidTurns: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
   ) {}

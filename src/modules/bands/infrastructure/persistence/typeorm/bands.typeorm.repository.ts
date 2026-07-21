@@ -1,8 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { InjectDataSource, InjectRepository } from "@nestjs/typeorm";
-import { DataSource, Repository } from "typeorm";
+import { DataSource, In, Repository } from "typeorm";
+import { targetSalary } from "@/modules/band-members/domain/salary/salary.calculator";
 import { toBandMemberDomain } from "@/modules/band-members/infrastructure/persistence/typeorm/band-member.mapper";
 import { BandMemberOrmEntity } from "@/modules/band-members/infrastructure/persistence/typeorm/band-member.orm-entity";
+import { MemberSalaryOrmEntity } from "@/modules/band-members/infrastructure/persistence/typeorm/member-salary.orm-entity";
 import { BandWithMembers } from "@/modules/bands/domain/entities/band-with-members";
 import { MemberRelationshipEntity } from "@/modules/bands/domain/entities/member-relationship.entity";
 import { BandEntity } from "@/modules/bands/domain/entities/band.entity";
@@ -73,11 +75,34 @@ export class BandsTypeormRepository implements BandsRepository {
           biography: member.biography,
           primarySkill: member.primarySkill,
           joinYear: member.joinYear ?? null,
+          // Initial salary = target salary at founding (ADR-0010 §3). Fan count
+          // is 0 on creation, so the fame factor is neutral.
+          salary: targetSalary(
+            member.skills,
+            member.characteristics,
+            savedBand.fanCount,
+          ),
         }),
       );
       const savedMembers = memberOrms.length
         ? await memberRepo.save(memberOrms)
         : [];
+
+      // Seed each member's salary history with the initial agreement.
+      const salaryRepo = manager.getRepository(MemberSalaryOrmEntity);
+      if (savedMembers.length) {
+        await salaryRepo.save(
+          savedMembers.map((member) =>
+            salaryRepo.create({
+              memberId: member.id,
+              bandId: savedBand.id,
+              amount: member.salary,
+              effectiveYear: savedBand.currentYear,
+              reason: "inicial",
+            }),
+          ),
+        );
+      }
 
       const relationshipRepo = manager.getRepository(
         MemberRelationshipOrmEntity,
@@ -212,6 +237,23 @@ export class BandsTypeormRepository implements BandsRepository {
             { bandId, memberAId: rel.memberAId, memberBId: rel.memberBId },
             { level: rel.level },
           );
+      }
+
+      for (const arrears of changes.memberSalaryArrears ?? []) {
+        await manager
+          .getRepository(BandMemberOrmEntity)
+          .update(
+            { id: arrears.memberId, bandId },
+            { salaryUnpaidTurns: arrears.unpaidTurns },
+          );
+      }
+
+      // Remove departed members last; cascades their relationships and salary
+      // history (FKs `ON DELETE CASCADE`).
+      if (changes.removedMemberIds?.length) {
+        await manager
+          .getRepository(BandMemberOrmEntity)
+          .delete({ id: In(changes.removedMemberIds), bandId });
       }
     });
   }

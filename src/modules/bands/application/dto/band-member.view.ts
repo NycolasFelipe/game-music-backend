@@ -20,4 +20,10 @@ export class BandMemberView {
   biography: string;
   primarySkill: SkillType;
   joinYear: number | null;
+  /** Current salary paid per turn (ADR-0010). */
+  salary: number;
+  /** Salary that keeps the member content, from skill/traits/fame. */
+  salaryTarget: number;
+  /** Consecutive turns the member went unpaid (arrears counter). */
+  salaryUnpaidTurns: number;
 }

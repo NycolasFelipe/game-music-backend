@@ -39,6 +39,10 @@ export interface BandStateChangesInput {
     memberBId: string;
     level: number;
   }>;
+  /** New absolute salary-arrears counter per member (ADR-0010). */
+  memberSalaryArrears?: Array<{ memberId: string; unpaidTurns: number }>;
+  /** Members to remove from the band this step (e.g. departed over arrears). */
+  removedMemberIds?: string[];
 }
 
 /** State transition applied when a band takes a turn. */

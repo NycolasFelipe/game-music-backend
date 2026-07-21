@@ -13,6 +13,7 @@ import {
 import { CreateBandMemberSeedDto } from "@/modules/bands/presentation/http/dto/create-band-member-seed.dto";
 import { GenerateAvatarDto } from "@/modules/band-members/presentation/http/dto/generate-avatar.dto";
 import { GenerateCandidatesDto } from "@/modules/band-members/presentation/http/dto/generate-candidates.dto";
+import { SetMemberSalaryDto } from "@/modules/band-members/presentation/http/dto/set-member-salary.dto";
 import { UpdateBandMemberDto } from "@/modules/band-members/presentation/http/dto/update-band-member.dto";
 
 /** `bandId` path parameter shared by the nested member routes. */
@@ -171,6 +172,39 @@ export function ApiRemoveBandMember() {
     memberIdParam(),
     ApiOperation({ summary: "Remove a member from a band" }),
     ApiNoContentResponse({ description: "The member was removed." }),
+    ApiNotFoundResponse({ description: "Band or member not found." }),
+  );
+}
+
+/**
+ * Swagger docs for adjusting a member's salary.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiSetMemberSalary() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    bandIdParam(),
+    memberIdParam(),
+    ApiOperation({ summary: "Adjust a member's salary" }),
+    ApiBody({ type: SetMemberSalaryDto }),
+    ApiOkResponse({ description: "The updated member." }),
+    ApiNotFoundResponse({ description: "Band or member not found." }),
+  );
+}
+
+/**
+ * Swagger docs for listing a member's salary history.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiGetMemberSalaryHistory() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    bandIdParam(),
+    memberIdParam(),
+    ApiOperation({ summary: "List a member's salary history" }),
+    ApiOkResponse({ description: "The member's salary agreements." }),
     ApiNotFoundResponse({ description: "Band or member not found." }),
   );
 }

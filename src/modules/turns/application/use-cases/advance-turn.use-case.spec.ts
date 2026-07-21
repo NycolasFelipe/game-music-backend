@@ -5,6 +5,7 @@ import { BANDS_REPOSITORY } from "@/modules/bands/domain/repositories/bands.repo
 import { GenerateActiveEventUseCase } from "@/modules/events/application/use-cases/generate-active-event.use-case";
 import { GeneratePassiveEventsUseCase } from "@/modules/events/application/use-cases/generate-passive-events.use-case";
 import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
+import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
 import { AccrueReleaseRoyaltiesUseCase } from "@/modules/releases/application/use-cases/accrue-release-royalties.use-case";
 import { RELEASES_REPOSITORY } from "@/modules/releases/domain/repositories/releases.repository";
 import { AdvanceTurnUseCase } from "@/modules/turns/application/use-cases/advance-turn.use-case";
@@ -27,7 +28,15 @@ describe("AdvanceTurnUseCase", () => {
   let generatePassiveEvents: { execute: jest.Mock };
   let generateActiveEvent: { execute: jest.Mock };
   let accrueReleaseRoyalties: { execute: jest.Mock };
+  let paySalaries: { execute: jest.Mock };
   let randomSpy: jest.SpyInstance;
+
+  const emptyPayroll = {
+    totalDue: 0,
+    totalPaid: 0,
+    fullyPaid: true,
+    outcomes: [],
+  };
 
   beforeEach(async () => {
     bandsRepository = {
@@ -50,6 +59,7 @@ describe("AdvanceTurnUseCase", () => {
     generatePassiveEvents = { execute: jest.fn().mockResolvedValue([]) };
     generateActiveEvent = { execute: jest.fn().mockResolvedValue(null) };
     accrueReleaseRoyalties = { execute: jest.fn().mockResolvedValue(0) };
+    paySalaries = { execute: jest.fn().mockResolvedValue(emptyPayroll) };
     randomSpy = jest.spyOn(Math, "random");
 
     const moduleRef = await Test.createTestingModule({
@@ -68,6 +78,7 @@ describe("AdvanceTurnUseCase", () => {
           provide: AccrueReleaseRoyaltiesUseCase,
           useValue: accrueReleaseRoyalties,
         },
+        { provide: PaySalariesUseCase, useValue: paySalaries },
       ],
     }).compile();
     useCase = moduleRef.get(AdvanceTurnUseCase);
@@ -192,12 +203,68 @@ describe("AdvanceTurnUseCase", () => {
     await useCase.execute(actor, BAND_ID);
 
     expect(accrueReleaseRoyalties.execute).toHaveBeenCalledWith(BAND_ID);
+    expect(paySalaries.execute).toHaveBeenCalledWith(BAND_ID, 10, 1250.5);
     expect(bandsRepository.applyBandStateChanges).toHaveBeenCalledWith(
       BAND_ID,
       {
         balance: 1250.5,
+        memberHappiness: [],
+        memberSalaryArrears: [],
+        removedMemberIds: undefined,
       },
     );
+  });
+
+  it("pays salaries, applies happiness/arrears and removes departed members", async () => {
+    bandsRepository.findByIdAndOwner.mockResolvedValue({
+      id: BAND_ID,
+      currentYear: 2003,
+      fanCount: 10,
+      balance: 1000,
+    });
+    accrueReleaseRoyalties.execute.mockResolvedValue(0);
+    paySalaries.execute.mockResolvedValue({
+      totalDue: 700,
+      totalPaid: 300,
+      fullyPaid: false,
+      outcomes: [
+        {
+          memberId: "m-1",
+          salary: 300,
+          paid: true,
+          amountPaid: 300,
+          newHappiness: 1.15,
+          newUnpaidTurns: 0,
+          departed: false,
+        },
+        {
+          memberId: "m-2",
+          salary: 400,
+          paid: false,
+          amountPaid: 0,
+          newHappiness: -1,
+          newUnpaidTurns: 3,
+          departed: true,
+        },
+      ],
+    });
+    randomSpy.mockReturnValue(0.9);
+
+    const result = await useCase.execute(actor, BAND_ID);
+
+    expect(bandsRepository.applyBandStateChanges).toHaveBeenCalledWith(
+      BAND_ID,
+      {
+        balance: 700,
+        memberHappiness: [{ memberId: "m-1", happiness: 1.15 }],
+        memberSalaryArrears: [{ memberId: "m-1", unpaidTurns: 0 }],
+        removedMemberIds: ["m-2"],
+      },
+    );
+    expect(result.salariesDue).toBe(700);
+    expect(result.salariesPaid).toBe(300);
+    expect(result.salariesFullyPaid).toBe(false);
+    expect(result.departedMemberIds).toEqual(["m-2"]);
   });
 
   it("does not touch the balance when there are no royalties", async () => {

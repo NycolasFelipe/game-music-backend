@@ -17,18 +17,24 @@ import { AuthenticatedUserEntity } from "@/common/entities/authenticated-user.en
 import { JwtAuthGuard } from "@/common/guards/jwt-auth.guard";
 import { BandMemberView } from "@/modules/bands/application/dto/band-member.view";
 import { CreateBandMemberSeedDto } from "@/modules/bands/presentation/http/dto/create-band-member-seed.dto";
+import { SalaryAgreementView } from "@/modules/band-members/application/dto/salary-agreement.view";
 import { AddBandMemberUseCase } from "@/modules/band-members/application/use-cases/add-band-member.use-case";
 import { GetBandMemberUseCase } from "@/modules/band-members/application/use-cases/get-band-member.use-case";
+import { GetMemberSalaryHistoryUseCase } from "@/modules/band-members/application/use-cases/get-member-salary-history.use-case";
 import { ListBandMembersUseCase } from "@/modules/band-members/application/use-cases/list-band-members.use-case";
 import { RemoveBandMemberUseCase } from "@/modules/band-members/application/use-cases/remove-band-member.use-case";
+import { SetMemberSalaryUseCase } from "@/modules/band-members/application/use-cases/set-member-salary.use-case";
 import { UpdateBandMemberUseCase } from "@/modules/band-members/application/use-cases/update-band-member.use-case";
 import {
   ApiAddBandMember,
   ApiGetBandMember,
+  ApiGetMemberSalaryHistory,
   ApiListBandMembers,
   ApiRemoveBandMember,
+  ApiSetMemberSalary,
   ApiUpdateBandMember,
 } from "@/modules/band-members/decorators/api-band-members.decorator";
+import { SetMemberSalaryDto } from "@/modules/band-members/presentation/http/dto/set-member-salary.dto";
 import { UpdateBandMemberDto } from "@/modules/band-members/presentation/http/dto/update-band-member.dto";
 
 /**
@@ -45,6 +51,8 @@ export class BandMembersController {
     private readonly getBandMemberUseCase: GetBandMemberUseCase,
     private readonly updateBandMemberUseCase: UpdateBandMemberUseCase,
     private readonly removeBandMemberUseCase: RemoveBandMemberUseCase,
+    private readonly setMemberSalaryUseCase: SetMemberSalaryUseCase,
+    private readonly getMemberSalaryHistoryUseCase: GetMemberSalaryHistoryUseCase,
   ) {}
 
   /**
@@ -136,5 +144,43 @@ export class BandMembersController {
     @Param("memberId", ParseUUIDPipe) memberId: string,
   ): Promise<void> {
     return this.removeBandMemberUseCase.execute(actor, bandId, memberId);
+  }
+
+  /**
+   * Adjusts a member's salary (ADR-0010).
+   *
+   * @param actor - The authenticated owner.
+   * @param bandId - The band id.
+   * @param memberId - The member id.
+   * @param dto - The new salary amount.
+   * @returns The updated member.
+   */
+  @Patch(":memberId/salary")
+  @ApiSetMemberSalary()
+  setSalary(
+    @CurrentUser() actor: AuthenticatedUserEntity,
+    @Param("bandId", ParseUUIDPipe) bandId: string,
+    @Param("memberId", ParseUUIDPipe) memberId: string,
+    @Body() dto: SetMemberSalaryDto,
+  ): Promise<BandMemberView> {
+    return this.setMemberSalaryUseCase.execute(actor, bandId, memberId, dto);
+  }
+
+  /**
+   * Lists a member's salary history (ADR-0010).
+   *
+   * @param actor - The authenticated owner.
+   * @param bandId - The band id.
+   * @param memberId - The member id.
+   * @returns The member's salary agreements (newest first).
+   */
+  @Get(":memberId/salary/history")
+  @ApiGetMemberSalaryHistory()
+  salaryHistory(
+    @CurrentUser() actor: AuthenticatedUserEntity,
+    @Param("bandId", ParseUUIDPipe) bandId: string,
+    @Param("memberId", ParseUUIDPipe) memberId: string,
+  ): Promise<SalaryAgreementView[]> {
+    return this.getMemberSalaryHistoryUseCase.execute(actor, bandId, memberId);
   }
 }

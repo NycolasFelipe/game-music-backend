@@ -28,7 +28,10 @@ describe("UpdateBandMemberUseCase", () => {
   });
 
   it("applies the changes and returns the updated member", async () => {
-    bandsRepository.findByIdAndOwner.mockResolvedValue({ id: BAND_ID });
+    bandsRepository.findByIdAndOwner.mockResolvedValue({
+      id: BAND_ID,
+      fanCount: 0,
+    });
     membersRepository.update.mockResolvedValue(
       new BandMemberEntity(
         "m-1",
@@ -43,6 +46,8 @@ describe("UpdateBandMemberUseCase", () => {
         "nova bio",
         "guitar",
         null,
+        300,
+        0,
         new Date(),
         new Date(),
       ),

@@ -62,6 +62,18 @@ export class BandMemberOrmEntity {
   @Column({ name: "join_year", type: "smallint", nullable: true })
   joinYear: number | null;
 
+  @Column({
+    type: "numeric",
+    precision: 12,
+    scale: 2,
+    default: 0,
+    transformer: numericTransformer,
+  })
+  salary: number;
+
+  @Column({ name: "salary_unpaid_turns", type: "smallint", default: 0 })
+  salaryUnpaidTurns: number;
+
   @CreateDateColumn({ name: "created_at", type: "timestamptz" })
   createdAt: Date;
 

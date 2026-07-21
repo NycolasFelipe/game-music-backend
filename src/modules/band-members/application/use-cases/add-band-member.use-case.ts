@@ -16,6 +16,7 @@ import { MEMBER_RELATIONSHIPS_REPOSITORY } from "@/modules/bands/domain/reposito
 import type { MemberRelationshipsRepository } from "@/modules/bands/domain/repositories/member-relationships.repository";
 import { AddBandMemberInput } from "@/modules/band-members/application/dto/add-band-member.input";
 import { getUnknownCharacteristicIds } from "@/modules/band-members/domain/data/characteristics";
+import { targetSalary } from "@/modules/band-members/domain/salary/salary.calculator";
 import { BAND_MEMBERS_REPOSITORY } from "@/modules/band-members/domain/repositories/band-members.repository";
 import type { BandMembersRepository } from "@/modules/band-members/domain/repositories/band-members.repository";
 
@@ -76,11 +77,27 @@ export class AddBandMemberUseCase {
       ...input,
     });
 
+    // Seed the member's initial salary at their target (ADR-0010 §3).
+    const initialSalary = targetSalary(
+      member.skills,
+      member.characteristics,
+      band.fanCount,
+    );
+    const salariedMember = await this.bandMembersRepository.setSalary(
+      member.id,
+      bandId,
+      {
+        amount: initialSalary,
+        effectiveYear: band.currentYear,
+        reason: "inicial",
+      },
+    );
+
     // Generate relationships between the new member and the existing ones.
     await this.relationshipsRepository.syncForMember(bandId, member.id);
 
     this.logger.log(`Member "${member.name}" added to band ${bandId}`);
 
-    return toBandMemberView(member);
+    return toBandMemberView(salariedMember ?? member, band.fanCount);
   }
 }

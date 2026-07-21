@@ -17,4 +17,12 @@ export class AdvanceTurnView {
   passiveEvent: PassiveEventView | null;
   /** The active (decision) event rolled this turn, if any. */
   activeEvent: ActiveEventView | null;
+  /** Total salaries owed this turn (ADR-0010). */
+  salariesDue: number;
+  /** Total salaries actually paid from the band's cash this turn. */
+  salariesPaid: number;
+  /** Whether every member was paid in full this turn. */
+  salariesFullyPaid: boolean;
+  /** Ids of members who left the band this turn over unpaid salary. */
+  departedMemberIds: string[];
 }

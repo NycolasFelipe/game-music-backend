@@ -4,6 +4,7 @@ import { FameView } from "@/modules/bands/application/dto/fame.view";
 import { BandWithMembersView } from "@/modules/bands/application/dto/band-with-members.view";
 import { MemberRelationshipView } from "@/modules/bands/application/dto/member-relationship.view";
 import type { BandMemberEntity } from "@/modules/band-members/domain/entities/band-member.entity";
+import { targetSalary } from "@/modules/band-members/domain/salary/salary.calculator";
 import type { BandWithMembers } from "@/modules/bands/domain/entities/band-with-members";
 import type { MemberRelationshipEntity } from "@/modules/bands/domain/entities/member-relationship.entity";
 import type { BandEntity } from "@/modules/bands/domain/entities/band.entity";
@@ -42,12 +43,17 @@ export function toBandView(band: BandEntity): BandView {
 }
 
 /**
- * Maps a band-member domain entity to its public view.
+ * Maps a band-member domain entity to its public view. The band's fan count is
+ * needed to derive the salary target (ADR-0010 §8).
  *
  * @param member - The band-member domain entity.
+ * @param fanCount - The band's current fan count (drives the salary target).
  * @returns The member view.
  */
-export function toBandMemberView(member: BandMemberEntity): BandMemberView {
+export function toBandMemberView(
+  member: BandMemberEntity,
+  fanCount: number,
+): BandMemberView {
   return {
     id: member.id,
     bandId: member.bandId,
@@ -61,6 +67,9 @@ export function toBandMemberView(member: BandMemberEntity): BandMemberView {
     biography: member.biography,
     primarySkill: member.primarySkill,
     joinYear: member.joinYear,
+    salary: member.salary,
+    salaryTarget: targetSalary(member.skills, member.characteristics, fanCount),
+    salaryUnpaidTurns: member.salaryUnpaidTurns,
   };
 }
 
@@ -91,7 +100,9 @@ export function toBandWithMembersView(
 ): BandWithMembersView {
   return {
     ...toBandView(composed.band),
-    members: composed.members.map(toBandMemberView),
+    members: composed.members.map((member) =>
+      toBandMemberView(member, composed.band.fanCount),
+    ),
     relationships: composed.relationships.map(toMemberRelationshipView),
   };
 }

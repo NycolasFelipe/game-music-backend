@@ -1,5 +1,7 @@
 import { BandMemberEntity } from "@/modules/band-members/domain/entities/band-member.entity";
+import { SalaryAgreementEntity } from "@/modules/band-members/domain/entities/salary-agreement.entity";
 import { BandMemberOrmEntity } from "@/modules/band-members/infrastructure/persistence/typeorm/band-member.orm-entity";
+import { MemberSalaryOrmEntity } from "@/modules/band-members/infrastructure/persistence/typeorm/member-salary.orm-entity";
 
 /**
  * Maps a raw band-member ORM record to a clean domain entity. Exported as a
@@ -23,7 +25,29 @@ export function toBandMemberDomain(orm: BandMemberOrmEntity): BandMemberEntity {
     orm.biography,
     orm.primarySkill,
     orm.joinYear,
+    orm.salary,
+    orm.salaryUnpaidTurns,
     orm.createdAt,
     orm.updatedAt,
+  );
+}
+
+/**
+ * Maps a raw salary-agreement ORM record to its domain entity.
+ *
+ * @param orm - The persistence model loaded from the database.
+ * @returns The corresponding {@link SalaryAgreementEntity}.
+ */
+export function toSalaryAgreementDomain(
+  orm: MemberSalaryOrmEntity,
+): SalaryAgreementEntity {
+  return new SalaryAgreementEntity(
+    orm.id,
+    orm.memberId,
+    orm.bandId,
+    orm.amount,
+    orm.effectiveYear,
+    orm.reason,
+    orm.createdAt,
   );
 }
