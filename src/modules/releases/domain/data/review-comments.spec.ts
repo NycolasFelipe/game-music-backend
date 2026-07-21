@@ -39,11 +39,20 @@ describe("review-comments", () => {
       expect(typeof result.format).toBe("string");
     });
 
+    it("signs each review with an author", () => {
+      const result = selectReviewComments(input);
+      for (const comment of result.critic) {
+        expect(comment.author.length).toBeGreaterThan(0);
+      }
+      // Public authors read like "Name, no <platform>".
+      expect(result.public[0].author).toMatch(/, no /);
+    });
+
     it("picks distinct comments from the right band", () => {
       const result = selectReviewComments(input);
-      expect(new Set(result.critic).size).toBe(3);
+      expect(new Set(result.critic.map((c) => c.text)).size).toBe(3);
       for (const comment of result.critic) {
-        expect(CRITIC_COMMENTS.excelente).toContain(comment);
+        expect(CRITIC_COMMENTS.excelente).toContain(comment.text);
       }
     });
 

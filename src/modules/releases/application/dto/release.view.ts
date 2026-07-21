@@ -29,10 +29,10 @@ export class ReleaseView {
   criticTier: string | null;
   /** Public review tier id, derived from `publicScore` (`null` when no score). */
   publicTier: string | null;
-  /** Three specialized-critic blurbs (empty when no score). */
-  criticComments: string[];
-  /** Three public (fan) blurbs (empty when no score). */
-  publicComments: string[];
+  /** Three specialized-critic blurbs with their outlet (empty when no score). */
+  criticComments: Array<{ text: string; author: string }>;
+  /** Three public (fan) blurbs with their author (empty when no score). */
+  publicComments: Array<{ text: string; author: string }>;
   /** A format-specific editorial note (`null` when no score / no note). */
   formatComment: string | null;
   fansGained: number | null;

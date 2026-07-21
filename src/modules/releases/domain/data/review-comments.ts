@@ -257,10 +257,71 @@ export function formatCommentsFor(formatId: string): string[] {
   return FORMAT_COMMENTS[formatId] ?? [];
 }
 
+/** Fictional specialized-critic outlets that sign the critic reviews. */
+export const CRITIC_OUTLETS: string[] = [
+  "Revista Distorção",
+  "Portal Acorde",
+  "Blog Grave & Agudo",
+  "Coluna Vinil Quente",
+  "Canal Contrabaixo",
+  "Fanzine Feedback",
+  "Palco Central",
+  "Podcast Sem Refrão",
+  "O Amplificador",
+  "Revista Timbre",
+  "Rádio Onda Média",
+  "Gazeta do Groove",
+  "Sonoridade",
+  "Revista Clave",
+  "Portal Dissonância",
+  "Caderno B7",
+];
+
+/** Names that sign the public reviews. */
+export const PUBLIC_REVIEWER_NAMES: string[] = [
+  "Caio Silva",
+  "Marina Rocha",
+  "Bruno Alves",
+  "Letícia Nunes",
+  "Rafael Costa",
+  "Aline Souza",
+  "Gustavo Lima",
+  "Bianca Farias",
+  "Diego Martins",
+  "Camila Torres",
+  "Thiago Ramos",
+  "Júlia Mendes",
+  "Felipe Araújo",
+  "Larissa Pinto",
+  "Vinícius Barros",
+  "Patrícia Gomes",
+  "Lucas Carvalho",
+  "Fernanda Dias",
+  "André Moraes",
+  "Sofia Ribeiro",
+];
+
+/** Platforms a public review was posted on (e.g. "no X"). */
+export const PUBLIC_PLATFORMS: string[] = [
+  "no X",
+  "no Instagram",
+  "no TikTok",
+  "no YouTube",
+  "no Threads",
+  "no fórum",
+  "no Reddit",
+];
+
+/** A review blurb paired with the author who signed it. */
+export interface ReviewComment {
+  text: string;
+  author: string;
+}
+
 /** The comments selected to accompany a work's reviews. */
 export interface SelectedReviewComments {
-  critic: string[];
-  public: string[];
+  critic: ReviewComment[];
+  public: ReviewComment[];
   format: string | null;
 }
 
@@ -323,9 +384,42 @@ export function selectReviewComments(input: {
   const publicPool = PUBLIC_COMMENTS[publicBandFor(input.publicScore)];
   const formatPool = formatCommentsFor(input.format);
 
+  const criticTexts = pickDistinct(
+    criticPool,
+    3,
+    hashString(`${input.id}:critic`),
+  );
+  const criticOutlets = pickDistinct(
+    CRITIC_OUTLETS,
+    3,
+    hashString(`${input.id}:critic-outlet`),
+  );
+
+  const publicTexts = pickDistinct(
+    publicPool,
+    3,
+    hashString(`${input.id}:public`),
+  );
+  const publicNames = pickDistinct(
+    PUBLIC_REVIEWER_NAMES,
+    3,
+    hashString(`${input.id}:public-name`),
+  );
+
   return {
-    critic: pickDistinct(criticPool, 3, hashString(`${input.id}:critic`)),
-    public: pickDistinct(publicPool, 3, hashString(`${input.id}:public`)),
+    critic: criticTexts.map((text, index) => ({
+      text,
+      author: criticOutlets[index] ?? criticOutlets[0],
+    })),
+    public: publicTexts.map((text, index) => ({
+      text,
+      author: `${publicNames[index] ?? publicNames[0]}, ${
+        PUBLIC_PLATFORMS[
+          hashString(`${input.id}:public-platform:${index}`) %
+            PUBLIC_PLATFORMS.length
+        ]
+      }`,
+    })),
     format: formatPool.length
       ? pickDistinct(formatPool, 1, hashString(`${input.id}:format`))[0]
       : null,
