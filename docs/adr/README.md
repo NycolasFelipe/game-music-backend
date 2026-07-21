@@ -23,6 +23,7 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | [0007](0007-fama.md) | Fama (nível derivado de fãs) | Aceita |
 | [0008](0008-obras-musicais.md) | Obras musicais (criação de discos) | Aceita |
 | [0009](0009-gravadoras-e-contratos.md) | Gravadoras e contratos (economia realista) | Aceita (impl. pendente) |
+| [0010](0010-salarios-por-integrante.md) | Salários por integrante | Aceita |
 
 ## Veja também
 - [Trabalho futuro](../future-work.md) — backlog de ideias de gameplay ainda não

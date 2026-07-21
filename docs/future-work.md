@@ -12,6 +12,9 @@ Convenção dos esboços: *Motivação* (por que), *Esboço* (como, em traços),
 
 ## 1. Salários por integrante
 
+> **Promovido:** este item virou o [ADR-0010 — Salários por integrante](adr/0010-salarios-por-integrante.md)
+> (Aceita) e foi implementado. O esboço abaixo fica como registro da motivação.
+
 **Motivação.** Dar peso à gestão financeira: hoje o dinheiro só entra (obras,
 royalties). Membros deveriam **custar** — um fluxo de saída recorrente que
 obriga o jogador a equilibrar produção e caixa.
