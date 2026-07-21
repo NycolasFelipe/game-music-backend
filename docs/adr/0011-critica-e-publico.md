@@ -67,13 +67,25 @@ o oposto.
 constantes mapeados por `BandTheme`. Os pesos e escalas vivem em
 `domain/constants/review.constant.ts` (versionados, sujeitos a playtesting).
 
-### 5. Selos: uma escala única (Metacritic)
-Um ladder **único** de patamares rotulados (`domain/data/review-tiers.ts`:
-Massacrado · Misto · Favorável · Aclamado · Consagrado, com emoji e limiar
-`minScore`), aplicado **aos dois escores** — no padrão de `mapQualityTier`
-(ADR-0007/0008), porém **display-only** (sem multiplicadores econômicos). Exposto
-por `GET /releases/review-tiers` (como `quality-tiers`); a **cor** vive no
-frontend (`labels.ts`), como já ocorre.
+### 5. Selos em estrelas + comentários (crítica e público)
+Um ladder **único** de patamares (`domain/data/review-tiers.ts`: Massacrado ·
+Misto · Favorável · Aclamado · Consagrado · **Obra-prima**, com **estrelas** 1–5
+e limiar `minScore`), aplicado **aos dois escores** — no padrão de
+`mapQualityTier` (ADR-0007/0008), porém **display-only** (sem multiplicadores
+econômicos). O selo mostra **estrelas** (⭐/☆), não emoji. **Obra-prima** é o topo
+**exclusivo** (score ≥ 92): compartilha as 5 estrelas com Consagrado, mas se
+distingue pelo rótulo e por uma cor própria (grape). Exposto por
+`GET /releases/review-tiers`; a **cor** vive no frontend (`labels.ts`).
+
+Cada obra também recebe **3 comentários da crítica especializada** e **3 do
+público**, mais uma **nota específica do formato** (`domain/data/review-comments.ts`).
+Os comentários têm tom **levemente humorístico (estilo tycoon)**, com pools de
+**≥10 blurbs por faixa** — crítica em 5 faixas (negativa/mista/boa/excelente/
+obra-prima), público em 5 (uma por estrela), e notas por formato. São
+**selecionados de forma determinística** por obra (semente = id, via FNV-1a +
+LCG), **derivados na leitura** (`release.mapper`), estáveis por obra e **sem
+persistência** — se os pools mudarem, o texto acompanha. Expostos na view como
+`criticComments`, `publicComments` e `formatComment`.
 
 ### 6. Persistência mínima; tiers derivados
 Persistem-se **só os dois escores** em `releases` (`critic_score`,

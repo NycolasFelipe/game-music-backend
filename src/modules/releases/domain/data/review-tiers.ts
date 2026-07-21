@@ -12,6 +12,7 @@ export const REVIEW_TIER_IDS = [
   "favoravel",
   "aclamado",
   "consagrado",
+  "obra-prima",
 ] as const;
 
 /** A review-tier identifier. */
@@ -21,18 +22,24 @@ export type ReviewTierId = (typeof REVIEW_TIER_IDS)[number];
 export interface ReviewTier {
   id: ReviewTierId;
   label: string;
-  emoji: string;
+  /** Star rating (1..5) shown for this tier. */
+  stars: number;
   /** Inclusive lower bound (0..100) of the tier. */
   minScore: number;
 }
 
-/** The review-tier ladder (ascending by `minScore`). */
+/**
+ * The review-tier ladder (ascending by `minScore`). `obra-prima` is the
+ * exclusive top honor: it shares the 5-star display with `consagrado` but is
+ * reserved for the rare masterpieces (distinguished by its label and color).
+ */
 export const REVIEW_TIERS: ReviewTier[] = [
-  { id: "massacrado", label: "Massacrado", emoji: "💀", minScore: 0 },
-  { id: "misto", label: "Misto", emoji: "😕", minScore: 40 },
-  { id: "favoravel", label: "Favorável", emoji: "🙂", minScore: 55 },
-  { id: "aclamado", label: "Aclamado", emoji: "🌟", minScore: 70 },
-  { id: "consagrado", label: "Consagrado", emoji: "🏆", minScore: 85 },
+  { id: "massacrado", label: "Massacrado", stars: 1, minScore: 0 },
+  { id: "misto", label: "Misto", stars: 2, minScore: 40 },
+  { id: "favoravel", label: "Favorável", stars: 3, minScore: 55 },
+  { id: "aclamado", label: "Aclamado", stars: 4, minScore: 70 },
+  { id: "consagrado", label: "Consagrado", stars: 5, minScore: 85 },
+  { id: "obra-prima", label: "Obra-prima", stars: 5, minScore: 92 },
 ];
 
 /**
