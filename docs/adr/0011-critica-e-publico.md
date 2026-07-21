@@ -81,11 +81,19 @@ Cada obra também recebe **3 comentários da crítica especializada** e **3 do
 público**, mais uma **nota específica do formato** (`domain/data/review-comments.ts`).
 Os comentários têm tom **levemente humorístico (estilo tycoon)**, com pools de
 **≥10 blurbs por faixa** — crítica em 5 faixas (negativa/mista/boa/excelente/
-obra-prima), público em 5 (uma por estrela), e notas por formato. São
-**selecionados de forma determinística** por obra (semente = id, via FNV-1a +
-LCG), **derivados na leitura** (`release.mapper`), estáveis por obra e **sem
-persistência** — se os pools mudarem, o texto acompanha. Expostos na view como
-`criticComments`, `publicComments` e `formatComment`.
+obra-prima), público em 5 (uma por estrela), e notas por formato. Cada avaliação é
+**assinada por um autor**: um **veículo fictício** para a crítica (ex.: "Revista
+Distorção") e uma **pessoa + plataforma** para o público (ex.: "Caio Silva, no
+X"). São **selecionados de forma determinística** por obra (semente = id, via
+FNV-1a + LCG), **derivados na leitura** (`release.mapper`), estáveis por obra e
+**sem persistência**. Expostos na view como `criticComments`/`publicComments`
+(cada item `{ text, author }`) e `formatComment`.
+
+**Revelação no lançamento (frontend).** Ao publicar a obra, um modal exibe a
+recepção de forma **gradual e sequencial**: a nota da **crítica** aparece com as
+estrelas **oscilando** (vazio → cheio → indo e voltando até parar na nota final),
+seguida do **fade** dos comentários da crítica; depois o mesmo para o **público**
+— tudo no mesmo modal.
 
 ### 6. Persistência mínima; tiers derivados
 Persistem-se **só os dois escores** em `releases` (`critic_score`,
