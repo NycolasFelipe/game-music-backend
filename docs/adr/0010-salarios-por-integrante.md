@@ -103,6 +103,22 @@ sorteio. A saída é determinística no limite (não probabilística) para ser
 testável; um gatilho por evento ativo fica como desdobramento futuro. Não há piso
 de membros no tick (o mínimo de 3 é regra só da criação, ADR-0002).
 
+**Contagem oculta.** O número de turnos até a saída **não é exposto** ao jogador
+(nem na view do membro, nem no `AdvanceTurn`): a API só sinaliza o **risco**
+(`salaryAtRisk` / `atRiskMemberIds`). Manter o prazo secreto é uma decisão de
+game feel (mais tenso/gamificado).
+
+### 6b. Ex-membros arquivados (snapshot)
+A saída **não é um simples delete**: antes de remover o `band_members`, o membro
+é **arquivado** em `former_members` (`ArchiveMemberDeparturesUseCase`) — um
+snapshot congelado com dados, skills, traços, **humor**, **último salário**,
+**turnos sem receber**, motivo, ano de saída e um **snapshot dos
+relacionamentos** (nome do outro membro + nível). Assim os ex-membros continuam
+visíveis mesmo depois de removidos. O `AdvanceTurn` retorna os snapshots das
+saídas do turno (`departures`) para o cliente abrir um **modal de saída**, e
+`GET /bands/:bandId/former-members` lista o histórico (aba "Ex-integrantes"). O
+snapshot roda **antes** do `applyBandStateChanges` que faz a remoção.
+
 ### 7. Ajuste de salário a qualquer momento
 `PATCH /bands/:bandId/members/:memberId/salary` `{ amount }` grava um novo acordo
 (coluna + histórico, motivo `ajuste`, ano de vigência = `current_year`), validado
@@ -111,12 +127,13 @@ em `[SALARY_MIN, SALARY_MAX]`. O efeito (custo e humor) aparece no próximo tick
 (cronológico decrescente).
 
 ### 8. Exposição nas views
-Toda view de membro passa a trazer `salary` (corrente), `salaryTarget`
-(calculado a partir da fama atual), `salaryUnpaidTurns` e
-`salaryTurnsUntilDeparture` (`null` quando em dia; `>= 1` sinaliza o aviso). O
-`AdvanceTurn` responde também um resumo da folha (`salariesDue`, `salariesPaid`,
-`salariesFullyPaid`, `departedMemberIds`) e os avisos do turno (`salaryWarnings`:
-membros em atraso e quantos turnos faltam para saírem).
+Toda view de membro passa a trazer `salary` (corrente, **inteiro** — sem
+decimais), `salaryTarget` (calculado a partir da fama atual, também inteiro),
+`salaryUnpaidTurns` e `salaryAtRisk` (booleano; o prazo exato é oculto, §6). O
+`AdvanceTurn` responde um resumo da folha (`salariesDue`, `salariesPaid`,
+`salariesFullyPaid`), os **snapshots das saídas do turno** (`departures`) e os
+membros em risco (`atRiskMemberIds`, sem contagem). O salário é validado como
+inteiro (`@IsInt`) e `targetSalary` arredonda para inteiro.
 
 ## Emenda ao ADR-0006
 
@@ -140,8 +157,12 @@ mudança é deliberada: salário sem consequência no humor não teria peso.
   `inicial` por membro existente (valor = coluna `salary`, ano = `current_year`
   da banda).
 
+- `former_members`: snapshot append-only dos membros que saíram (dados, humor,
+  salário, `unpaid_turns`, `reason`, `left_at_year`, `relationships` em `jsonb`),
+  FK→bands cascade, índice em `band_id`. Migration `CreateFormerMembersTable`.
+
 Migrations (sequência a partir de `1752000015000`): `AddSalaryToBandMembers`,
-`CreateMemberSalariesTable`.
+`CreateMemberSalariesTable`, `CreateFormerMembersTable`.
 
 ## Endpoints
 | Método | Rota | Descrição |
