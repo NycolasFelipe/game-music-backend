@@ -155,13 +155,16 @@ export class BandsTypeormRepository implements BandsRepository {
       return null;
     }
 
+    // Order by id as a tiebreaker: members created in the same transaction share
+    // a `created_at`, so ordering by it alone is non-deterministic and the cards
+    // would reshuffle after any update (e.g. a salary change).
     const memberOrms = await this.dataSource
       .getRepository(BandMemberOrmEntity)
-      .find({ where: { bandId: id }, order: { createdAt: "ASC" } });
+      .find({ where: { bandId: id }, order: { createdAt: "ASC", id: "ASC" } });
 
     const relationshipOrms = await this.dataSource
       .getRepository(MemberRelationshipOrmEntity)
-      .find({ where: { bandId: id }, order: { createdAt: "ASC" } });
+      .find({ where: { bandId: id }, order: { createdAt: "ASC", id: "ASC" } });
 
     return {
       band: this.toDomain(orm),

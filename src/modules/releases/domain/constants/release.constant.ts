@@ -55,8 +55,13 @@ export interface ReleaseDetails {
   };
 }
 
-/** Fraction of total revenue paid upfront at launch (the rest is a royalty tail). */
-export const UPFRONT_FRACTION = 0.4;
+/**
+ * Fraction of total revenue paid upfront at launch. **Zero**: no money enters on
+ * launch — the entire revenue is the royalty tail and only starts arriving on the
+ * next `AdvanceTurn` (ADR-0008 §8 amended; the band still pays the production cost
+ * upfront).
+ */
+export const UPFRONT_FRACTION = 0;
 
 /** Fraction of the remaining royalty tail paid out each turn (geometric decay). */
 export const ROYALTY_PAYOUT_RATE = 0.5;

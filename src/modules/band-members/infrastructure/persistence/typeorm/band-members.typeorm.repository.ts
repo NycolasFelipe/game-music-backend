@@ -63,7 +63,9 @@ export class BandMembersTypeormRepository implements BandMembersRepository {
   async findByBandId(bandId: string): Promise<BandMemberEntity[]> {
     const orms = await this.repository.find({
       where: { bandId },
-      order: { createdAt: "ASC" },
+      // `id` tiebreaker keeps the order stable across updates (members created in
+      // the same transaction share a `created_at`).
+      order: { createdAt: "ASC", id: "ASC" },
     });
     return orms.map((orm) => this.toDomain(orm));
   }

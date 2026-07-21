@@ -29,9 +29,10 @@ import {
 
 /**
  * Finalizes (launches) a release draft: computes its quality and economics,
- * debits the production cost, credits the upfront revenue and the fans gained
- * (fame recomputes from fans), and records the royalty tail. Atomic band-state
- * change via `applyBandStateChanges`.
+ * debits the production cost and credits the fans gained (fame recomputes from
+ * fans). No revenue enters on launch (`UPFRONT_FRACTION = 0`) — the whole revenue
+ * is the royalty tail, which only starts arriving on the next `AdvanceTurn`.
+ * Atomic band-state change via `applyBandStateChanges`.
  */
 @Injectable()
 export class FinalizeReleaseUseCase {
