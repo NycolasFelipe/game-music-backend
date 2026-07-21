@@ -31,11 +31,16 @@ import {
   type QualityTier,
 } from "@/modules/releases/domain/data/quality-tiers";
 import {
+  REVIEW_TIERS,
+  type ReviewTier,
+} from "@/modules/releases/domain/data/review-tiers";
+import {
   ApiGenerateReleaseConcept,
   ApiGenerateReleaseTitle,
   ApiListBudgetTiers,
   ApiListQualityTiers,
   ApiListReleaseFormats,
+  ApiListReviewTiers,
 } from "@/modules/releases/decorators/api-releases.decorator";
 import { GenerateReleaseConceptDto } from "@/modules/releases/presentation/http/dto/generate-release-concept.dto";
 import { GenerateReleaseTitleDto } from "@/modules/releases/presentation/http/dto/generate-release-title.dto";
@@ -84,6 +89,17 @@ export class ReleasesController {
   @ApiListQualityTiers()
   qualityTiers(): QualityTier[] {
     return QUALITY_TIERS;
+  }
+
+  /**
+   * Lists the review-tier ladder (labels/emoji for critic/public scores).
+   *
+   * @returns The review tiers.
+   */
+  @Get("review-tiers")
+  @ApiListReviewTiers()
+  reviewTiers(): ReviewTier[] {
+    return REVIEW_TIERS;
   }
 
   /**

@@ -21,6 +21,14 @@ export class ReleaseView {
   credits: ReleaseCredits;
   quality: number | null;
   qualityTier: string | null;
+  /** Critic reception score 0..100 (`null` for drafts / legacy works). */
+  criticScore: number | null;
+  /** Public reception score 0..100 (`null` for drafts / legacy works). */
+  publicScore: number | null;
+  /** Critic review tier id, derived from `criticScore` (`null` when no score). */
+  criticTier: string | null;
+  /** Public review tier id, derived from `publicScore` (`null` when no score). */
+  publicTier: string | null;
   fansGained: number | null;
   cost: number | null;
   masterRevenueTotal: number | null;

@@ -58,6 +58,21 @@ export function ApiListQualityTiers() {
 }
 
 /**
+ * Swagger docs for listing review tiers (critic/public selos).
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiListReviewTiers() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiOperation({
+      summary: "List review tiers (labels/emoji for critic/public scores)",
+    }),
+    ApiOkResponse({ description: "The review-tier ladder." }),
+  );
+}
+
+/**
  * Swagger docs for generating release titles.
  *
  * @returns The composed set of Swagger decorators.

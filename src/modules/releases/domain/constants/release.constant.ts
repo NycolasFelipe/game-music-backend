@@ -46,6 +46,13 @@ export interface ReleaseDetails {
   eventModifier: number;
   variance: number;
   reach: number;
+  /** Reception factors behind the critic/public scores (ADR-0011). */
+  reviews?: {
+    accessibility: number;
+    ambition: number;
+    experimental: number;
+    fameAppeal: number;
+  };
 }
 
 /** Fraction of total revenue paid upfront at launch (the rest is a royalty tail). */

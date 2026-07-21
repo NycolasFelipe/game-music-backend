@@ -59,6 +59,26 @@ export class ReleaseOrmEntity {
   @Column({ name: "quality_tier", type: "varchar", length: 32, nullable: true })
   qualityTier: string | null;
 
+  @Column({
+    name: "critic_score",
+    type: "numeric",
+    precision: 6,
+    scale: 1,
+    nullable: true,
+    transformer: numericTransformer,
+  })
+  criticScore: number | null;
+
+  @Column({
+    name: "public_score",
+    type: "numeric",
+    precision: 6,
+    scale: 1,
+    nullable: true,
+    transformer: numericTransformer,
+  })
+  publicScore: number | null;
+
   @Column({ name: "fans_gained", type: "integer", nullable: true })
   fansGained: number | null;
 

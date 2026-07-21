@@ -37,6 +37,10 @@ export interface CreateReleaseData {
 export interface FinalizeReleaseData {
   quality: number;
   qualityTier: string;
+  /** Critic reception score 0..100 (ADR-0011). */
+  criticScore: number;
+  /** Public reception score 0..100 (ADR-0011). */
+  publicScore: number;
   fansGained: number;
   cost: number;
   masterRevenueTotal: number;

@@ -25,6 +25,10 @@ export class ReleaseEntity {
     /** Numeric quality 0..100 (null until finalized). */
     public readonly quality: number | null,
     public readonly qualityTier: string | null,
+    /** Critic reception score 0..100 (null until finalized / legacy). */
+    public readonly criticScore: number | null,
+    /** Public reception score 0..100 (null until finalized / legacy). */
+    public readonly publicScore: number | null,
     public readonly fansGained: number | null,
     public readonly cost: number | null,
     public readonly masterRevenueTotal: number | null,

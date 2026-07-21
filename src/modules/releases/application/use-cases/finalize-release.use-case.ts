@@ -21,6 +21,7 @@ import { findBudgetTier } from "@/modules/releases/domain/data/budget-tiers";
 import { findReleaseFormat } from "@/modules/releases/domain/data/release-formats";
 import { genreProfileFor } from "@/modules/releases/domain/data/release-genre-profiles";
 import { evaluateRelease } from "@/modules/releases/domain/quality/release.calculator";
+import { evaluateReviews } from "@/modules/releases/domain/quality/review.calculator";
 import {
   RELEASES_REPOSITORY,
   type ReleasesRepository,
@@ -121,6 +122,16 @@ export class FinalizeReleaseUseCase {
       variance,
     });
 
+    // Critic and public reception scores (ADR-0011) — informational; they do not
+    // change fans/revenue, which still come from the quality tier.
+    const reviews = evaluateReviews({
+      quality: evaluation.quality,
+      formatId: format.id,
+      budgetTierId: budgetTier.id,
+      style: release.style,
+      currentFans: composed.band.fanCount,
+    });
+
     if (composed.band.balance < evaluation.cost) {
       throw new BadRequestException(
         "Insufficient balance to finalize this release.",
@@ -141,6 +152,8 @@ export class FinalizeReleaseUseCase {
     const finalized = await this.releasesRepository.finalize(releaseId, {
       quality: evaluation.quality,
       qualityTier: evaluation.qualityTier.id,
+      criticScore: reviews.critic,
+      publicScore: reviews.public,
       fansGained: evaluation.fansGained,
       cost: evaluation.cost,
       masterRevenueTotal: evaluation.masterRevenueTotal,
@@ -149,7 +162,7 @@ export class FinalizeReleaseUseCase {
       royaltyTurnsLeft: ROYALTY_WINDOW_TURNS,
       releasedAtYear: composed.band.currentYear,
       creationLog,
-      details: evaluation.factors,
+      details: { ...evaluation.factors, reviews: reviews.factors },
     });
 
     this.logger.log(
