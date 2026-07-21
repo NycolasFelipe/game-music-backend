@@ -81,12 +81,25 @@ deixa o saldo negativo: quando o caixa não cobre um salário, o membro fica
 O novo humor é absoluto e `clamp`ado a `[HAPPINESS_MIN, HAPPINESS_MAX]`, aplicado
 junto do saldo no mesmo `applyBandStateChanges`.
 
-### 6. Inadimplência prolongada → saída do integrante
-Cada membro tem `salary_unpaid_turns` (contador de turnos consecutivos sem
-pagamento). Pagar zera; não pagar incrementa. Ao atingir `SALARY_ARREARS_LIMIT`
-o membro **sai da banda** no mesmo tick — a remoção do `band_members` cascateia
-os **relacionamentos** e o **histórico de salário** (FKs `ON DELETE CASCADE`,
-ADR-0003). A saída é **determinística** no limite (não probabilística) para ser
+### 6. Inadimplência: aviso, paciência por traço e saída na timeline
+Cada membro tem `salary_unpaid_turns` (turnos consecutivos sem pagamento). Pagar
+zera; não pagar incrementa. Enquanto o contador é `>= 1` e ainda abaixo do
+limite, o membro está **em aviso**: a saída **nunca é instantânea** e a UI mostra
+"sairá em N turnos se o salário não for pago" (`salaryTurnsUntilDeparture`).
+
+O limite de tolerância é **por personalidade** (`salaryPatience`): um `greedy`
+(Ganancioso) aguenta só 1 turno; um `loyal` (Leal), 6; sem traço relevante,
+`SALARY_DEFAULT_PATIENCE` (3). Com vários traços mapeados, vale o **menor** (o
+mais impaciente governa). Ao atingir a paciência, o membro **sai** no mesmo tick
+— a remoção do `band_members` cascateia os **relacionamentos** e o **histórico de
+salário** (FKs `ON DELETE CASCADE`, ADR-0003).
+
+A saída é **registrada na linha do tempo** como um **evento passivo interno**
+(`saida_integrante`) via `RecordMemberDeparturesUseCase` (ADR-0005), aparecendo
+na timeline como qualquer outro evento. Para não poluir o gerador de eventos
+passivos (que sorteia por probabilidade), os tipos passivos passam a se dividir
+em **gerados** (mundo/artistas) e **internos** (banda); só os gerados têm peso de
+sorteio. A saída é determinística no limite (não probabilística) para ser
 testável; um gatilho por evento ativo fica como desdobramento futuro. Não há piso
 de membros no tick (o mínimo de 3 é regra só da criação, ADR-0002).
 
@@ -99,9 +112,11 @@ em `[SALARY_MIN, SALARY_MAX]`. O efeito (custo e humor) aparece no próximo tick
 
 ### 8. Exposição nas views
 Toda view de membro passa a trazer `salary` (corrente), `salaryTarget`
-(calculado a partir da fama atual) e `salaryUnpaidTurns`. O `AdvanceTurn`
-responde também um resumo da folha (`salariesDue`, `salariesPaid`, `fullyPaid`,
-`departedMemberIds`).
+(calculado a partir da fama atual), `salaryUnpaidTurns` e
+`salaryTurnsUntilDeparture` (`null` quando em dia; `>= 1` sinaliza o aviso). O
+`AdvanceTurn` responde também um resumo da folha (`salariesDue`, `salariesPaid`,
+`salariesFullyPaid`, `departedMemberIds`) e os avisos do turno (`salaryWarnings`:
+membros em atraso e quantos turnos faltam para saírem).
 
 ## Emenda ao ADR-0006
 
