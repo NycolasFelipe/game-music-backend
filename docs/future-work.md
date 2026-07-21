@@ -45,6 +45,9 @@ endpoint + a lógica de débito/inadimplência no tick.
 
 ## 2. Obras: análise da crítica e análise do público
 
+> **Promovido:** este item virou o [ADR-0011 — Crítica e público](adr/0011-critica-e-publico.md)
+> (Aceita) e foi implementado. O esboço abaixo fica como registro da motivação.
+
 **Motivação.** Sucesso é multidimensional. Uma obra pode ser **aclamada pela
 crítica** e ignorada pelo público — ou o oposto (um "guilty pleasure"). Espelha
 a divisão crítica × audiência (à la Metacritic) e enriquece o feedback de uma
