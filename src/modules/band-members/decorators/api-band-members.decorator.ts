@@ -194,6 +194,21 @@ export function ApiSetMemberSalary() {
 }
 
 /**
+ * Swagger docs for listing a band's former (departed) members.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiListFormerMembers() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    bandIdParam(),
+    ApiOperation({ summary: "List a band's former (departed) members" }),
+    ApiOkResponse({ description: "The band's former members (newest first)." }),
+    ApiNotFoundResponse({ description: "Band not found for this owner." }),
+  );
+}
+
+/**
  * Swagger docs for listing a member's salary history.
  *
  * @returns The composed set of Swagger decorators.

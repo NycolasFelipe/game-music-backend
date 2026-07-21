@@ -1,3 +1,4 @@
+import type { FormerMemberView } from "@/modules/band-members/application/dto/former-member.view";
 import type { ActiveEventView } from "@/modules/events/application/dto/active-event.view";
 import type { PassiveEventView } from "@/modules/events/application/dto/passive-event.view";
 
@@ -23,8 +24,11 @@ export class AdvanceTurnView {
   salariesPaid: number;
   /** Whether every member was paid in full this turn. */
   salariesFullyPaid: boolean;
-  /** Ids of members who left the band this turn over unpaid salary. */
-  departedMemberIds: string[];
-  /** Members in arrears who will leave soon if still unpaid (warning window). */
-  salaryWarnings: Array<{ memberId: string; turnsUntilDeparture: number }>;
+  /** Members who left the band this turn over unpaid salary (full snapshots). */
+  departures: FormerMemberView[];
+  /**
+   * Ids of members in arrears who risk leaving if still unpaid. Deliberately
+   * without a turn count — the exact deadline is hidden from the player.
+   */
+  atRiskMemberIds: string[];
 }

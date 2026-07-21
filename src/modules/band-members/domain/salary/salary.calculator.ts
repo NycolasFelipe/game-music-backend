@@ -78,8 +78,9 @@ export function targetSalary(
     1,
   );
 
+  // Salaries are whole numbers (no decimals) for a cleaner UX.
   const target = SALARY_BASE * skillFactor * fameFactor * traitFactor;
-  return clamp(round2(target), SALARY_MIN, SALARY_MAX);
+  return clamp(Math.round(target), SALARY_MIN, SALARY_MAX);
 }
 
 /**

@@ -6,6 +6,7 @@ import { GenerateActiveEventUseCase } from "@/modules/events/application/use-cas
 import { GeneratePassiveEventsUseCase } from "@/modules/events/application/use-cases/generate-passive-events.use-case";
 import { RecordMemberDeparturesUseCase } from "@/modules/events/application/use-cases/record-member-departures.use-case";
 import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
+import { ArchiveMemberDeparturesUseCase } from "@/modules/band-members/application/use-cases/archive-member-departures.use-case";
 import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
 import { AccrueReleaseRoyaltiesUseCase } from "@/modules/releases/application/use-cases/accrue-release-royalties.use-case";
 import { RELEASES_REPOSITORY } from "@/modules/releases/domain/repositories/releases.repository";
@@ -30,6 +31,7 @@ describe("AdvanceTurnUseCase", () => {
   let generateActiveEvent: { execute: jest.Mock };
   let accrueReleaseRoyalties: { execute: jest.Mock };
   let paySalaries: { execute: jest.Mock };
+  let archiveMemberDepartures: { execute: jest.Mock };
   let recordMemberDepartures: { execute: jest.Mock };
   let randomSpy: jest.SpyInstance;
 
@@ -62,6 +64,7 @@ describe("AdvanceTurnUseCase", () => {
     generateActiveEvent = { execute: jest.fn().mockResolvedValue(null) };
     accrueReleaseRoyalties = { execute: jest.fn().mockResolvedValue(0) };
     paySalaries = { execute: jest.fn().mockResolvedValue(emptyPayroll) };
+    archiveMemberDepartures = { execute: jest.fn().mockResolvedValue([]) };
     recordMemberDepartures = {
       execute: jest.fn().mockResolvedValue(undefined),
     };
@@ -84,6 +87,10 @@ describe("AdvanceTurnUseCase", () => {
           useValue: accrueReleaseRoyalties,
         },
         { provide: PaySalariesUseCase, useValue: paySalaries },
+        {
+          provide: ArchiveMemberDeparturesUseCase,
+          useValue: archiveMemberDepartures,
+        },
         {
           provide: RecordMemberDeparturesUseCase,
           useValue: recordMemberDepartures,
@@ -261,6 +268,9 @@ describe("AdvanceTurnUseCase", () => {
         },
       ],
     });
+    archiveMemberDepartures.execute.mockResolvedValue([
+      { id: "fm-1", name: "Saiu", unpaidTurns: 3 },
+    ]);
     randomSpy.mockReturnValue(0.9);
 
     const result = await useCase.execute(actor, BAND_ID);
@@ -274,18 +284,23 @@ describe("AdvanceTurnUseCase", () => {
         removedMemberIds: ["m-2"],
       },
     );
-    // The departure is recorded on the timeline (year after the step).
+    // Departing members are archived before removal (year after the step).
+    expect(archiveMemberDepartures.execute).toHaveBeenCalledWith(
+      BAND_ID,
+      2003.5,
+      [{ memberId: "m-2", unpaidTurns: 3, reason: "salario_atrasado" }],
+    );
+    // The departure is also recorded on the timeline.
     expect(recordMemberDepartures.execute).toHaveBeenCalledWith(
       BAND_ID,
       2003.5,
       [{ memberName: "Saiu", unpaidTurns: 3 }],
     );
     expect(result.salariesDue).toBe(700);
-    expect(result.salariesPaid).toBe(0);
-    expect(result.departedMemberIds).toEqual(["m-2"]);
-    expect(result.salaryWarnings).toEqual([
-      { memberId: "m-1", turnsUntilDeparture: 2 },
+    expect(result.departures).toEqual([
+      { id: "fm-1", name: "Saiu", unpaidTurns: 3 },
     ]);
+    expect(result.atRiskMemberIds).toEqual(["m-1"]);
   });
 
   it("does not touch the balance when there are no royalties", async () => {

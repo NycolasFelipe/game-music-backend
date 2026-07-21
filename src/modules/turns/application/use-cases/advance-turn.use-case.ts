@@ -14,6 +14,7 @@ import { GeneratePassiveEventsUseCase } from "@/modules/events/application/use-c
 import { RecordMemberDeparturesUseCase } from "@/modules/events/application/use-cases/record-member-departures.use-case";
 import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
 import type { ActiveEventsRepository } from "@/modules/events/domain/repositories/active-events.repository";
+import { ArchiveMemberDeparturesUseCase } from "@/modules/band-members/application/use-cases/archive-member-departures.use-case";
 import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
 import { AccrueReleaseRoyaltiesUseCase } from "@/modules/releases/application/use-cases/accrue-release-royalties.use-case";
 import { RELEASES_REPOSITORY } from "@/modules/releases/domain/repositories/releases.repository";
@@ -52,6 +53,7 @@ export class AdvanceTurnUseCase {
     private readonly generateActiveEvent: GenerateActiveEventUseCase,
     private readonly accrueReleaseRoyalties: AccrueReleaseRoyaltiesUseCase,
     private readonly paySalaries: PaySalariesUseCase,
+    private readonly archiveMemberDepartures: ArchiveMemberDeparturesUseCase,
     private readonly recordMemberDepartures: RecordMemberDeparturesUseCase,
   ) {}
 
@@ -124,16 +126,26 @@ export class AdvanceTurnUseCase {
       Math.round((cashBeforePayroll - payroll.totalPaid) * 100) / 100;
 
     const survivors = payroll.outcomes.filter((o) => !o.departed);
-    const departures = payroll.outcomes.filter((o) => o.departed);
-    const departedMemberIds = departures.map((o) => o.memberId);
+    const departingOutcomes = payroll.outcomes.filter((o) => o.departed);
+    const departedMemberIds = departingOutcomes.map((o) => o.memberId);
 
-    // Members in arrears who have not left yet — the warning window (ADR-0010 §6).
-    const salaryWarnings = survivors
+    // Members in arrears who have not left yet. The exact deadline is kept from
+    // the player (more gamified) — only the risk is surfaced (ADR-0010 §6).
+    const atRiskMemberIds = survivors
       .filter((o) => !o.paid)
-      .map((o) => ({
+      .map((o) => o.memberId);
+
+    // Archive the departing members BEFORE they are removed, so ex-members stay
+    // viewable and the departure modal has their full snapshot.
+    const departures = await this.archiveMemberDepartures.execute(
+      bandId,
+      newYear,
+      departingOutcomes.map((o) => ({
         memberId: o.memberId,
-        turnsUntilDeparture: o.turnsUntilDeparture,
-      }));
+        unpaidTurns: o.newUnpaidTurns,
+        reason: "salario_atrasado" as const,
+      })),
+    );
 
     if (balanceAfter !== band.balance || payroll.outcomes.length > 0) {
       await this.bandsRepository.applyBandStateChanges(bandId, {
@@ -156,7 +168,7 @@ export class AdvanceTurnUseCase {
     await this.recordMemberDepartures.execute(
       bandId,
       newYear,
-      departures.map((o) => ({
+      departingOutcomes.map((o) => ({
         memberName: o.name,
         unpaidTurns: o.newUnpaidTurns,
       })),
@@ -198,8 +210,8 @@ export class AdvanceTurnUseCase {
       salariesDue: payroll.totalDue,
       salariesPaid: payroll.totalPaid,
       salariesFullyPaid: payroll.fullyPaid,
-      departedMemberIds,
-      salaryWarnings,
+      departures,
+      atRiskMemberIds,
     };
   }
 
