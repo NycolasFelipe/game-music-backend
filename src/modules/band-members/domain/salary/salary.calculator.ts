@@ -3,8 +3,8 @@ import {
   HAPPINESS_MIN,
 } from "@/modules/band-members/domain/constants/member-rules.constant";
 import {
-  SALARY_ARREARS_LIMIT,
   SALARY_BASE,
+  SALARY_DEFAULT_PATIENCE,
   SALARY_FAME_HALF_FANS,
   SALARY_FAME_MAX_BONUS,
   SALARY_MAX,
@@ -12,6 +12,7 @@ import {
   SALARY_PAID_HAPPINESS_BONUS,
   SALARY_SKILL_WEIGHT,
   SALARY_TRAIT_MULTIPLIERS,
+  SALARY_TRAIT_PATIENCE,
   SALARY_UNDERPAY_HAPPINESS_PENALTY,
   SALARY_UNPAID_HAPPINESS_PENALTY,
 } from "@/modules/band-members/domain/constants/salary.constant";
@@ -82,6 +83,21 @@ export function targetSalary(
 }
 
 /**
+ * How many consecutive unpaid turns a member tolerates before leaving, from
+ * their personality (ADR-0010 §6). The least patient matching trait governs;
+ * with no matching trait, the default applies.
+ *
+ * @param characteristics - The member's trait ids.
+ * @returns The member's salary patience, in turns.
+ */
+export function salaryPatience(characteristics: string[]): number {
+  const values = characteristics
+    .map((id) => SALARY_TRAIT_PATIENCE[id])
+    .filter((value): value is number => value !== undefined);
+  return values.length > 0 ? Math.min(...values) : SALARY_DEFAULT_PATIENCE;
+}
+
+/**
  * Computes the happiness delta a member feels for how they were paid this turn
  * (ADR-0010 §5).
  *
@@ -108,6 +124,8 @@ export function salaryHappinessDelta(
 /** One member's payroll inputs for a turn. */
 export interface PayrollMemberInput {
   memberId: string;
+  /** The member's name (for timeline records on departure). */
+  name: string;
   /** Salary owed this turn. */
   salary: number;
   /** Target salary (for the happiness reaction). */
@@ -116,11 +134,15 @@ export interface PayrollMemberInput {
   happiness: number;
   /** Consecutive unpaid turns so far. */
   unpaidTurns: number;
+  /** Unpaid turns the member tolerates before leaving (from their traits). */
+  patience: number;
 }
 
 /** One member's payroll outcome for a turn. */
 export interface PayrollMemberOutcome {
   memberId: string;
+  /** The member's name. */
+  name: string;
   /** Salary owed this turn. */
   salary: number;
   /** Whether the member was paid this turn. */
@@ -131,8 +153,13 @@ export interface PayrollMemberOutcome {
   newHappiness: number;
   /** New consecutive-unpaid-turns counter (0 when paid). */
   newUnpaidTurns: number;
-  /** Whether the member leaves the band this turn (arrears limit reached). */
+  /** Whether the member leaves the band this turn (patience reached). */
   departed: boolean;
+  /**
+   * Turns left before the member leaves if still unpaid. `0` when paid or
+   * already departed; `>= 1` while in arrears (the warning window).
+   */
+  turnsUntilDeparture: number;
 }
 
 /** The result of running a band's payroll for a turn. */
@@ -188,16 +215,20 @@ export function computePayroll(
       HAPPINESS_MIN,
       HAPPINESS_MAX,
     );
-    const departed = newUnpaidTurns >= SALARY_ARREARS_LIMIT;
+    const departed = newUnpaidTurns >= member.patience;
+    const turnsUntilDeparture =
+      paid || departed ? 0 : member.patience - newUnpaidTurns;
 
     return {
       memberId: member.memberId,
+      name: member.name,
       salary: member.salary,
       paid,
       amountPaid,
       newHappiness,
       newUnpaidTurns,
       departed,
+      turnsUntilDeparture,
     };
   });
 

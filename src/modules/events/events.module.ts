@@ -7,6 +7,7 @@ import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/a
 import { GetActiveEventUseCase } from "@/modules/events/application/use-cases/get-active-event.use-case";
 import { ListActiveEventsUseCase } from "@/modules/events/application/use-cases/list-active-events.use-case";
 import { ListPassiveEventsUseCase } from "@/modules/events/application/use-cases/list-passive-events.use-case";
+import { RecordMemberDeparturesUseCase } from "@/modules/events/application/use-cases/record-member-departures.use-case";
 import { ResolveActiveEventUseCase } from "@/modules/events/application/use-cases/resolve-active-event.use-case";
 import { activeEventsProviders } from "@/modules/events/infrastructure/persistence/providers/active-events.providers";
 import { passiveEventsProviders } from "@/modules/events/infrastructure/persistence/providers/passive-events.providers";
@@ -35,11 +36,13 @@ import { PassiveEventsController } from "@/modules/events/presentation/http/cont
     ResolveActiveEventUseCase,
     GeneratePassiveEventsUseCase,
     ListPassiveEventsUseCase,
+    RecordMemberDeparturesUseCase,
   ],
   exports: [
     // Consumed by the turns module to run the per-turn event tick.
     GenerateActiveEventUseCase,
     GeneratePassiveEventsUseCase,
+    RecordMemberDeparturesUseCase,
     ACTIVE_EVENTS_REPOSITORY,
   ],
 })

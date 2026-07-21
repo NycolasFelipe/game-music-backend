@@ -4,7 +4,10 @@ import { FameView } from "@/modules/bands/application/dto/fame.view";
 import { BandWithMembersView } from "@/modules/bands/application/dto/band-with-members.view";
 import { MemberRelationshipView } from "@/modules/bands/application/dto/member-relationship.view";
 import type { BandMemberEntity } from "@/modules/band-members/domain/entities/band-member.entity";
-import { targetSalary } from "@/modules/band-members/domain/salary/salary.calculator";
+import {
+  salaryPatience,
+  targetSalary,
+} from "@/modules/band-members/domain/salary/salary.calculator";
 import type { BandWithMembers } from "@/modules/bands/domain/entities/band-with-members";
 import type { MemberRelationshipEntity } from "@/modules/bands/domain/entities/member-relationship.entity";
 import type { BandEntity } from "@/modules/bands/domain/entities/band.entity";
@@ -70,6 +73,13 @@ export function toBandMemberView(
     salary: member.salary,
     salaryTarget: targetSalary(member.skills, member.characteristics, fanCount),
     salaryUnpaidTurns: member.salaryUnpaidTurns,
+    salaryTurnsUntilDeparture:
+      member.salaryUnpaidTurns > 0
+        ? Math.max(
+            0,
+            salaryPatience(member.characteristics) - member.salaryUnpaidTurns,
+          )
+        : null,
   };
 }
 

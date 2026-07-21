@@ -1,6 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import {
   computePayroll,
+  salaryPatience,
   targetSalary,
   type PayrollMemberInput,
   type PayrollResult,
@@ -37,10 +38,12 @@ export class PaySalariesUseCase {
     const members = await this.bandMembersRepository.findByBandId(bandId);
     const inputs: PayrollMemberInput[] = members.map((member) => ({
       memberId: member.id,
+      name: member.name,
       salary: member.salary,
       target: targetSalary(member.skills, member.characteristics, fanCount),
       happiness: member.happiness,
       unpaidTurns: member.salaryUnpaidTurns,
+      patience: salaryPatience(member.characteristics),
     }));
 
     return computePayroll(inputs, availableCash);

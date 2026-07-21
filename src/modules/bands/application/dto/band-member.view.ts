@@ -26,4 +26,9 @@ export class BandMemberView {
   salaryTarget: number;
   /** Consecutive turns the member went unpaid (arrears counter). */
   salaryUnpaidTurns: number;
+  /**
+   * Turns left before the member leaves over unpaid salary, or `null` when not
+   * in arrears (paid). A warning while `>= 1`.
+   */
+  salaryTurnsUntilDeparture: number | null;
 }

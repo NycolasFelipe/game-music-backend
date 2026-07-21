@@ -42,8 +42,28 @@ export const SALARY_TRAIT_MULTIPLIERS: Readonly<Record<string, number>> = {
   purist: 0.6, // rejects commercial success
 };
 
-/** Consecutive unpaid turns after which a member leaves the band. */
-export const SALARY_ARREARS_LIMIT = 3;
+/**
+ * How many consecutive unpaid turns a member tolerates before leaving, when no
+ * personality trait applies.
+ */
+export const SALARY_DEFAULT_PATIENCE = 3;
+
+/**
+ * Per-trait salary patience — how many unpaid turns the member tolerates before
+ * leaving. A member's patience is the **minimum** across their matching traits
+ * (the least patient trait governs), falling back to {@link SALARY_DEFAULT_PATIENCE}.
+ * A `greedy` (Ganancioso) member walks fast; a `loyal` (Leal) one endures.
+ */
+export const SALARY_TRAIT_PATIENCE: Readonly<Record<string, number>> = {
+  greedy: 1, // Ganancioso — não aceita atraso
+  dazzled: 2, // Deslumbrado — acostumado a gastar
+  professional: 2, // exige compensação em dia
+  romantic: 4, // liga menos para dinheiro
+  stable: 4, // paciente e previsível
+  spiritual: 5, // dinheiro importa pouco
+  purist: 5, // rejeita a lógica comercial
+  loyal: 6, // Leal — banca a banda por muito tempo
+};
 
 /** Happiness gained when a member is paid at or above their target. */
 export const SALARY_PAID_HAPPINESS_BONUS = 0.15;

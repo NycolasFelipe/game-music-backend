@@ -11,6 +11,7 @@ import type { BandsRepository } from "@/modules/bands/domain/repositories/bands.
 import { ActiveEventView } from "@/modules/events/application/dto/active-event.view";
 import { GenerateActiveEventUseCase } from "@/modules/events/application/use-cases/generate-active-event.use-case";
 import { GeneratePassiveEventsUseCase } from "@/modules/events/application/use-cases/generate-passive-events.use-case";
+import { RecordMemberDeparturesUseCase } from "@/modules/events/application/use-cases/record-member-departures.use-case";
 import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
 import type { ActiveEventsRepository } from "@/modules/events/domain/repositories/active-events.repository";
 import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
@@ -51,6 +52,7 @@ export class AdvanceTurnUseCase {
     private readonly generateActiveEvent: GenerateActiveEventUseCase,
     private readonly accrueReleaseRoyalties: AccrueReleaseRoyaltiesUseCase,
     private readonly paySalaries: PaySalariesUseCase,
+    private readonly recordMemberDepartures: RecordMemberDeparturesUseCase,
   ) {}
 
   /**
@@ -122,9 +124,16 @@ export class AdvanceTurnUseCase {
       Math.round((cashBeforePayroll - payroll.totalPaid) * 100) / 100;
 
     const survivors = payroll.outcomes.filter((o) => !o.departed);
-    const departedMemberIds = payroll.outcomes
-      .filter((o) => o.departed)
-      .map((o) => o.memberId);
+    const departures = payroll.outcomes.filter((o) => o.departed);
+    const departedMemberIds = departures.map((o) => o.memberId);
+
+    // Members in arrears who have not left yet — the warning window (ADR-0010 §6).
+    const salaryWarnings = survivors
+      .filter((o) => !o.paid)
+      .map((o) => ({
+        memberId: o.memberId,
+        turnsUntilDeparture: o.turnsUntilDeparture,
+      }));
 
     if (balanceAfter !== band.balance || payroll.outcomes.length > 0) {
       await this.bandsRepository.applyBandStateChanges(bandId, {
@@ -142,6 +151,16 @@ export class AdvanceTurnUseCase {
           : undefined,
       });
     }
+
+    // Record departures on the timeline as internal passive events.
+    await this.recordMemberDepartures.execute(
+      bandId,
+      newYear,
+      departures.map((o) => ({
+        memberName: o.name,
+        unpaidTurns: o.newUnpaidTurns,
+      })),
+    );
 
     // Chance to spawn a blocking decision event for the player.
     const activeEvent = this.rollActiveEvent()
@@ -180,6 +199,7 @@ export class AdvanceTurnUseCase {
       salariesPaid: payroll.totalPaid,
       salariesFullyPaid: payroll.fullyPaid,
       departedMemberIds,
+      salaryWarnings,
     };
   }
 

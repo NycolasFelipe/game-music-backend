@@ -25,4 +25,6 @@ export class AdvanceTurnView {
   salariesFullyPaid: boolean;
   /** Ids of members who left the band this turn over unpaid salary. */
   departedMemberIds: string[];
+  /** Members in arrears who will leave soon if still unpaid (warning window). */
+  salaryWarnings: Array<{ memberId: string; turnsUntilDeparture: number }>;
 }

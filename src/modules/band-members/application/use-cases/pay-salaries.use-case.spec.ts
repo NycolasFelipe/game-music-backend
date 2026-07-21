@@ -11,6 +11,7 @@ const member = (
   unpaidTurns: number,
 ) => ({
   id,
+  name: `Member ${id}`,
   salary,
   happiness,
   salaryUnpaidTurns: unpaidTurns,

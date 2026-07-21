@@ -4,6 +4,7 @@ import { AuthenticatedUserEntity } from "@/common/entities/authenticated-user.en
 import { BANDS_REPOSITORY } from "@/modules/bands/domain/repositories/bands.repository";
 import { GenerateActiveEventUseCase } from "@/modules/events/application/use-cases/generate-active-event.use-case";
 import { GeneratePassiveEventsUseCase } from "@/modules/events/application/use-cases/generate-passive-events.use-case";
+import { RecordMemberDeparturesUseCase } from "@/modules/events/application/use-cases/record-member-departures.use-case";
 import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
 import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
 import { AccrueReleaseRoyaltiesUseCase } from "@/modules/releases/application/use-cases/accrue-release-royalties.use-case";
@@ -29,6 +30,7 @@ describe("AdvanceTurnUseCase", () => {
   let generateActiveEvent: { execute: jest.Mock };
   let accrueReleaseRoyalties: { execute: jest.Mock };
   let paySalaries: { execute: jest.Mock };
+  let recordMemberDepartures: { execute: jest.Mock };
   let randomSpy: jest.SpyInstance;
 
   const emptyPayroll = {
@@ -60,6 +62,9 @@ describe("AdvanceTurnUseCase", () => {
     generateActiveEvent = { execute: jest.fn().mockResolvedValue(null) };
     accrueReleaseRoyalties = { execute: jest.fn().mockResolvedValue(0) };
     paySalaries = { execute: jest.fn().mockResolvedValue(emptyPayroll) };
+    recordMemberDepartures = {
+      execute: jest.fn().mockResolvedValue(undefined),
+    };
     randomSpy = jest.spyOn(Math, "random");
 
     const moduleRef = await Test.createTestingModule({
@@ -79,6 +84,10 @@ describe("AdvanceTurnUseCase", () => {
           useValue: accrueReleaseRoyalties,
         },
         { provide: PaySalariesUseCase, useValue: paySalaries },
+        {
+          provide: RecordMemberDeparturesUseCase,
+          useValue: recordMemberDepartures,
+        },
       ],
     }).compile();
     useCase = moduleRef.get(AdvanceTurnUseCase);
@@ -225,26 +234,30 @@ describe("AdvanceTurnUseCase", () => {
     accrueReleaseRoyalties.execute.mockResolvedValue(0);
     paySalaries.execute.mockResolvedValue({
       totalDue: 700,
-      totalPaid: 300,
+      totalPaid: 0,
       fullyPaid: false,
       outcomes: [
         {
           memberId: "m-1",
+          name: "Em atraso",
           salary: 300,
-          paid: true,
-          amountPaid: 300,
-          newHappiness: 1.15,
-          newUnpaidTurns: 0,
+          paid: false,
+          amountPaid: 0,
+          newHappiness: 0,
+          newUnpaidTurns: 1,
           departed: false,
+          turnsUntilDeparture: 2,
         },
         {
           memberId: "m-2",
+          name: "Saiu",
           salary: 400,
           paid: false,
           amountPaid: 0,
           newHappiness: -1,
           newUnpaidTurns: 3,
           departed: true,
+          turnsUntilDeparture: 0,
         },
       ],
     });
@@ -255,16 +268,24 @@ describe("AdvanceTurnUseCase", () => {
     expect(bandsRepository.applyBandStateChanges).toHaveBeenCalledWith(
       BAND_ID,
       {
-        balance: 700,
-        memberHappiness: [{ memberId: "m-1", happiness: 1.15 }],
-        memberSalaryArrears: [{ memberId: "m-1", unpaidTurns: 0 }],
+        balance: 1000,
+        memberHappiness: [{ memberId: "m-1", happiness: 0 }],
+        memberSalaryArrears: [{ memberId: "m-1", unpaidTurns: 1 }],
         removedMemberIds: ["m-2"],
       },
     );
+    // The departure is recorded on the timeline (year after the step).
+    expect(recordMemberDepartures.execute).toHaveBeenCalledWith(
+      BAND_ID,
+      2003.5,
+      [{ memberName: "Saiu", unpaidTurns: 3 }],
+    );
     expect(result.salariesDue).toBe(700);
-    expect(result.salariesPaid).toBe(300);
-    expect(result.salariesFullyPaid).toBe(false);
+    expect(result.salariesPaid).toBe(0);
     expect(result.departedMemberIds).toEqual(["m-2"]);
+    expect(result.salaryWarnings).toEqual([
+      { memberId: "m-1", turnsUntilDeparture: 2 },
+    ]);
   });
 
   it("does not touch the balance when there are no royalties", async () => {
