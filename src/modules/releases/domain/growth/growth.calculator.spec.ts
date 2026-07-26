@@ -159,6 +159,28 @@ describe("evaluateMemberGrowth", () => {
     expect(outcomes[0].record.happinessDelta).toBeGreaterThan(0);
   });
 
+  it("teaches less per aspect to whoever spread themselves out (ADR-0014 §3)", () => {
+    const focused = evaluateMemberGrowth({
+      credits: { vocal: ["m1"] },
+      members: [member("m1", { vocal: 3, guitar: 3, bass: 3 })],
+      quality: 80,
+      formatWeight: 1,
+    });
+    const spread = evaluateMemberGrowth({
+      credits: { vocal: ["m1"], guitar: ["m1"], bass: ["m1"] },
+      members: [member("m1", { vocal: 3, guitar: 3, bass: 3 })],
+      quality: 80,
+      formatWeight: 1,
+    });
+
+    const focusedGain = focused[0].skills.vocal - 3;
+    const spreadGain = spread[0].skills.vocal - 3;
+
+    expect(spreadGain).toBeLessThan(focusedGain);
+    // ...but doing three things still teaches more in total than doing one.
+    expect(spreadGain * 3).toBeGreaterThan(focusedGain);
+  });
+
   it("returns nothing when nobody is credited", () => {
     expect(
       evaluateMemberGrowth({

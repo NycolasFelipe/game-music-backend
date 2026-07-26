@@ -121,6 +121,7 @@ export class FinalizeReleaseUseCase {
       credits: release.credits,
       members,
       currentFans: composed.band.fanCount,
+      relationships: composed.relationships,
       eventModifier,
       variance,
     });

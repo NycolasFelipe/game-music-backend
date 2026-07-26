@@ -72,6 +72,12 @@ export interface ReleaseDetails {
   eventModifier: number;
   variance: number;
   reach: number;
+  /**
+   * Average focus factor of the credited members and average chemistry of the
+   * shared aspects (ADR-0014). Absent on works launched before the feature.
+   */
+  focus?: number;
+  chemistry?: number;
   /** Reception factors behind the critic/public scores (ADR-0011). */
   reviews?: {
     accessibility: number;
@@ -108,3 +114,17 @@ export const QUALITY_VARIANCE = 0.08;
 
 /** How strongly average member happiness shifts quality (±15% at the extremes). */
 export const HAPPINESS_QUALITY_WEIGHT = 0.15;
+
+/**
+ * Focus factor by how many aspects a member takes on in the same work
+ * (ADR-0014 §1), indexed by that count. Doubling up is nearly free — that is
+ * ordinary in a band — but a one-person orchestra delivers less of themselves in
+ * every part. Index 0 is unused (an uncredited member contributes nothing).
+ */
+export const FOCUS_FACTORS = [1, 1, 0.95, 0.85, 0.72, 0.58, 0.45];
+
+/**
+ * How strongly the relationships between co-credited members shift the aspect
+ * they share (ADR-0014 §2): ±12% between sworn enemies and best friends.
+ */
+export const CHEMISTRY_WEIGHT = 0.12;

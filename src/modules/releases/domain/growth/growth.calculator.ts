@@ -19,12 +19,14 @@ import type {
   ReleaseMemberGrowth,
   ReleaseSkillGain,
 } from "@/modules/releases/domain/constants/release.constant";
+import { focusFactor } from "@/modules/releases/domain/quality/release.calculator";
 
 /**
  * Member development from finishing a work (ADR-0012) — pure functions. Credited
  * members grow in the aspects they covered, with diminishing returns near the
- * skill cap and scaled by the work's quality and format. No randomness (the
- * variance already entered `quality`).
+ * skill cap and scaled by the work's quality and format. Whoever spread
+ * themselves over many aspects also learns less from each one (ADR-0014 §3). No
+ * randomness (the variance already entered `quality`).
  */
 
 /** A member's data as consumed by the growth calculator. */
@@ -88,12 +90,14 @@ export function qualityLearningFactor(quality: number): number {
  * @param skill - The member's current level in the aspect (0..`SKILL_MAX`).
  * @param quality - The work's technical quality (0..100).
  * @param formatWeight - The format's learning weight.
+ * @param focus - The member's focus factor (ADR-0014 §1; defaults to full).
  * @returns The new level, rounded to two decimals and capped at `SKILL_MAX`.
  */
 export function grownSkill(
   skill: number,
   quality: number,
   formatWeight: number,
+  focus = 1,
 ): number {
   const current = clamp(Number.isFinite(skill) ? skill : 0, 0, SKILL_MAX);
   const headroom = (SKILL_MAX - current) / SKILL_MAX;
@@ -101,6 +105,7 @@ export function grownSkill(
     SKILL_GAIN_BASE *
     qualityLearningFactor(quality) *
     Math.max(0, formatWeight) *
+    Math.max(0, focus) *
     headroom;
   return round2(Math.min(SKILL_MAX, current + gain));
 }
@@ -151,10 +156,13 @@ export function evaluateMemberGrowth(
     .map((member) => {
       const skills: Skills = { ...member.skills };
       const gains: ReleaseSkillGain[] = [];
+      const aspects = aspectsByMember.get(member.id) ?? [];
+      // Spreading over many aspects teaches less of each (ADR-0014 §3).
+      const focus = focusFactor(aspects.length);
 
-      for (const aspect of aspectsByMember.get(member.id) ?? []) {
+      for (const aspect of aspects) {
         const from = round2(member.skills[aspect]);
-        const to = grownSkill(from, input.quality, input.formatWeight);
+        const to = grownSkill(from, input.quality, input.formatWeight, focus);
         if (to <= from) {
           continue; // Already at the cap: nothing left to learn here.
         }

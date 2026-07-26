@@ -3,9 +3,12 @@ import { findBudgetTier } from "@/modules/releases/domain/data/budget-tiers";
 import { findReleaseFormat } from "@/modules/releases/domain/data/release-formats";
 import type { SkillWeights } from "@/modules/releases/domain/data/release-genre-profiles";
 import {
+  chemistryFactor,
   computeMoodModifier,
   computeSkillScore,
+  creditLoad,
   evaluateRelease,
+  focusFactor,
   reachFactor,
   royaltyPayout,
   type ReleaseMemberInput,
@@ -36,8 +39,119 @@ const ALL_VOCAL: SkillWeights = {
   lyrics: 0,
 };
 
+/** A style split evenly between vocal and guitar, for the focus tests. */
+const HALF_HALF: SkillWeights = {
+  vocal: 0.5,
+  guitar: 0.5,
+  bass: 0,
+  drums: 0,
+  piano: 0,
+  lyrics: 0,
+};
+
 describe("release.calculator", () => {
+  describe("focusFactor (ADR-0014 §1)", () => {
+    it("is full for one aspect and decays as the member spreads out", () => {
+      expect(focusFactor(1)).toBe(1);
+      expect(focusFactor(2)).toBeLessThan(1);
+      expect(focusFactor(6)).toBeLessThan(focusFactor(4));
+      expect(focusFactor(6)).toBeGreaterThan(0);
+    });
+
+    it("treats an uncredited member as contributing nothing", () => {
+      expect(focusFactor(0)).toBe(0);
+    });
+  });
+
+  describe("creditLoad", () => {
+    it("counts the distinct aspects each member took on", () => {
+      const load = creditLoad({
+        vocal: ["m1"],
+        guitar: ["m1", "m2"],
+        bass: ["m2"],
+      });
+      expect(load.get("m1")).toBe(2);
+      expect(load.get("m2")).toBe(2);
+    });
+  });
+
+  describe("chemistryFactor (ADR-0014 §2)", () => {
+    const relationships = [
+      { memberAId: "m1", memberBId: "m2", level: 5 },
+      { memberAId: "m1", memberBId: "m3", level: -5 },
+    ];
+
+    it("is neutral for a single member", () => {
+      expect(chemistryFactor(["m1"], relationships)).toBe(1);
+    });
+
+    it("rewards friends and punishes enemies sharing an aspect", () => {
+      expect(chemistryFactor(["m1", "m2"], relationships)).toBeGreaterThan(1);
+      expect(chemistryFactor(["m1", "m3"], relationships)).toBeLessThan(1);
+    });
+
+    it("reads the pair in either direction and ignores unknown pairs", () => {
+      expect(chemistryFactor(["m2", "m1"], relationships)).toBe(
+        chemistryFactor(["m1", "m2"], relationships),
+      );
+      expect(chemistryFactor(["m4", "m5"], relationships)).toBe(1);
+    });
+  });
+
   describe("computeSkillScore", () => {
+    it("penalizes a member who covers several aspects (ADR-0014 §1)", () => {
+      const soloist = [member("m1", { vocal: 10, guitar: 10 })];
+      const duo = [
+        member("m1", { vocal: 10, guitar: 10 }),
+        member("m2", { vocal: 10, guitar: 10 }),
+      ];
+
+      const spread = computeSkillScore(
+        { vocal: ["m1"], guitar: ["m1"] },
+        soloist,
+        HALF_HALF,
+      );
+      const specialized = computeSkillScore(
+        { vocal: ["m1"], guitar: ["m2"] },
+        duo,
+        HALF_HALF,
+      );
+
+      expect(spread).toBeCloseTo(focusFactor(2), 5);
+      expect(specialized).toBe(1);
+      expect(spread).toBeLessThan(specialized);
+    });
+
+    it("lets two friends beat the better of them alone (ADR-0014 §2)", () => {
+      const members = [member("m1", { vocal: 8 }), member("m2", { vocal: 7 })];
+      const friends = [{ memberAId: "m1", memberBId: "m2", level: 5 }];
+
+      const alone = computeSkillScore({ vocal: ["m1"] }, members, ALL_VOCAL);
+      const together = computeSkillScore(
+        { vocal: ["m1", "m2"] },
+        members,
+        ALL_VOCAL,
+        friends,
+      );
+
+      expect(together).toBeGreaterThan(alone);
+    });
+
+    it("makes sharing an aspect with a rival worse than working alone", () => {
+      const members = [member("m1", { vocal: 8 }), member("m2", { vocal: 8 })];
+      const rivals = [{ memberAId: "m1", memberBId: "m2", level: -5 }];
+
+      const alone = computeSkillScore({ vocal: ["m1"] }, members, ALL_VOCAL);
+      const together = computeSkillScore(
+        { vocal: ["m1", "m2"] },
+        members,
+        ALL_VOCAL,
+        rivals,
+      );
+
+      expect(together).toBeLessThan(alone);
+    });
+
     it("scores a maxed, fully-credited aspect at 1", () => {
       const score = computeSkillScore(
         { vocal: ["m1"] },
