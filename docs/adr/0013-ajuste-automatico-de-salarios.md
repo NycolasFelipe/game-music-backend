@@ -19,10 +19,14 @@ Este ADR adiciona uma **opção do save**: com ela ligada, o jogo reajusta os
 salários a cada turno. É uma escolha de conforto (quem gosta de negociar
 continua no manual), não uma mudança de balanceamento.
 
+A opção nasce **ligada**. Negociar cada reajuste na mão não é uma decisão — o
+alvo é calculado pelo jogo e a resposta ótima é sempre pagá-lo —, então o padrão
+é o conforto, e quem quiser a fricção desliga em Opções.
+
 ## Decisão
 
 ### 1. Opção por save, persistida no backend
-`bands.auto_salary_adjust` (`boolean not null default false`). Não é preferência
+`bands.auto_salary_adjust` (`boolean not null default true`). Não é preferência
 de UI: quem executa o reajuste é o **tick do turno**, que roda no servidor —
 guardar isso no cliente deixaria a regra do jogo fora do jogo. Alterada por
 `PATCH /bands/:id/settings` e exposta na `BandView`.
@@ -60,9 +64,9 @@ para a UI mostrar "Ana: 400 → 460" no resumo do turno. Sem isso o dinheiro sai
 do caixa sem explicação visível.
 
 ## Persistência
-- `bands.auto_salary_adjust` (`boolean not null default false`) — migration
-  `AddAutoSalaryAdjustToBands`. Saves existentes ficam com a opção **desligada**
-  (o comportamento atual).
+- `bands.auto_salary_adjust` (`boolean not null default true`) — migrations
+  `AddAutoSalaryAdjustToBands` (coluna, nasceu `false`) e
+  `EnableAutoSalaryAdjustByDefault` (padrão `true` + saves existentes migrados).
 
 ## Endpoints
 | Método | Rota | Descrição |

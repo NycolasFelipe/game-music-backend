@@ -102,7 +102,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
   },
   {
     id: "live",
-    label: "Ao Vivo",
+    label: "Disco Ao Vivo",
     minTracks: 8,
     maxTracks: 16,
     baseCost: 3000,
