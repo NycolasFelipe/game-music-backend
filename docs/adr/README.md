@@ -26,6 +26,7 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | [0010](0010-salarios-por-integrante.md) | Salários por integrante | Aceita |
 | [0011](0011-critica-e-publico.md) | Obras: análise da crítica e análise do público | Aceita |
 | [0012](0012-evolucao-dos-integrantes.md) | Evolução dos integrantes ao publicar uma obra | Aceita |
+| [0013](0013-ajuste-automatico-de-salarios.md) | Ajuste automático de salários (opção do save) | Aceita |
 
 ## Veja também
 - [Trabalho futuro](../future-work.md) — backlog de ideias de gameplay ainda não
