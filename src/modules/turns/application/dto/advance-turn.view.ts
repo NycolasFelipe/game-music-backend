@@ -1,6 +1,7 @@
 import type { FormerMemberView } from "@/modules/band-members/application/dto/former-member.view";
 import type { ActiveEventView } from "@/modules/events/application/dto/active-event.view";
 import type { PassiveEventView } from "@/modules/events/application/dto/passive-event.view";
+import type { SalaryRaiseView } from "@/modules/turns/application/dto/salary-raise.view";
 
 /**
  * Result of advancing a turn: the new clock plus anything the tick produced.
@@ -24,6 +25,11 @@ export class AdvanceTurnView {
   salariesPaid: number;
   /** Whether every member was paid in full this turn. */
   salariesFullyPaid: boolean;
+  /**
+   * Salaries raised by the automatic adjustment this turn (ADR-0013). Always
+   * empty when the save has the option off, or when the cash fell short.
+   */
+  salaryRaises: SalaryRaiseView[];
   /** Members who left the band this turn over unpaid salary (full snapshots). */
   departures: FormerMemberView[];
   /**

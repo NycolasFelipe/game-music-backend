@@ -8,6 +8,7 @@ import { GetBandMemberUseCase } from "@/modules/band-members/application/use-cas
 import { GetMemberSalaryHistoryUseCase } from "@/modules/band-members/application/use-cases/get-member-salary-history.use-case";
 import { ListBandMembersUseCase } from "@/modules/band-members/application/use-cases/list-band-members.use-case";
 import { ListFormerMembersUseCase } from "@/modules/band-members/application/use-cases/list-former-members.use-case";
+import { AutoAdjustSalariesUseCase } from "@/modules/band-members/application/use-cases/auto-adjust-salaries.use-case";
 import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
 import { RemoveBandMemberUseCase } from "@/modules/band-members/application/use-cases/remove-band-member.use-case";
 import { SetMemberSalaryUseCase } from "@/modules/band-members/application/use-cases/set-member-salary.use-case";
@@ -50,12 +51,14 @@ import { MemberCandidatesController } from "@/modules/band-members/presentation/
     RemoveBandMemberUseCase,
     SetMemberSalaryUseCase,
     GetMemberSalaryHistoryUseCase,
+    AutoAdjustSalariesUseCase,
     PaySalariesUseCase,
     ArchiveMemberDeparturesUseCase,
     ListFormerMembersUseCase,
   ],
   exports: [
     BAND_MEMBERS_REPOSITORY,
+    AutoAdjustSalariesUseCase,
     PaySalariesUseCase,
     ArchiveMemberDeparturesUseCase,
   ],

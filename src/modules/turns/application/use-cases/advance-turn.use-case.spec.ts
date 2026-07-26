@@ -7,6 +7,7 @@ import { GeneratePassiveEventsUseCase } from "@/modules/events/application/use-c
 import { RecordMemberDeparturesUseCase } from "@/modules/events/application/use-cases/record-member-departures.use-case";
 import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
 import { ArchiveMemberDeparturesUseCase } from "@/modules/band-members/application/use-cases/archive-member-departures.use-case";
+import { AutoAdjustSalariesUseCase } from "@/modules/band-members/application/use-cases/auto-adjust-salaries.use-case";
 import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
 import { AccrueReleaseRoyaltiesUseCase } from "@/modules/releases/application/use-cases/accrue-release-royalties.use-case";
 import { RELEASES_REPOSITORY } from "@/modules/releases/domain/repositories/releases.repository";
@@ -30,6 +31,7 @@ describe("AdvanceTurnUseCase", () => {
   let generatePassiveEvents: { execute: jest.Mock };
   let generateActiveEvent: { execute: jest.Mock };
   let accrueReleaseRoyalties: { execute: jest.Mock };
+  let autoAdjustSalaries: { execute: jest.Mock };
   let paySalaries: { execute: jest.Mock };
   let archiveMemberDepartures: { execute: jest.Mock };
   let recordMemberDepartures: { execute: jest.Mock };
@@ -63,6 +65,7 @@ describe("AdvanceTurnUseCase", () => {
     generatePassiveEvents = { execute: jest.fn().mockResolvedValue([]) };
     generateActiveEvent = { execute: jest.fn().mockResolvedValue(null) };
     accrueReleaseRoyalties = { execute: jest.fn().mockResolvedValue(0) };
+    autoAdjustSalaries = { execute: jest.fn().mockResolvedValue([]) };
     paySalaries = { execute: jest.fn().mockResolvedValue(emptyPayroll) };
     archiveMemberDepartures = { execute: jest.fn().mockResolvedValue([]) };
     recordMemberDepartures = {
@@ -85,6 +88,10 @@ describe("AdvanceTurnUseCase", () => {
         {
           provide: AccrueReleaseRoyaltiesUseCase,
           useValue: accrueReleaseRoyalties,
+        },
+        {
+          provide: AutoAdjustSalariesUseCase,
+          useValue: autoAdjustSalaries,
         },
         { provide: PaySalariesUseCase, useValue: paySalaries },
         {
@@ -338,5 +345,49 @@ describe("AdvanceTurnUseCase", () => {
       NotFoundException,
     );
     expect(bandsRepository.advanceTurn).not.toHaveBeenCalled();
+  });
+
+  it("skips the automatic salary adjustment when the save has it off", async () => {
+    bandsRepository.findByIdAndOwner.mockResolvedValue({
+      id: BAND_ID,
+      currentYear: 2003,
+      fanCount: 10,
+      balance: 1000,
+      autoSalaryAdjust: false,
+    });
+    randomSpy.mockReturnValue(0.9);
+
+    const result = await useCase.execute(actor, BAND_ID);
+
+    expect(autoAdjustSalaries.execute).not.toHaveBeenCalled();
+    expect(result.salaryRaises).toEqual([]);
+  });
+
+  it("auto-adjusts salaries with the post-royalty cash and reports the raises", async () => {
+    bandsRepository.findByIdAndOwner.mockResolvedValue({
+      id: BAND_ID,
+      currentYear: 2003,
+      fanCount: 10,
+      balance: 1000,
+      autoSalaryAdjust: true,
+    });
+    accrueReleaseRoyalties.execute.mockResolvedValue(500);
+    autoAdjustSalaries.execute.mockResolvedValue([
+      { memberId: "m-1", name: "Ana", from: 400, to: 460 },
+    ]);
+    randomSpy.mockReturnValue(0.9);
+
+    const result = await useCase.execute(actor, BAND_ID);
+
+    // Sees the cash the royalties just brought in, and runs before the payroll.
+    expect(autoAdjustSalaries.execute).toHaveBeenCalledWith(
+      BAND_ID,
+      10,
+      1500,
+      2003.5,
+    );
+    expect(result.salaryRaises).toEqual([
+      { memberId: "m-1", name: "Ana", from: 400, to: 460 },
+    ]);
   });
 });

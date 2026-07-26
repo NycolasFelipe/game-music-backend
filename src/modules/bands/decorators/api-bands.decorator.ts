@@ -10,6 +10,7 @@ import {
   ApiParam,
 } from "@nestjs/swagger";
 import { CreateBandDto } from "@/modules/bands/presentation/http/dto/create-band.dto";
+import { UpdateBandSettingsDto } from "@/modules/bands/presentation/http/dto/update-band-settings.dto";
 import { GenerateBandNameDto } from "@/modules/bands/presentation/http/dto/generate-band-name.dto";
 
 /**
@@ -115,6 +116,22 @@ export function ApiGetBandFame() {
     ApiOperation({ summary: "Get a band's fame standing (derived from fans)" }),
     ApiParam({ name: "id", format: "uuid" }),
     ApiOkResponse({ description: "The band's fame view." }),
+    ApiNotFoundResponse({ description: "Band not found for this owner." }),
+  );
+}
+
+/**
+ * Swagger docs for updating a save's options.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiUpdateBandSettings() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiOperation({ summary: "Update a save's options (ADR-0013)" }),
+    ApiParam({ name: "id", format: "uuid" }),
+    ApiBody({ type: UpdateBandSettingsDto }),
+    ApiOkResponse({ description: "The updated band." }),
     ApiNotFoundResponse({ description: "Band not found for this owner." }),
   );
 }

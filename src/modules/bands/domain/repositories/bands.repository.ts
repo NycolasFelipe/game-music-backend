@@ -48,6 +48,12 @@ export interface BandStateChangesInput {
   removedMemberIds?: string[];
 }
 
+/** Player-facing options of a save (ADR-0013). */
+export interface BandSettingsInput {
+  /** Whether salaries are raised to their target each turn, within the cash. */
+  autoSalaryAdjust?: boolean;
+}
+
 /** State transition applied when a band takes a turn. */
 export interface AdvanceTurnInput {
   /** The band's new live year after the step. */
@@ -101,6 +107,20 @@ export interface BandsRepository {
    * @returns The owner's bands.
    */
   findAllByOwner(ownerId: string): Promise<BandEntity[]>;
+
+  /**
+   * Updates the save's options, scoped to its owner (ADR-0013).
+   *
+   * @param id - The band id.
+   * @param ownerId - The owning user's id.
+   * @param settings - The options to change (omitted keys stay as they are).
+   * @returns The updated band, or `null` when not found for this owner.
+   */
+  updateSettings(
+    id: string,
+    ownerId: string,
+    settings: BandSettingsInput,
+  ): Promise<BandEntity | null>;
 
   /**
    * Deletes a band by id, scoped to its owner (cascades to its members).

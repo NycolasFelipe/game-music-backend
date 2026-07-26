@@ -30,6 +30,11 @@ export class BandEntity {
     public readonly currentYear: number,
     /** The band's cash balance (money), in abstract currency units. */
     public readonly balance: number,
+    /**
+     * Whether the game raises salaries to their target on every turn, within
+     * the available cash (ADR-0013).
+     */
+    public readonly autoSalaryAdjust: boolean,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
   ) {}

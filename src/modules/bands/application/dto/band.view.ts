@@ -22,6 +22,8 @@ export class BandView {
   currentYear: number;
   /** The band's cash balance (money). */
   balance: number;
+  /** Whether salaries are raised automatically each turn (ADR-0013). */
+  autoSalaryAdjust: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

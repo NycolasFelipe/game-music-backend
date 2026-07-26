@@ -122,6 +122,73 @@ export function salaryHappinessDelta(
   return round2(-shortfall * SALARY_UNDERPAY_HAPPINESS_PENALTY);
 }
 
+/** One member's inputs for the automatic salary adjustment (ADR-0013). */
+export interface AutoRaiseMemberInput {
+  memberId: string;
+  /** The member's name (for the turn report). */
+  name: string;
+  /** The member's current salary. */
+  salary: number;
+  /** The member's target salary. */
+  target: number;
+}
+
+/** One salary raise the automatic adjustment applied. */
+export interface AutoRaise {
+  memberId: string;
+  name: string;
+  /** Salary before the raise. */
+  from: number;
+  /** Salary after the raise (the member's target). */
+  to: number;
+}
+
+/** The outcome of the automatic salary adjustment for a turn. */
+export interface AutoRaiseResult {
+  /** The raises the members are due — only to be applied when `applied`. */
+  raises: AutoRaise[];
+  /** The payroll the raises would produce (whether or not they were applied). */
+  payrollProposed: number;
+  /** Whether the raises were applied (the cash covers the new payroll). */
+  applied: boolean;
+}
+
+/**
+ * Computes the automatic salary adjustment for a turn (ADR-0013 §2): every
+ * member is raised to their target salary — never cut — and the raises only
+ * happen when the resulting payroll fits in the turn's available cash. It is
+ * all-or-nothing on purpose: a partial pass would depend on member order.
+ *
+ * @param members - The members with their current and target salaries.
+ * @param availableCash - The cash available this turn (balance + royalties).
+ * @returns The raises to apply, the resulting payroll and whether it applies.
+ */
+export function computeAutoRaises(
+  members: AutoRaiseMemberInput[],
+  availableCash: number,
+): AutoRaiseResult {
+  const proposals = members.map((member) => ({
+    member,
+    to: Math.max(member.salary, member.target),
+  }));
+
+  const payrollProposed = round2(
+    proposals.reduce((sum, proposal) => sum + proposal.to, 0),
+  );
+
+  const raises = proposals
+    .filter((proposal) => proposal.to > proposal.member.salary)
+    .map((proposal) => ({
+      memberId: proposal.member.memberId,
+      name: proposal.member.name,
+      from: proposal.member.salary,
+      to: proposal.to,
+    }));
+
+  const applied = raises.length > 0 && payrollProposed <= availableCash;
+  return { raises, payrollProposed, applied };
+}
+
 /** One member's payroll inputs for a turn. */
 export interface PayrollMemberInput {
   memberId: string;

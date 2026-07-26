@@ -13,6 +13,7 @@ import { generateRelationshipsForMembers } from "@/modules/bands/domain/generati
 import {
   AdvanceTurnInput,
   BandsRepository,
+  BandSettingsInput,
   BandStateChangesInput,
   CreateBandData,
   CreateBandMemberSeed,
@@ -188,6 +189,31 @@ export class BandsTypeormRepository implements BandsRepository {
   }
 
   /**
+   * Updates the save's options, scoped to its owner (ADR-0013).
+   *
+   * @param id - The band id.
+   * @param ownerId - The owning user's id.
+   * @param settings - The options to change (omitted keys stay as they are).
+   * @returns The updated domain band, or `null` when not found for this owner.
+   */
+  async updateSettings(
+    id: string,
+    ownerId: string,
+    settings: BandSettingsInput,
+  ): Promise<BandEntity | null> {
+    const orm = await this.repository.findOne({ where: { id, ownerId } });
+    if (!orm) {
+      return null;
+    }
+
+    if (settings.autoSalaryAdjust !== undefined) {
+      orm.autoSalaryAdjust = settings.autoSalaryAdjust;
+    }
+
+    return this.toDomain(await this.repository.save(orm));
+  }
+
+  /**
    * Deletes a band by id, scoped to its owner (cascades to its members).
    *
    * @param id - The band id.
@@ -335,6 +361,7 @@ export class BandsTypeormRepository implements BandsRepository {
       orm.fanCount,
       orm.currentYear,
       orm.balance,
+      orm.autoSalaryAdjust,
       orm.createdAt,
       orm.updatedAt,
     );

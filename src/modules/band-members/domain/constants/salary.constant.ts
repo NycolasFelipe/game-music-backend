@@ -76,5 +76,9 @@ export const SALARY_UNDERPAY_HAPPINESS_PENALTY = 0.5;
 /** Happiness lost when the band cannot pay the member at all this turn. */
 export const SALARY_UNPAID_HAPPINESS_PENALTY = 1;
 
-/** Reason recorded on a salary agreement (audit log in `member_salaries`). */
-export type SalaryChangeReason = "inicial" | "ajuste";
+/**
+ * Reason recorded on a salary agreement (audit log in `member_salaries`):
+ * `inicial` at founding/hiring, `ajuste` when the player negotiates, and
+ * `automatico` when the per-turn automatic adjustment raised it (ADR-0013).
+ */
+export type SalaryChangeReason = "inicial" | "ajuste" | "automatico";

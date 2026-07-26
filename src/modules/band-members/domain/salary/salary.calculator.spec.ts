@@ -1,5 +1,6 @@
 import type { Skills } from "@/modules/band-members/domain/constants/skill.constant";
 import {
+  computeAutoRaises,
   computePayroll,
   salaryHappinessDelta,
   salaryPatience,
@@ -208,6 +209,51 @@ describe("salary.calculator", () => {
         totalPaid: 0,
         fullyPaid: true,
         outcomes: [],
+      });
+    });
+  });
+
+  describe("computeAutoRaises", () => {
+    const member = (memberId: string, salary: number, target: number) => ({
+      memberId,
+      name: memberId,
+      salary,
+      target,
+    });
+
+    it("raises everyone below target when the cash covers the new payroll", () => {
+      const result = computeAutoRaises(
+        [member("m-1", 100, 160), member("m-2", 200, 180)],
+        1000,
+      );
+
+      expect(result.applied).toBe(true);
+      // m-2 already earns above target: never cut.
+      expect(result.raises).toEqual([
+        { memberId: "m-1", name: "m-1", from: 100, to: 160 },
+      ]);
+      expect(result.payrollProposed).toBe(360);
+    });
+
+    it("applies nothing when the new payroll exceeds the available cash", () => {
+      const result = computeAutoRaises([member("m-1", 100, 900)], 500);
+
+      expect(result.applied).toBe(false);
+      expect(result.payrollProposed).toBe(900);
+    });
+
+    it("does not apply when nobody is below their target", () => {
+      const result = computeAutoRaises([member("m-1", 300, 300)], 10_000);
+
+      expect(result.applied).toBe(false);
+      expect(result.raises).toEqual([]);
+    });
+
+    it("handles an empty band", () => {
+      expect(computeAutoRaises([], 500)).toEqual({
+        raises: [],
+        payrollProposed: 0,
+        applied: false,
       });
     });
   });

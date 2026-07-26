@@ -15,6 +15,7 @@ import { RecordMemberDeparturesUseCase } from "@/modules/events/application/use-
 import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
 import type { ActiveEventsRepository } from "@/modules/events/domain/repositories/active-events.repository";
 import { ArchiveMemberDeparturesUseCase } from "@/modules/band-members/application/use-cases/archive-member-departures.use-case";
+import { AutoAdjustSalariesUseCase } from "@/modules/band-members/application/use-cases/auto-adjust-salaries.use-case";
 import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
 import { AccrueReleaseRoyaltiesUseCase } from "@/modules/releases/application/use-cases/accrue-release-royalties.use-case";
 import { RELEASES_REPOSITORY } from "@/modules/releases/domain/repositories/releases.repository";
@@ -52,6 +53,7 @@ export class AdvanceTurnUseCase {
     private readonly generatePassiveEvents: GeneratePassiveEventsUseCase,
     private readonly generateActiveEvent: GenerateActiveEventUseCase,
     private readonly accrueReleaseRoyalties: AccrueReleaseRoyaltiesUseCase,
+    private readonly autoAdjustSalaries: AutoAdjustSalariesUseCase,
     private readonly paySalaries: PaySalariesUseCase,
     private readonly archiveMemberDepartures: ArchiveMemberDeparturesUseCase,
     private readonly recordMemberDepartures: RecordMemberDeparturesUseCase,
@@ -117,6 +119,19 @@ export class AdvanceTurnUseCase {
     const royalties = await this.accrueReleaseRoyalties.execute(bandId);
     const cashBeforePayroll =
       Math.round((band.balance + royalties) * 100) / 100;
+
+    // Optional automatic raises (ADR-0013), between the income and the payroll:
+    // they see the cash the royalties just brought in, and the payroll below
+    // already pays the adjusted salaries.
+    const salaryRaises = band.autoSalaryAdjust
+      ? await this.autoAdjustSalaries.execute(
+          bandId,
+          band.fanCount,
+          cashBeforePayroll,
+          newYear,
+        )
+      : [];
+
     const payroll = await this.paySalaries.execute(
       bandId,
       band.fanCount,
@@ -197,6 +212,7 @@ export class AdvanceTurnUseCase {
         `${agedMembers ? " (members aged)" : ""}` +
         `${activeEvent ? ` — active event "${activeEvent.templateId}"` : ""}` +
         `${payroll.totalPaid > 0 ? ` — paid ${payroll.totalPaid} in salaries` : ""}` +
+        `${salaryRaises.length ? ` — ${salaryRaises.length} salary(ies) auto-adjusted` : ""}` +
         `${departedMemberIds.length ? ` — ${departedMemberIds.length} member(s) left over unpaid salary` : ""}`,
     );
 
@@ -210,6 +226,7 @@ export class AdvanceTurnUseCase {
       salariesDue: payroll.totalDue,
       salariesPaid: payroll.totalPaid,
       salariesFullyPaid: payroll.fullyPaid,
+      salaryRaises,
       departures,
       atRiskMemberIds,
     };

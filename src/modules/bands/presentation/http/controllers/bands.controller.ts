@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   UseGuards,
 } from "@nestjs/common";
@@ -26,6 +27,7 @@ import {
 import { GetBandFameUseCase } from "@/modules/bands/application/use-cases/get-band-fame.use-case";
 import { GetBandUseCase } from "@/modules/bands/application/use-cases/get-band.use-case";
 import { ListBandsUseCase } from "@/modules/bands/application/use-cases/list-bands.use-case";
+import { UpdateBandSettingsUseCase } from "@/modules/bands/application/use-cases/update-band-settings.use-case";
 import {
   BAND_THEMES,
   FOUNDATION_YEARS,
@@ -41,6 +43,7 @@ import {
   ApiGetBandFame,
   ApiListBands,
   ApiRelationshipLevels,
+  ApiUpdateBandSettings,
 } from "@/modules/bands/decorators/api-bands.decorator";
 import {
   ORIGIN_LABELS,
@@ -50,6 +53,7 @@ import { BandOptionsView } from "@/modules/bands/presentation/http/dto/band-opti
 import { CreateBandDto } from "@/modules/bands/presentation/http/dto/create-band.dto";
 import { GenerateBandNameDto } from "@/modules/bands/presentation/http/dto/generate-band-name.dto";
 import { RelationshipLevelView } from "@/modules/bands/presentation/http/dto/relationship-level.view";
+import { UpdateBandSettingsDto } from "@/modules/bands/presentation/http/dto/update-band-settings.dto";
 
 /**
  * HTTP endpoints for bands. All routes require authentication and are scoped
@@ -66,6 +70,7 @@ export class BandsController {
     private readonly getBandUseCase: GetBandUseCase,
     private readonly getBandFameUseCase: GetBandFameUseCase,
     private readonly deleteBandUseCase: DeleteBandUseCase,
+    private readonly updateBandSettingsUseCase: UpdateBandSettingsUseCase,
   ) {}
 
   /**
@@ -170,6 +175,26 @@ export class BandsController {
     @Param("id", ParseUUIDPipe) id: string,
   ): Promise<FameView> {
     return this.getBandFameUseCase.execute(actor, id);
+  }
+
+  /**
+   * Updates a save's options (ADR-0013).
+   *
+   * @param actor - The authenticated owner.
+   * @param id - The band id.
+   * @param dto - The options to change.
+   * @returns The updated band.
+   */
+  @Patch(":id/settings")
+  @ApiUpdateBandSettings()
+  updateSettings(
+    @CurrentUser() actor: AuthenticatedUserEntity,
+    @Param("id", ParseUUIDPipe) id: string,
+    @Body() dto: UpdateBandSettingsDto,
+  ): Promise<BandView> {
+    return this.updateBandSettingsUseCase.execute(actor, id, {
+      autoSalaryAdjust: dto.autoSalaryAdjust,
+    });
   }
 
   /**

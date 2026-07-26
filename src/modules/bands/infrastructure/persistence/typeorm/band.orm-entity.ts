@@ -61,6 +61,9 @@ export class BandOrmEntity {
   })
   balance: number;
 
+  @Column({ name: "auto_salary_adjust", type: "boolean", default: false })
+  autoSalaryAdjust: boolean;
+
   @CreateDateColumn({ name: "created_at", type: "timestamptz" })
   createdAt: Date;
 

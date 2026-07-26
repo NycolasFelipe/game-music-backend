@@ -8,6 +8,7 @@ import { GetBandUseCase } from "@/modules/bands/application/use-cases/get-band.u
 import { ListBandsUseCase } from "@/modules/bands/application/use-cases/list-bands.use-case";
 import { ListBandRelationshipsUseCase } from "@/modules/bands/application/use-cases/list-band-relationships.use-case";
 import { SetBandRelationshipLevelUseCase } from "@/modules/bands/application/use-cases/set-band-relationship-level.use-case";
+import { UpdateBandSettingsUseCase } from "@/modules/bands/application/use-cases/update-band-settings.use-case";
 import { BANDS_REPOSITORY } from "@/modules/bands/domain/repositories/bands.repository";
 import { MEMBER_RELATIONSHIPS_REPOSITORY } from "@/modules/bands/domain/repositories/member-relationships.repository";
 import { bandsProviders } from "@/modules/bands/infrastructure/persistence/providers/bands.providers";
@@ -34,6 +35,7 @@ import { BandRelationshipsController } from "@/modules/bands/presentation/http/c
     GetBandUseCase,
     GetBandFameUseCase,
     DeleteBandUseCase,
+    UpdateBandSettingsUseCase,
     ListBandRelationshipsUseCase,
     SetBandRelationshipLevelUseCase,
   ],
