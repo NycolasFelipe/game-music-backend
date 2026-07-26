@@ -16,6 +16,7 @@ import { toReleaseView } from "@/modules/releases/application/mappers/release.ma
 import {
   QUALITY_VARIANCE,
   ROYALTY_WINDOW_TURNS,
+  SATURATION_FACTORS,
 } from "@/modules/releases/domain/constants/release.constant";
 import { findBudgetTier } from "@/modules/releases/domain/data/budget-tiers";
 import { findReleaseFormat } from "@/modules/releases/domain/data/release-formats";
@@ -78,6 +79,11 @@ export class FinalizeReleaseUseCase {
     if (release.status !== "em_criacao") {
       throw new ConflictException("This release has already been launched.");
     }
+    if (release.productionTurnsLeft > 0) {
+      throw new ConflictException(
+        `This release is still in production (${release.productionTurnsLeft} turn(s) left).`,
+      );
+    }
 
     const format = findReleaseFormat(release.format);
     const budgetTier = findBudgetTier(release.budgetTier);
@@ -114,6 +120,17 @@ export class FinalizeReleaseUseCase {
 
     const variance = 1 + (Math.random() * 2 - 1) * QUALITY_VARIANCE;
 
+    // How crowded this release year already is: each extra work sells to a more
+    // tired audience (ADR-0015 §5).
+    const launchedThisYear = await this.releasesRepository.countLaunchedInYear(
+      bandId,
+      Math.floor(composed.band.currentYear),
+    );
+    const saturation =
+      SATURATION_FACTORS[
+        Math.min(launchedThisYear, SATURATION_FACTORS.length - 1)
+      ];
+
     const evaluation = evaluateRelease({
       format,
       budgetTier,
@@ -122,6 +139,7 @@ export class FinalizeReleaseUseCase {
       members,
       currentFans: composed.band.fanCount,
       relationships: composed.relationships,
+      saturation,
       eventModifier,
       variance,
     });

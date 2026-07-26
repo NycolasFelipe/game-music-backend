@@ -39,6 +39,11 @@ export class ReleaseEntity {
     public readonly royaltyTurnsLeft: number,
     /** The band's live year when the work was launched (null until finalized). */
     public readonly releasedAtYear: number | null,
+    /**
+     * Turns of production still to run before the draft can be launched
+     * (ADR-0015 §1). Zero on launched works and on ready-to-launch drafts.
+     */
+    public readonly productionTurnsLeft: number,
     public readonly creationLog: ReleaseCreationLogEntry[],
     public readonly details: ReleaseDetails | null,
     public readonly createdAt: Date,

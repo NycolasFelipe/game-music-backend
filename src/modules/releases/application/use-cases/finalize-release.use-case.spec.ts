@@ -41,6 +41,7 @@ const draft = {
   budgetTier: "estudio",
   credits: { vocal: ["m1"], guitar: ["m1"] },
   creationLog: [],
+  productionTurnsLeft: 0,
 };
 
 describe("FinalizeReleaseUseCase", () => {
@@ -52,6 +53,7 @@ describe("FinalizeReleaseUseCase", () => {
   let releasesRepository: {
     findByIdAndBand: jest.Mock;
     findCreationEventsByRelease: jest.Mock;
+    countLaunchedInYear: jest.Mock;
     finalize: jest.Mock;
   };
 
@@ -64,6 +66,7 @@ describe("FinalizeReleaseUseCase", () => {
     releasesRepository = {
       findByIdAndBand: jest.fn().mockResolvedValue(draft),
       findCreationEventsByRelease: jest.fn().mockResolvedValue([]),
+      countLaunchedInYear: jest.fn().mockResolvedValue(0),
       finalize: jest.fn((id, data) => ({
         ...draft,
         status: "lancada",
@@ -125,6 +128,32 @@ describe("FinalizeReleaseUseCase", () => {
       "guitar",
       "vocal",
     ]);
+  });
+
+  it("refuses to launch a work still in production (ADR-0015 §1)", async () => {
+    releasesRepository.findByIdAndBand.mockResolvedValue({
+      ...draft,
+      productionTurnsLeft: 2,
+    });
+
+    await expect(
+      useCase.execute(actor, "band-1", "rel-1"),
+    ).rejects.toBeInstanceOf(ConflictException);
+    expect(releasesRepository.finalize).not.toHaveBeenCalled();
+  });
+
+  it("cuts fans and revenue when the year is already crowded (ADR-0015 §5)", async () => {
+    const first = await useCase.execute(actor, "band-1", "rel-1");
+
+    releasesRepository.countLaunchedInYear.mockResolvedValue(1);
+    const second = await useCase.execute(actor, "band-1", "rel-1");
+
+    expect(second.fansGained ?? 0).toBeLessThan(first.fansGained ?? 0);
+    expect(second.masterRevenueTotal ?? 0).toBeLessThan(
+      first.masterRevenueTotal ?? 0,
+    );
+    // The work itself is just as good — only the market is tired.
+    expect(second.quality).toBe(first.quality);
   });
 
   it("throws NotFound when the release is missing", async () => {

@@ -18,6 +18,7 @@ import { ArchiveMemberDeparturesUseCase } from "@/modules/band-members/applicati
 import { AutoAdjustSalariesUseCase } from "@/modules/band-members/application/use-cases/auto-adjust-salaries.use-case";
 import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
 import { AccrueReleaseRoyaltiesUseCase } from "@/modules/releases/application/use-cases/accrue-release-royalties.use-case";
+import { AdvanceReleaseProductionUseCase } from "@/modules/releases/application/use-cases/advance-release-production.use-case";
 import { RELEASES_REPOSITORY } from "@/modules/releases/domain/repositories/releases.repository";
 import type { ReleasesRepository } from "@/modules/releases/domain/repositories/releases.repository";
 import { AdvanceTurnView } from "@/modules/turns/application/dto/advance-turn.view";
@@ -53,6 +54,7 @@ export class AdvanceTurnUseCase {
     private readonly generatePassiveEvents: GeneratePassiveEventsUseCase,
     private readonly generateActiveEvent: GenerateActiveEventUseCase,
     private readonly accrueReleaseRoyalties: AccrueReleaseRoyaltiesUseCase,
+    private readonly advanceReleaseProduction: AdvanceReleaseProductionUseCase,
     private readonly autoAdjustSalaries: AutoAdjustSalariesUseCase,
     private readonly paySalaries: PaySalariesUseCase,
     private readonly archiveMemberDepartures: ArchiveMemberDeparturesUseCase,
@@ -85,10 +87,14 @@ export class AdvanceTurnUseCase {
       );
     }
 
-    const inCreation = await this.releasesRepository.countInCreation(bandId);
-    if (inCreation > 0) {
+    // A work in production is *expected* to cross turns (ADR-0015 §1) — what
+    // blocks the clock is a studio decision waiting on the player, mirroring the
+    // rule for active events.
+    const pendingSessions =
+      await this.releasesRepository.countPendingCreationEventsByBand(bandId);
+    if (pendingSessions > 0) {
       throw new ConflictException(
-        "Finish or discard the release in creation before advancing the turn",
+        "Resolve the pending studio decision before advancing the turn",
       );
     }
 
@@ -110,6 +116,13 @@ export class AdvanceTurnUseCase {
       newYear,
       ageMembers: agedMembers,
     });
+
+    // Burn a production turn on the work being recorded and, if the studio time
+    // continues, bring up this turn's session (ADR-0015 §1/§3).
+    const production = await this.advanceReleaseProduction.execute(
+      actor,
+      bandId,
+    );
 
     // Accrue this turn's release royalties (income), then pay salaries (expense)
     // from the resulting cash. Money, happiness (salary satisfaction/arrears) and
@@ -213,6 +226,7 @@ export class AdvanceTurnUseCase {
         `${activeEvent ? ` — active event "${activeEvent.templateId}"` : ""}` +
         `${payroll.totalPaid > 0 ? ` — paid ${payroll.totalPaid} in salaries` : ""}` +
         `${salaryRaises.length ? ` — ${salaryRaises.length} salary(ies) auto-adjusted` : ""}` +
+        `${production ? ` — "${production.title}" ${production.ready ? "ready to launch" : `has ${production.turnsLeft} production turn(s) left`}` : ""}` +
         `${departedMemberIds.length ? ` — ${departedMemberIds.length} member(s) left over unpaid salary` : ""}`,
     );
 
@@ -227,6 +241,7 @@ export class AdvanceTurnUseCase {
       salariesPaid: payroll.totalPaid,
       salariesFullyPaid: payroll.fullyPaid,
       salaryRaises,
+      production,
       departures,
       atRiskMemberIds,
     };

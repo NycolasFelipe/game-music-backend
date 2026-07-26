@@ -186,17 +186,34 @@ function conflictEvent(nameA: string, nameB: string): EventTemplate {
 }
 
 /**
- * Generates the creation events for a work from its credited members and their
- * relationships. Capped at {@link MAX_CREATION_EVENTS}.
+ * Generates the creation events of one studio session from the credited members
+ * and their relationships. Capped at {@link MAX_CREATION_EVENTS}, or at the
+ * caller's `limit` — the production spreads the sessions over its turns
+ * (ADR-0015 §3), so each call asks for the slice it needs and continues the
+ * sequence numbering from where the work left off.
  *
  * @param members - The credited members (id, name, characteristics).
  * @param relationships - Relationships among the band's members.
- * @returns The generated creation events (sequenced from 0).
+ * @param options - How many events to take, where to resume the sequence, and
+ *   which kinds the work already used (so a long production does not replay the
+ *   same drama every session).
+ * @returns The generated creation events.
  */
 export function generateCreationEvents(
   members: CreationEventMemberInput[],
   relationships: CreationEventRelationshipInput[],
+  options: {
+    limit?: number;
+    startSequence?: number;
+    excludeKinds?: string[];
+  } = {},
 ): GeneratedCreationEvent[] {
+  const limit = Math.max(
+    0,
+    Math.min(options.limit ?? MAX_CREATION_EVENTS, MAX_CREATION_EVENTS),
+  );
+  const startSequence = options.startSequence ?? 0;
+  const exclude = new Set(options.excludeKinds ?? []);
   const creditedIds = new Set(members.map((m) => m.id));
   const nameById = new Map(members.map((m) => [m.id, m.name]));
   const templates: EventTemplate[] = [];
@@ -207,7 +224,7 @@ export function generateCreationEvents(
       creditedIds.has(r.memberAId) &&
       creditedIds.has(r.memberBId),
   );
-  if (conflicts.length > 0) {
+  if (conflicts.length > 0 && !exclude.has("conflito_visao")) {
     const r = pick(conflicts);
     templates.push(
       conflictEvent(
@@ -229,13 +246,17 @@ export function generateCreationEvents(
   }
 
   for (const template of shuffle(characterEvents)) {
-    if (templates.length >= MAX_CREATION_EVENTS) {
+    if (templates.length >= limit) {
       break;
+    }
+    if (exclude.has(template.kind)) {
+      continue;
     }
     templates.push(template);
   }
 
-  return templates
-    .slice(0, MAX_CREATION_EVENTS)
-    .map((template, index) => ({ ...template, sequence: index }));
+  return templates.slice(0, limit).map((template, index) => ({
+    ...template,
+    sequence: startSequence + index,
+  }));
 }

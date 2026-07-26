@@ -36,6 +36,11 @@ export interface ReleaseFormat {
    * single is a weekend, an album is a season in the studio.
    */
   skillGain: number;
+  /**
+   * Turns the work spends in production before it can be launched (ADR-0015 §1).
+   * Each turn is half a year, so an album occupies a year and a half.
+   */
+  productionTurns: number;
 }
 
 /** The release-format catalog. */
@@ -49,6 +54,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
     baseReach: 400,
     baseRevenue: 1200,
     skillGain: 0.6,
+    productionTurns: 1,
   },
   {
     id: "ep",
@@ -59,6 +65,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
     baseReach: 1000,
     baseRevenue: 3000,
     skillGain: 0.9,
+    productionTurns: 2,
   },
   {
     id: "lp",
@@ -69,6 +76,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
     baseReach: 2500,
     baseRevenue: 7000,
     skillGain: 1.2,
+    productionTurns: 3,
   },
   {
     id: "album",
@@ -79,6 +87,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
     baseReach: 4000,
     baseRevenue: 12000,
     skillGain: 1.4,
+    productionTurns: 3,
   },
   {
     id: "acoustic",
@@ -89,6 +98,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
     baseReach: 1200,
     baseRevenue: 3500,
     skillGain: 0.9,
+    productionTurns: 2,
   },
   {
     id: "live",
@@ -99,6 +109,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
     baseReach: 1800,
     baseRevenue: 5000,
     skillGain: 0.8,
+    productionTurns: 2,
   },
 ];
 

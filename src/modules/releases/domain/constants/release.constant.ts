@@ -78,6 +78,8 @@ export interface ReleaseDetails {
    */
   focus?: number;
   chemistry?: number;
+  /** Market saturation applied to fans/revenue (ADR-0015). */
+  saturation?: number;
   /** Reception factors behind the critic/public scores (ADR-0011). */
   reviews?: {
     accessibility: number;
@@ -102,6 +104,16 @@ export const UPFRONT_FRACTION = 0;
 
 /** Fraction of the remaining royalty tail paid out each turn (geometric decay). */
 export const ROYALTY_PAYOUT_RATE = 0.5;
+
+/**
+ * Commercial multiplier by how many works the band already launched in the same
+ * calendar year (ADR-0015 §5): the market's appetite runs out. Beyond the table,
+ * the last factor holds.
+ */
+export const SATURATION_FACTORS = [1, 0.6, 0.35, 0.2];
+
+/** Creation events a single production turn brings up (ADR-0015 §3). */
+export const CREATION_EVENTS_PER_SESSION = 1;
 
 /** Maximum number of turns a release keeps paying royalties. */
 export const ROYALTY_WINDOW_TURNS = 6;

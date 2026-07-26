@@ -134,6 +134,9 @@ export class ReleaseOrmEntity {
   })
   releasedAtYear: number | null;
 
+  @Column({ name: "production_turns_left", type: "smallint", default: 0 })
+  productionTurnsLeft: number;
+
   @Column({ name: "creation_log", type: "jsonb", default: () => "'[]'" })
   creationLog: ReleaseCreationLogEntry[];
 

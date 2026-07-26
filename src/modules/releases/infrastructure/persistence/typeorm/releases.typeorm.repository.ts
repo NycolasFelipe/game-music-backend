@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { MoreThan, Repository } from "typeorm";
+import { Between, MoreThan, Repository } from "typeorm";
 import { CreationEventEntity } from "@/modules/releases/domain/entities/creation-event.entity";
 import { ReleaseEntity } from "@/modules/releases/domain/entities/release.entity";
 import {
@@ -43,6 +43,7 @@ export class ReleasesTypeormRepository implements ReleasesRepository {
         budgetTier: data.budgetTier,
         status: "em_criacao",
         credits: data.credits,
+        productionTurnsLeft: data.productionTurnsLeft,
         royaltyRemaining: 0,
         royaltyTurnsLeft: 0,
         creationLog: [],
@@ -134,6 +135,64 @@ export class ReleasesTypeormRepository implements ReleasesRepository {
    */
   async countInCreation(bandId: string): Promise<number> {
     return this.repository.count({ where: { bandId, status: "em_criacao" } });
+  }
+
+  /**
+   * Finds the band's draft in creation, if any (there is at most one).
+   *
+   * @param bandId - The band id.
+   * @returns The domain draft, or `null` when the band has none.
+   */
+  async findInCreation(bandId: string): Promise<ReleaseEntity | null> {
+    const orm = await this.repository.findOne({
+      where: { bandId, status: "em_criacao" },
+    });
+    return orm ? this.toDomain(orm) : null;
+  }
+
+  /**
+   * Sets how many production turns a draft still has to run (ADR-0015 §1).
+   *
+   * @param id - The release id.
+   * @param turnsLeft - The new absolute number of turns left.
+   * @returns A promise that resolves once applied.
+   */
+  async setProductionTurnsLeft(id: string, turnsLeft: number): Promise<void> {
+    await this.repository.update({ id }, { productionTurnsLeft: turnsLeft });
+  }
+
+  /**
+   * Counts the works a band launched in a given calendar year (ADR-0015 §5).
+   * The live year is fractional (`.5` is the second semester), so the year spans
+   * `[year, year + 1)`.
+   *
+   * @param bandId - The band id.
+   * @param year - The calendar year (whole number).
+   * @returns The number of works launched that year.
+   */
+  async countLaunchedInYear(bandId: string, year: number): Promise<number> {
+    return this.repository.count({
+      where: {
+        bandId,
+        status: "lancada",
+        releasedAtYear: Between(Math.floor(year), Math.floor(year) + 0.5),
+      },
+    });
+  }
+
+  /**
+   * Counts the band's unresolved creation events across its draft.
+   *
+   * @param bandId - The band id.
+   * @returns The number of pending studio decisions.
+   */
+  async countPendingCreationEventsByBand(bandId: string): Promise<number> {
+    return this.creationEventRepository
+      .createQueryBuilder("event")
+      .innerJoin("releases", "release", "release.id = event.release_id")
+      .where("release.band_id = :bandId", { bandId })
+      .andWhere("event.resolved = false")
+      .getCount();
   }
 
   /**
@@ -320,6 +379,7 @@ export class ReleasesTypeormRepository implements ReleasesRepository {
       orm.royaltyRemaining,
       orm.royaltyTurnsLeft,
       orm.releasedAtYear,
+      orm.productionTurnsLeft,
       orm.creationLog,
       orm.details,
       orm.createdAt,

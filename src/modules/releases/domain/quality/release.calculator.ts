@@ -46,6 +46,11 @@ export interface ReleaseEvaluationInput {
   currentFans: number;
   /** The band's relationships, for the chemistry of shared aspects (ADR-0014). */
   relationships?: ReleaseRelationshipInput[];
+  /**
+   * Commercial multiplier for how crowded the band's own release year already is
+   * (ADR-0015 §5; default 1 — the first work of the year).
+   */
+  saturation?: number;
   /** Product of the creation-event choice modifiers (default 1). */
   eventModifier?: number;
   /** Random quality variance factor, e.g. `1 ± QUALITY_VARIANCE` (default 1). */
@@ -64,6 +69,8 @@ export interface ReleaseQualityFactors {
   focus: number;
   /** Average chemistry factor across the shared aspects (ADR-0014 §2). */
   chemistry: number;
+  /** Market saturation applied to fans and revenue (ADR-0015 §5). */
+  saturation: number;
 }
 
 /** The computed outcome of a work. */
@@ -258,6 +265,7 @@ export function evaluateRelease(
 ): ReleaseEvaluation {
   const eventModifier = input.eventModifier ?? 1;
   const variance = input.variance ?? 1;
+  const saturation = clamp(input.saturation ?? 1, 0, 1);
 
   const skillScore = computeSkillScore(
     input.credits,
@@ -285,12 +293,17 @@ export function evaluateRelease(
   const cost = round2(input.format.baseCost * input.budgetTier.costMultiplier);
   const reach = reachFactor(input.currentFans);
 
+  // Saturation hits the commercial result only: the work is as good as it is,
+  // what runs out is the market's appetite for it (ADR-0015 §5).
   const fansGained = Math.round(
-    input.format.baseReach * qualityTier.fansMultiplier * reach,
+    input.format.baseReach * qualityTier.fansMultiplier * reach * saturation,
   );
 
   const masterRevenueTotal = round2(
-    input.format.baseRevenue * qualityTier.revenueMultiplier * reach,
+    input.format.baseRevenue *
+      qualityTier.revenueMultiplier *
+      reach *
+      saturation,
   );
   const publishingRevenueTotal = round2(masterRevenueTotal * PUBLISHING_RATIO);
   const revenueTotal = round2(masterRevenueTotal + publishingRevenueTotal);
@@ -317,6 +330,7 @@ export function evaluateRelease(
       reach: round2(reach),
       focus: round2(focus),
       chemistry: round2(chemistry),
+      saturation: round2(saturation),
     },
   };
 }

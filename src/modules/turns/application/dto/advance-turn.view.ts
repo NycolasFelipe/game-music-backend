@@ -1,6 +1,7 @@
 import type { FormerMemberView } from "@/modules/band-members/application/dto/former-member.view";
 import type { ActiveEventView } from "@/modules/events/application/dto/active-event.view";
 import type { PassiveEventView } from "@/modules/events/application/dto/passive-event.view";
+import type { ReleaseProductionView } from "@/modules/releases/application/dto/release-production.view";
 import type { SalaryRaiseView } from "@/modules/turns/application/dto/salary-raise.view";
 
 /**
@@ -30,6 +31,11 @@ export class AdvanceTurnView {
    * empty when the save has the option off, or when the cash fell short.
    */
   salaryRaises: SalaryRaiseView[];
+  /**
+   * How the work in production moved this turn (ADR-0015): `null` when the band
+   * is not recording anything.
+   */
+  production: ReleaseProductionView | null;
   /** Members who left the band this turn over unpaid salary (full snapshots). */
   departures: FormerMemberView[];
   /**

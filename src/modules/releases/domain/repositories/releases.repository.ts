@@ -31,6 +31,8 @@ export interface CreateReleaseData {
   style: string;
   budgetTier: string;
   credits: ReleaseCredits;
+  /** Turns of production the format demands before launch (ADR-0015 §1). */
+  productionTurnsLeft: number;
 }
 
 /** Absolute outcome fields written when a draft is finalized (launched). */
@@ -107,6 +109,41 @@ export interface ReleasesRepository {
    * @returns The number of in-creation releases.
    */
   countInCreation(bandId: string): Promise<number>;
+
+  /**
+   * Finds the band's draft in creation, if any (there is at most one).
+   *
+   * @param bandId - The band id.
+   * @returns The draft, or `null` when the band has none.
+   */
+  findInCreation(bandId: string): Promise<ReleaseEntity | null>;
+
+  /**
+   * Sets how many production turns a draft still has to run (ADR-0015 §1).
+   *
+   * @param id - The release id.
+   * @param turnsLeft - The new absolute number of turns left.
+   * @returns A promise that resolves once applied.
+   */
+  setProductionTurnsLeft(id: string, turnsLeft: number): Promise<void>;
+
+  /**
+   * Counts the works a band launched in a given calendar year, for the market
+   * saturation of the next one (ADR-0015 §5).
+   *
+   * @param bandId - The band id.
+   * @param year - The calendar year (whole number).
+   * @returns The number of works launched that year.
+   */
+  countLaunchedInYear(bandId: string, year: number): Promise<number>;
+
+  /**
+   * Counts the band's unresolved creation events across its draft.
+   *
+   * @param bandId - The band id.
+   * @returns The number of pending studio decisions.
+   */
+  countPendingCreationEventsByBand(bandId: string): Promise<number>;
 
   /**
    * Persists the generated creation events for a release draft.

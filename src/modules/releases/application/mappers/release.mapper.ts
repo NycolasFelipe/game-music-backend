@@ -54,6 +54,7 @@ export function toReleaseView(release: ReleaseEntity): ReleaseView {
     royaltyRemaining: release.royaltyRemaining,
     royaltyTurnsLeft: release.royaltyTurnsLeft,
     releasedAtYear: release.releasedAtYear,
+    productionTurnsLeft: release.productionTurnsLeft,
     creationLog: release.creationLog,
     details: release.details,
     createdAt: release.createdAt,

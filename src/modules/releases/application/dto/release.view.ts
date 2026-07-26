@@ -42,6 +42,8 @@ export class ReleaseView {
   royaltyRemaining: number;
   royaltyTurnsLeft: number;
   releasedAtYear: number | null;
+  /** Turns of production left before the draft can be launched (ADR-0015). */
+  productionTurnsLeft: number;
   creationLog: ReleaseCreationLogEntry[];
   details: ReleaseDetails | null;
   createdAt: Date;

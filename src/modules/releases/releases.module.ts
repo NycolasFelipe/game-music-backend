@@ -4,6 +4,7 @@ import { BandsModule } from "@/modules/bands/bands.module";
 import { GenerateReleaseConceptUseCase } from "@/modules/releases/application/use-cases/generate-release-concept.use-case";
 import { GenerateReleaseTitleUseCase } from "@/modules/releases/application/use-cases/generate-release-title.use-case";
 import { AccrueReleaseRoyaltiesUseCase } from "@/modules/releases/application/use-cases/accrue-release-royalties.use-case";
+import { AdvanceReleaseProductionUseCase } from "@/modules/releases/application/use-cases/advance-release-production.use-case";
 import { CancelReleaseUseCase } from "@/modules/releases/application/use-cases/cancel-release.use-case";
 import { FinalizeReleaseUseCase } from "@/modules/releases/application/use-cases/finalize-release.use-case";
 import { GetReleaseUseCase } from "@/modules/releases/application/use-cases/get-release.use-case";
@@ -41,7 +42,12 @@ import { ReleasesController } from "@/modules/releases/presentation/http/control
     FinalizeReleaseUseCase,
     CancelReleaseUseCase,
     AccrueReleaseRoyaltiesUseCase,
+    AdvanceReleaseProductionUseCase,
   ],
-  exports: [RELEASES_REPOSITORY, AccrueReleaseRoyaltiesUseCase],
+  exports: [
+    RELEASES_REPOSITORY,
+    AccrueReleaseRoyaltiesUseCase,
+    AdvanceReleaseProductionUseCase,
+  ],
 })
 export class ReleasesModule {}

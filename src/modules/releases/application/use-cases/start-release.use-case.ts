@@ -14,7 +14,10 @@ import {
 import { ReleaseView } from "@/modules/releases/application/dto/release.view";
 import type { StartReleaseInput } from "@/modules/releases/application/dto/start-release.input";
 import { toReleaseView } from "@/modules/releases/application/mappers/release.mapper";
-import { creditedMemberIds } from "@/modules/releases/domain/constants/release.constant";
+import {
+  creditedMemberIds,
+  CREATION_EVENTS_PER_SESSION,
+} from "@/modules/releases/domain/constants/release.constant";
 import { findBudgetTier } from "@/modules/releases/domain/data/budget-tiers";
 import { findReleaseFormat } from "@/modules/releases/domain/data/release-formats";
 import { generateCreationEvents } from "@/modules/releases/domain/generation/creation-event.generator";
@@ -104,6 +107,7 @@ export class StartReleaseUseCase {
       style: input.style,
       budgetTier: input.budgetTier,
       credits: input.credits,
+      productionTurnsLeft: format.productionTurns,
     });
 
     const creditedSet = new Set(credited);
@@ -120,6 +124,9 @@ export class StartReleaseUseCase {
         memberBId: r.memberBId,
         level: r.level,
       })),
+      // Only the first studio session: the rest come one per production turn
+      // (ADR-0015 §3).
+      { limit: CREATION_EVENTS_PER_SESSION },
     );
     await this.releasesRepository.createCreationEvents(
       release.id,
@@ -128,7 +135,8 @@ export class StartReleaseUseCase {
 
     this.logger.log(
       `Started release ${release.id} for band ${bandId} ` +
-        `(${creationEvents.length} creation events).`,
+        `(${format.productionTurns} production turn(s), ` +
+        `${creationEvents.length} session event(s)).`,
     );
     return toReleaseView(release);
   }

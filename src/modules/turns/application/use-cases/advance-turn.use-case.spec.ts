@@ -10,6 +10,7 @@ import { ArchiveMemberDeparturesUseCase } from "@/modules/band-members/applicati
 import { AutoAdjustSalariesUseCase } from "@/modules/band-members/application/use-cases/auto-adjust-salaries.use-case";
 import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
 import { AccrueReleaseRoyaltiesUseCase } from "@/modules/releases/application/use-cases/accrue-release-royalties.use-case";
+import { AdvanceReleaseProductionUseCase } from "@/modules/releases/application/use-cases/advance-release-production.use-case";
 import { RELEASES_REPOSITORY } from "@/modules/releases/domain/repositories/releases.repository";
 import { AdvanceTurnUseCase } from "@/modules/turns/application/use-cases/advance-turn.use-case";
 import { TURNS_REPOSITORY } from "@/modules/turns/domain/repositories/turns.repository";
@@ -26,11 +27,12 @@ describe("AdvanceTurnUseCase", () => {
     getBandMemberAverages: jest.Mock;
   };
   let activeEventsRepository: { countUnresolved: jest.Mock };
-  let releasesRepository: { countInCreation: jest.Mock };
+  let releasesRepository: { countPendingCreationEventsByBand: jest.Mock };
   let turnsRepository: { create: jest.Mock };
   let generatePassiveEvents: { execute: jest.Mock };
   let generateActiveEvent: { execute: jest.Mock };
   let accrueReleaseRoyalties: { execute: jest.Mock };
+  let advanceReleaseProduction: { execute: jest.Mock };
   let autoAdjustSalaries: { execute: jest.Mock };
   let paySalaries: { execute: jest.Mock };
   let archiveMemberDepartures: { execute: jest.Mock };
@@ -57,7 +59,7 @@ describe("AdvanceTurnUseCase", () => {
       countUnresolved: jest.fn().mockResolvedValue(0),
     };
     releasesRepository = {
-      countInCreation: jest.fn().mockResolvedValue(0),
+      countPendingCreationEventsByBand: jest.fn().mockResolvedValue(0),
     };
     turnsRepository = {
       create: jest.fn().mockImplementation((data: unknown) => data),
@@ -65,6 +67,7 @@ describe("AdvanceTurnUseCase", () => {
     generatePassiveEvents = { execute: jest.fn().mockResolvedValue([]) };
     generateActiveEvent = { execute: jest.fn().mockResolvedValue(null) };
     accrueReleaseRoyalties = { execute: jest.fn().mockResolvedValue(0) };
+    advanceReleaseProduction = { execute: jest.fn().mockResolvedValue(null) };
     autoAdjustSalaries = { execute: jest.fn().mockResolvedValue([]) };
     paySalaries = { execute: jest.fn().mockResolvedValue(emptyPayroll) };
     archiveMemberDepartures = { execute: jest.fn().mockResolvedValue([]) };
@@ -88,6 +91,10 @@ describe("AdvanceTurnUseCase", () => {
         {
           provide: AccrueReleaseRoyaltiesUseCase,
           useValue: accrueReleaseRoyalties,
+        },
+        {
+          provide: AdvanceReleaseProductionUseCase,
+          useValue: advanceReleaseProduction,
         },
         {
           provide: AutoAdjustSalariesUseCase,
@@ -324,19 +331,46 @@ describe("AdvanceTurnUseCase", () => {
     expect(bandsRepository.applyBandStateChanges).not.toHaveBeenCalled();
   });
 
-  it("refuses to advance while a release is in creation", async () => {
+  it("refuses to advance while a studio decision is pending (ADR-0015 §2)", async () => {
     bandsRepository.findByIdAndOwner.mockResolvedValue({
       id: BAND_ID,
       currentYear: 2003,
       fanCount: 10,
     });
-    releasesRepository.countInCreation.mockResolvedValue(1);
+    releasesRepository.countPendingCreationEventsByBand.mockResolvedValue(1);
 
     await expect(useCase.execute(actor, BAND_ID)).rejects.toBeInstanceOf(
       ConflictException,
     );
     expect(bandsRepository.advanceTurn).not.toHaveBeenCalled();
     expect(turnsRepository.create).not.toHaveBeenCalled();
+  });
+
+  it("burns a production turn on the work being recorded (ADR-0015 §1)", async () => {
+    bandsRepository.findByIdAndOwner.mockResolvedValue({
+      id: BAND_ID,
+      currentYear: 2003,
+      fanCount: 10,
+      balance: 1000,
+    });
+    advanceReleaseProduction.execute.mockResolvedValue({
+      releaseId: "rel-1",
+      title: "Ruído Branco",
+      turnsLeft: 1,
+      ready: false,
+      newSession: true,
+    });
+    randomSpy.mockReturnValue(0.9);
+
+    const result = await useCase.execute(actor, BAND_ID);
+
+    expect(advanceReleaseProduction.execute).toHaveBeenCalledWith(
+      actor,
+      BAND_ID,
+    );
+    expect(result.production).toEqual(
+      expect.objectContaining({ turnsLeft: 1, ready: false }),
+    );
   });
 
   it("throws NotFound when the band is not owned by the actor", async () => {
