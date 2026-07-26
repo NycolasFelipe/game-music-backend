@@ -9,6 +9,7 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "@/common/guards/jwt-auth.guard";
+import { BAND_THEMES } from "@/modules/bands/domain/constants/band.constant";
 import { THEME_LABELS } from "@/modules/bands/presentation/http/constants/band-labels.constant";
 import {
   GenerateReleaseConceptUseCase,
@@ -34,15 +35,18 @@ import {
   REVIEW_TIERS,
   type ReviewTier,
 } from "@/modules/releases/domain/data/review-tiers";
+import { genreProfileFor } from "@/modules/releases/domain/data/release-genre-profiles";
 import {
   ApiGenerateReleaseConcept,
   ApiGenerateReleaseTitle,
+  ApiListGenreProfiles,
   ApiListBudgetTiers,
   ApiListQualityTiers,
   ApiListReleaseFormats,
   ApiListReviewTiers,
 } from "@/modules/releases/decorators/api-releases.decorator";
 import { GenerateReleaseConceptDto } from "@/modules/releases/presentation/http/dto/generate-release-concept.dto";
+import { GenreProfileView } from "@/modules/releases/presentation/http/dto/genre-profile.view";
 import { GenerateReleaseTitleDto } from "@/modules/releases/presentation/http/dto/generate-release-title.dto";
 
 /**
@@ -100,6 +104,23 @@ export class ReleasesController {
   @ApiListReviewTiers()
   reviewTiers(): ReviewTier[] {
     return REVIEW_TIERS;
+  }
+
+  /**
+   * Lists the skill-weight profile of every style: how much each aspect matters
+   * to a work of that style. Lets the client show what a style demands and
+   * forecast a draft's technical potential.
+   *
+   * @returns One profile per style, with its display label.
+   */
+  @Get("genre-profiles")
+  @ApiListGenreProfiles()
+  genreProfiles(): GenreProfileView[] {
+    return BAND_THEMES.map((style) => ({
+      style,
+      label: THEME_LABELS[style],
+      weights: genreProfileFor(style),
+    }));
   }
 
   /**

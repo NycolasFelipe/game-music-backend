@@ -73,6 +73,21 @@ export function ApiListReviewTiers() {
 }
 
 /**
+ * Swagger docs for listing the per-style skill-weight profiles.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiListGenreProfiles() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiOperation({
+      summary: "List the skill-weight profile of every style (ADR-0008 §5)",
+    }),
+    ApiOkResponse({ description: "The genre profiles." }),
+  );
+}
+
+/**
  * Swagger docs for generating release titles.
  *
  * @returns The composed set of Swagger decorators.
