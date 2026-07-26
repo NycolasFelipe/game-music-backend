@@ -6,6 +6,7 @@ import { AuthModule } from "@/modules/auth/auth.module";
 import { BandMembersModule } from "@/modules/band-members/band-members.module";
 import { BandsModule } from "@/modules/bands/bands.module";
 import { EventsModule } from "@/modules/events/events.module";
+import { GigsModule } from "@/modules/gigs/gigs.module";
 import { ReleasesModule } from "@/modules/releases/releases.module";
 import { TurnsModule } from "@/modules/turns/turns.module";
 import { UsersModule } from "@/modules/users/users.module";
@@ -20,6 +21,7 @@ import { UsersModule } from "@/modules/users/users.module";
     BandMembersModule,
     EventsModule,
     ReleasesModule,
+    GigsModule,
     TurnsModule,
   ],
   controllers: [],

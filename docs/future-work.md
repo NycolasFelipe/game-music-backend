@@ -128,6 +128,9 @@ endpoint.
 
 ## 5. Renda por shows ao vivo (pubs, covers, etc.)
 
+> **Promovido:** este item virou o [ADR-0016 — Shows ao vivo](adr/0016-shows-ao-vivo.md)
+> (Aceita) e foi implementado. O esboço abaixo fica como registro da motivação.
+
 **Motivação.** No início a banda quase não fatura com obras (fama baixa, alcance
 pequeno). **Tocar ao vivo** — bares, pubs, tocar covers — é a **renda de base** e
 o principal caminho para uma banda pequena juntar caixa e ganhar os primeiros
