@@ -76,6 +76,9 @@ cálculo de impacto e no `ReleaseCard`.
 
 ## 3. Evolução dos integrantes ao publicar uma obra
 
+> **Promovido:** este item virou o [ADR-0012 — Evolução dos integrantes](adr/0012-evolucao-dos-integrantes.md)
+> (Aceita) e foi implementado. O esboço abaixo fica como registro da motivação.
+
 **Motivação.** Recompensar a produção e fazer a banda **amadurecer** ao trabalhar:
 gravar discos deveria desenvolver quem participou, dando um loop de progressão.
 
