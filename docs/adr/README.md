@@ -30,6 +30,7 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | [0014](0014-foco-e-quimica-nos-creditos.md) | Foco e química nos créditos de uma obra | Aceita |
 | [0015](0015-tempo-de-producao-e-saturacao.md) | Tempo de produção e saturação de mercado | Aceita |
 | [0016](0016-shows-ao-vivo.md) | Shows ao vivo (a renda de base) | Aceita |
+| [0017](0017-confraternizacoes.md) | Confraternizações (dinheiro para cuidar do elenco) | Aceita |
 
 ## Veja também
 - [Trabalho futuro](../future-work.md) — backlog de ideias de gameplay ainda não

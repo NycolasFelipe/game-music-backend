@@ -103,6 +103,9 @@ aplicação dos deltas no finalize.
 
 ## 4. Dinheiro para eventos internos do grupo
 
+> **Promovido:** este item virou o [ADR-0017 — Confraternizações](adr/0017-confraternizacoes.md)
+> (Aceita) e foi implementado. O esboço abaixo fica como registro da motivação.
+
 **Motivação.** Usar o caixa para **cuidar do elenco** — um "custo de manutenção
 social" que fecha o loop econômico: produzir gera dinheiro; parte dele volta para
 manter a banda unida (relacionamento/humor).
