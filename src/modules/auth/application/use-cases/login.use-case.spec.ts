@@ -20,6 +20,7 @@ describe("LoginUseCase", () => {
     "user-id-1",
     "user",
     "hashed-password",
+    { peopleView: "cards" },
     new Date("2026-01-01T00:00:00Z"),
     new Date("2026-01-01T00:00:00Z"),
   );

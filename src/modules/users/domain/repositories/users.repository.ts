@@ -1,3 +1,4 @@
+import type { UserPreferences } from "@/modules/users/domain/constants/user-preferences.constant";
 import { UserEntity } from "@/modules/users/domain/entities/user.entity";
 
 /** DI token for the users repository implementation. */
@@ -37,4 +38,16 @@ export interface UsersRepository {
    * @returns The newly created user.
    */
   create(data: CreateUserData): Promise<UserEntity>;
+
+  /**
+   * Replaces a user's account-level preferences (ADR-0018).
+   *
+   * @param id - The user id.
+   * @param preferences - The complete, already-validated preferences.
+   * @returns The updated user, or `null` when no such user exists.
+   */
+  updatePreferences(
+    id: string,
+    preferences: UserPreferences,
+  ): Promise<UserEntity | null>;
 }

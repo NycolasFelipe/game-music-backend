@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import type { UserPreferences } from "@/modules/users/domain/constants/user-preferences.constant";
 
 /**
  * TypeORM persistence model for the `users` table. This type lives strictly in
@@ -21,6 +22,10 @@ export class UserOrmEntity {
 
   @Column({ name: "password_hash", type: "varchar", length: 255 })
   passwordHash: string;
+
+  /** Account-level settings (ADR-0018), a `jsonb` blob with a known schema. */
+  @Column({ type: "jsonb", default: () => "'{}'" })
+  preferences: Partial<UserPreferences>;
 
   @CreateDateColumn({ name: "created_at", type: "timestamptz" })
   createdAt: Date;
