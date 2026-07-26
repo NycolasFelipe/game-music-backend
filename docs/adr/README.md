@@ -31,6 +31,7 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | [0015](0015-tempo-de-producao-e-saturacao.md) | Tempo de produção e saturação de mercado | Aceita |
 | [0016](0016-shows-ao-vivo.md) | Shows ao vivo (a renda de base) | Aceita |
 | [0017](0017-confraternizacoes.md) | Confraternizações (dinheiro para cuidar do elenco) | Aceita |
+| [0018](0018-preferencias-do-usuario.md) | Preferências do usuário (da conta, não do save) | Aceita |
 
 ## Veja também
 - [Trabalho futuro](../future-work.md) — backlog de ideias de gameplay ainda não
