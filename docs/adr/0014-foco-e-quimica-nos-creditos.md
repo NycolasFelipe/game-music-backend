@@ -98,9 +98,9 @@ química e sem evolução).
 `chemistry` (fator médio dos aspectos divididos), ao lado dos fatores que já
 existem. Obras antigas não têm os campos — sem backfill, como nos ADRs 0011/0012.
 
-O **frontend** espelha as duas regras no prognóstico da tela de criação (que já é
-declaradamente uma estimativa) e mostra, por integrante, quantas funções ele já
-acumula e o que a química está somando ou tirando em cada aspecto dividido.
+O **frontend** mostra as duas regras na tela de criação: por integrante, quantas
+funções ele acumula e a que porcentagem está operando; por instrumento dividido,
+o que a química soma ou tira.
 
 ## Persistência
 Nenhuma migration: só novos campos dentro de `releases.details` (`jsonb`).
@@ -131,8 +131,8 @@ Nenhuma migration: só novos campos dentro de `releases.details` (`jsonb`).
 
 **Negativas / trade-offs**
 - Duas constantes novas a balancear (curva de foco e `CHEMISTRY_WEIGHT`).
-- A nota fica mais difícil de prever de cabeça; mitigado pelo prognóstico da tela
-  de criação, que aplica as mesmas regras.
+- A nota fica mais difícil de prever de cabeça; mitigado pelos indicadores de
+  carga e química exibidos na própria tela de créditos.
 - Obras lançadas antes deste ADR foram avaliadas por outra fórmula — os números
   antigos não são comparáveis aos novos (não há recálculo).
 
