@@ -9,6 +9,9 @@ export const ACTIVE_EVENT_TYPES = [
   "decisao_criativa",
   "crise_financeira",
   "proposta_contrato",
+  // Never drawn by the random generator: reached only when an activity goes
+  // wrong (ADR-0017 §3).
+  "confraternizacao",
 ] as const;
 
 /** An active event type identifier. */

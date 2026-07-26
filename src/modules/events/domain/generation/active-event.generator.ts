@@ -310,6 +310,46 @@ function selectSolo(
 }
 
 /**
+ * Builds a concrete event from a template and an explicit cast, filling the
+ * text placeholders and keeping only the options that cast makes visible.
+ * Exposed so callers that already know *which* event to raise — an activity
+ * that went wrong (ADR-0017 §3), for instance — can skip the random selection.
+ *
+ * @param template - The template to instantiate.
+ * @param involved - The characters, in template position order.
+ * @param year - The band's live year to stamp on the event.
+ * @returns The generated event, or `null` when no option survives the cast.
+ */
+export function instantiateActiveEvent(
+  template: ActiveEventTemplate,
+  involved: EventCharacter[],
+  year: number,
+): GeneratedActiveEvent | null {
+  const visibleOptions = template.options.filter((opt) =>
+    optionIsVisible(opt, involved),
+  );
+  if (visibleOptions.length === 0) return null;
+
+  const options: ResolvedEventOption[] = visibleOptions.map((opt, index) => ({
+    id: `option_${index}`,
+    label: fillTemplate(opt.label, involved),
+    description: fillTemplate(opt.description, involved),
+    consequence: resolveConsequence(opt.consequence, involved),
+  }));
+  shuffleInPlace(options);
+
+  return {
+    templateId: template.id,
+    year,
+    type: template.type,
+    title: fillTemplate(template.title, involved),
+    description: fillTemplate(template.descriptionTemplate, involved),
+    involvedCharacterIds: involved.map((c) => c.id),
+    options,
+  };
+}
+
+/**
  * Generates one eligible active event for a band's current state, or `null`
  * when no suitable event could be built.
  *
@@ -367,28 +407,10 @@ export function generateActiveEvent(params: {
       if (involved.length === 0) continue;
     }
 
-    const visibleOptions = template.options.filter((opt) =>
-      optionIsVisible(opt, involved),
-    );
-    if (visibleOptions.length === 0) continue;
+    const event = instantiateActiveEvent(template, involved, year);
+    if (!event) continue;
 
-    const options: ResolvedEventOption[] = visibleOptions.map((opt, index) => ({
-      id: `option_${index}`,
-      label: fillTemplate(opt.label, involved),
-      description: fillTemplate(opt.description, involved),
-      consequence: resolveConsequence(opt.consequence, involved),
-    }));
-    shuffleInPlace(options);
-
-    return {
-      templateId: template.id,
-      year,
-      type: template.type,
-      title: fillTemplate(template.title, involved),
-      description: fillTemplate(template.descriptionTemplate, involved),
-      involvedCharacterIds: involved.map((c) => c.id),
-      options,
-    };
+    return event;
   }
 
   return null;

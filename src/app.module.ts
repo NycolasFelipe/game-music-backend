@@ -2,6 +2,7 @@ import { Module, ValidationPipe } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { APP_PIPE } from "@nestjs/core";
 import { DatabaseModule } from "@/database/database.module";
+import { ActivitiesModule } from "@/modules/activities/activities.module";
 import { AuthModule } from "@/modules/auth/auth.module";
 import { BandMembersModule } from "@/modules/band-members/band-members.module";
 import { BandsModule } from "@/modules/bands/bands.module";
@@ -22,6 +23,7 @@ import { UsersModule } from "@/modules/users/users.module";
     EventsModule,
     ReleasesModule,
     GigsModule,
+    ActivitiesModule,
     TurnsModule,
   ],
   controllers: [],
