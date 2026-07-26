@@ -14,6 +14,7 @@ export interface CreateBandActivityData {
   relationshipDelta: number;
   trouble: boolean;
   troubleEventId: string | null;
+  story: string[];
 }
 
 /**

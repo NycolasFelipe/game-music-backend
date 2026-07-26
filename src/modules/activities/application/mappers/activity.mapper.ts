@@ -21,6 +21,7 @@ export function toBandActivityView(
     relationshipDelta: activity.relationshipDelta,
     trouble: activity.trouble,
     troubleEventId: activity.troubleEventId,
+    story: activity.story,
     createdAt: activity.createdAt,
   };
 }

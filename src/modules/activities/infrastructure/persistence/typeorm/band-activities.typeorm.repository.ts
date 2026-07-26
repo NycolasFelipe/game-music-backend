@@ -70,6 +70,7 @@ export class BandActivitiesTypeormRepository implements BandActivitiesRepository
       orm.relationshipDelta,
       orm.trouble,
       orm.troubleEventId,
+      orm.story ?? [],
       orm.createdAt,
     );
   }

@@ -95,9 +95,28 @@ divertido), quase não dá errado e é de longe a que mais conserta relação. A
 
 ### 5. Persistência e histórico
 `band_activities` (append-only): atividade, ano, custo, **ids dos participantes**
-(`jsonb`), deltas aplicados, se deu problema e o id do evento gerado. É o
-histórico que responde `countByBandAndYear` para a saturação do §2 — nenhuma
-coluna nova em `bands`.
+(`jsonb`), deltas aplicados, se deu problema, o id do evento gerado e a
+**história da noite** (§6). É o histórico que responde `countByBandAndYear` para
+a saturação do §2 — nenhuma coluna nova em `bands`.
+
+### 6. A noite é contada, não resumida
+Uma confraternização entregue como número (`humor +0,4 · Ana × Beto −5 → −4`) é
+uma planilha, não uma noite. O backend gera uma **história** em três ou quatro
+parágrafos e o jogo a mostra num modal, com os números embaixo.
+
+A história **reage ao estado**, senão vira papel de parede: a abertura vem da
+atividade, o parágrafo do meio segue **o par mais hostil que foi convidado** (e
+muda se eles se odeiam, se são próximos ou se estão em paz), e o fecho depende de
+a noite ter dado errado — quando deu, ele mesmo passa a bola para a decisão que
+está esperando.
+
+É aqui também que a **saturação do §2** finalmente aparece para o jogador, e de
+propósito **só depois do fato**: um parágrafo dizendo que "fazia pouco tempo
+desde a última vez" ensina a regra sem imprimir a fórmula antes da escolha.
+
+O gerador é **puro** — a aleatoriedade entra como `seed`, como nas outras
+calculadoras —, e o texto é gravado na linha. A noite é escrita uma vez, no
+momento em que acontece; regerar depois seria reescrever a história.
 
 ## Consequências
 
@@ -111,9 +130,13 @@ coluna nova em `bands`.
 - Uma atividade pode gerar um evento que bloqueia o turno logo depois de o jogador
   ter gastado — combinação frustrante se ele estava com pressa. É intencional
   (é o risco que ele comprou), mas merece atenção no playtest.
+- O catálogo de cenas (§6) é **conteúdo**, e conteúdo se gasta: numa campanha
+  longa o jogador vai reler as mesmas aberturas. Ampliá-lo é barato (é dado), mas
+  precisa entrar na conta de manutenção como qualquer texto do jogo.
 - Fica de fora: atividades que consomem turno, efeitos por traço (um `greedy`
-  reagir diferente a uma viagem cara) e atividades individuais (levar **um**
-  integrante para conversar). Todas cabem depois sem quebrar o formato.
+  reagir diferente a uma viagem cara), atividades individuais (levar **um**
+  integrante para conversar) e cenas que citem traços ou o momento da banda.
+  Todas cabem depois sem quebrar o formato.
 
 ## Referências
 - Implementação: [src/modules/activities/](../../src/modules/activities/) e

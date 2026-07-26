@@ -22,6 +22,8 @@ export class BandActivityEntity {
     public readonly trouble: boolean,
     /** The active event the trouble spawned, when one was generated. */
     public readonly troubleEventId: string | null,
+    /** The story of the night, one paragraph per entry (ADR-0017 §6). */
+    public readonly story: string[],
     public readonly createdAt: Date,
   ) {}
 }

@@ -62,6 +62,9 @@ export class BandActivityOrmEntity {
   @Column({ name: "trouble_event_id", type: "uuid", nullable: true })
   troubleEventId: string | null;
 
+  @Column({ type: "jsonb", default: () => "'[]'" })
+  story: string[];
+
   @CreateDateColumn({ name: "created_at", type: "timestamptz" })
   createdAt: Date;
 }

@@ -9,6 +9,7 @@ import type { AuthenticatedUserEntity } from "@/common/entities/authenticated-us
 import { ActivityResultView } from "@/modules/activities/application/dto/activity-result.view";
 import { HoldActivityInput } from "@/modules/activities/application/dto/hold-activity.input";
 import { toBandActivityView } from "@/modules/activities/application/mappers/activity.mapper";
+import { generateActivityStory } from "@/modules/activities/domain/activity/activity-story.generator";
 import { evaluateActivity } from "@/modules/activities/domain/activity/activity.calculator";
 import { findActivity } from "@/modules/activities/domain/data/activities";
 import {
@@ -134,6 +135,23 @@ export class HoldActivityUseCase {
       ? await this.raiseTrouble(bandId, composed, evaluation.weakestPair)
       : null;
 
+    const nameOf = (id: string) =>
+      composed.members.find((member) => member.id === id)?.name ?? "alguém";
+    const story = generateActivityStory({
+      activity,
+      participantNames: participants.map((member) => member.name),
+      weakestPair: evaluation.weakestPair
+        ? {
+            a: nameOf(evaluation.weakestPair.memberAId),
+            b: nameOf(evaluation.weakestPair.memberBId),
+            level: evaluation.weakestPair.level,
+          }
+        : null,
+      trouble,
+      saturation: evaluation.saturation,
+      seed: Math.random(),
+    });
+
     const recorded = await this.activitiesRepository.create({
       bandId,
       activityId: activity.id,
@@ -144,6 +162,7 @@ export class HoldActivityUseCase {
       relationshipDelta: evaluation.relationshipDelta,
       trouble,
       troubleEventId: troubleEvent?.id ?? null,
+      story,
     });
 
     this.logger.log(

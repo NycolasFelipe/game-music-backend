@@ -10,5 +10,7 @@ export class BandActivityView {
   relationshipDelta: number;
   trouble: boolean;
   troubleEventId: string | null;
+  /** The story of the night (ADR-0017 §6). */
+  story: string[];
   createdAt: Date;
 }
