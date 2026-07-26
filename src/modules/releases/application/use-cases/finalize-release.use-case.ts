@@ -20,6 +20,7 @@ import {
 import { findBudgetTier } from "@/modules/releases/domain/data/budget-tiers";
 import { findReleaseFormat } from "@/modules/releases/domain/data/release-formats";
 import { genreProfileFor } from "@/modules/releases/domain/data/release-genre-profiles";
+import { evaluateMemberGrowth } from "@/modules/releases/domain/growth/growth.calculator";
 import { evaluateRelease } from "@/modules/releases/domain/quality/release.calculator";
 import { evaluateReviews } from "@/modules/releases/domain/quality/review.calculator";
 import {
@@ -32,7 +33,8 @@ import {
  * debits the production cost and credits the fans gained (fame recomputes from
  * fans). No revenue enters on launch (`UPFRONT_FRACTION = 0`) — the whole revenue
  * is the royalty tail, which only starts arriving on the next `AdvanceTurn`.
- * Atomic band-state change via `applyBandStateChanges`.
+ * The credited members also develop (skills + pride, ADR-0012). Atomic
+ * band-state change via `applyBandStateChanges`.
  */
 @Injectable()
 export class FinalizeReleaseUseCase {
@@ -133,6 +135,20 @@ export class FinalizeReleaseUseCase {
       currentFans: composed.band.fanCount,
     });
 
+    // Member development (ADR-0012) — computed *after* the evaluation: the work
+    // is judged by the skills that made it; the growth is its consequence.
+    const growth = evaluateMemberGrowth({
+      credits: release.credits,
+      members: composed.members.map((m) => ({
+        id: m.id,
+        name: m.name,
+        skills: m.skills,
+        happiness: m.happiness,
+      })),
+      quality: evaluation.quality,
+      formatWeight: format.skillGain,
+    });
+
     if (composed.band.balance < evaluation.cost) {
       throw new BadRequestException(
         "Insufficient balance to finalize this release.",
@@ -148,6 +164,14 @@ export class FinalizeReleaseUseCase {
     await this.bandsRepository.applyBandStateChanges(bandId, {
       balance: newBalance,
       fanCount: newFans,
+      memberSkills: growth.map((outcome) => ({
+        memberId: outcome.memberId,
+        skills: outcome.skills,
+      })),
+      memberHappiness: growth.map((outcome) => ({
+        memberId: outcome.memberId,
+        happiness: outcome.happiness,
+      })),
     });
 
     const finalized = await this.releasesRepository.finalize(releaseId, {
@@ -163,7 +187,11 @@ export class FinalizeReleaseUseCase {
       royaltyTurnsLeft: ROYALTY_WINDOW_TURNS,
       releasedAtYear: composed.band.currentYear,
       creationLog,
-      details: { ...evaluation.factors, reviews: reviews.factors },
+      details: {
+        ...evaluation.factors,
+        reviews: reviews.factors,
+        growth: growth.map((outcome) => outcome.record),
+      },
     });
 
     this.logger.log(

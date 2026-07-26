@@ -38,6 +38,32 @@ export interface ReleaseCreationLogEntry {
   qualityModifier: number;
 }
 
+/** One aspect a credited member developed while making the work (ADR-0012). */
+export interface ReleaseSkillGain {
+  /** The aspect (skill) the member was credited on. */
+  skill: SkillType;
+  /** Skill level before the work. */
+  from: number;
+  /** Skill level after the work. */
+  to: number;
+  /** Whether the whole-number level went up with this work. */
+  leveledUp: boolean;
+}
+
+/**
+ * What one credited member took from the work (ADR-0012). The member `name` is
+ * denormalized on purpose: this is a historical record and the member may leave
+ * the band later.
+ */
+export interface ReleaseMemberGrowth {
+  memberId: string;
+  name: string;
+  /** Pride (or frustration) the work gave the member. */
+  happinessDelta: number;
+  /** The aspects that grew (never empty unless only happiness moved). */
+  gains: ReleaseSkillGain[];
+}
+
 /** The quality breakdown persisted with a finalized release (for display). */
 export interface ReleaseDetails {
   skillScore: number;
@@ -53,6 +79,11 @@ export interface ReleaseDetails {
     experimental: number;
     fameAppeal: number;
   };
+  /**
+   * What the work developed in the members credited on it (ADR-0012). Absent on
+   * works launched before the feature.
+   */
+  growth?: ReleaseMemberGrowth[];
 }
 
 /**

@@ -21,7 +21,13 @@ const skills = (partial: Partial<Skills>): Skills => ({
 const composed = (balance = 5000) => ({
   band: { id: "band-1", balance, fanCount: 100, currentYear: 1991 },
   members: [
-    { id: "m1", skills: skills({ vocal: 8, guitar: 6 }), happiness: 2 },
+    {
+      id: "m1",
+      name: "Ana",
+      skills: skills({ vocal: 8, guitar: 6 }),
+      happiness: 2,
+    },
+    { id: "m2", name: "Beto", skills: skills({ bass: 4 }), happiness: 0 },
   ],
   relationships: [],
 });
@@ -96,6 +102,29 @@ describe("FinalizeReleaseUseCase", () => {
       }),
     );
     expect(result.status).toBe("lancada");
+  });
+
+  it("develops the credited members and records it on the work (ADR-0012)", async () => {
+    const result = await useCase.execute(actor, "band-1", "rel-1");
+
+    const changes = bandsRepository.applyBandStateChanges.mock.calls[0][1];
+    // Only the credited member (m1) grows — and only on vocal/guitar.
+    expect(changes.memberSkills).toHaveLength(1);
+    expect(changes.memberSkills[0].memberId).toBe("m1");
+    expect(changes.memberSkills[0].skills.vocal).toBeGreaterThan(8);
+    expect(changes.memberSkills[0].skills.guitar).toBeGreaterThan(6);
+    expect(changes.memberSkills[0].skills.bass).toBe(0);
+    expect(changes.memberHappiness).toEqual([
+      { memberId: "m1", happiness: expect.any(Number) },
+    ]);
+
+    const growth = result.details?.growth;
+    expect(growth).toHaveLength(1);
+    expect(growth?.[0]).toMatchObject({ memberId: "m1", name: "Ana" });
+    expect(growth?.[0].gains.map((gain) => gain.skill).sort()).toEqual([
+      "guitar",
+      "vocal",
+    ]);
   });
 
   it("throws NotFound when the release is missing", async () => {

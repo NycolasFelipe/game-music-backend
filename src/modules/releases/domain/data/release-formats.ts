@@ -31,6 +31,11 @@ export interface ReleaseFormat {
   baseReach: number;
   /** Base revenue (before quality/fame multipliers). */
   baseRevenue: number;
+  /**
+   * How much the format develops the members credited on it (ADR-0012): a
+   * single is a weekend, an album is a season in the studio.
+   */
+  skillGain: number;
 }
 
 /** The release-format catalog. */
@@ -43,6 +48,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
     baseCost: 800,
     baseReach: 400,
     baseRevenue: 1200,
+    skillGain: 0.6,
   },
   {
     id: "ep",
@@ -52,6 +58,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
     baseCost: 2000,
     baseReach: 1000,
     baseRevenue: 3000,
+    skillGain: 0.9,
   },
   {
     id: "lp",
@@ -61,6 +68,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
     baseCost: 4000,
     baseReach: 2500,
     baseRevenue: 7000,
+    skillGain: 1.2,
   },
   {
     id: "album",
@@ -70,6 +78,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
     baseCost: 6000,
     baseReach: 4000,
     baseRevenue: 12000,
+    skillGain: 1.4,
   },
   {
     id: "acoustic",
@@ -79,6 +88,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
     baseCost: 2500,
     baseReach: 1200,
     baseRevenue: 3500,
+    skillGain: 0.9,
   },
   {
     id: "live",
@@ -88,6 +98,7 @@ export const RELEASE_FORMATS: ReleaseFormat[] = [
     baseCost: 3000,
     baseReach: 1800,
     baseRevenue: 5000,
+    skillGain: 0.8,
   },
 ];
 

@@ -1,3 +1,4 @@
+import type { Skills } from "@/modules/band-members/domain/constants/skill.constant";
 import type { CreateBandMemberData } from "@/modules/band-members/domain/repositories/band-members.repository";
 import type {
   BandTheme,
@@ -33,6 +34,8 @@ export interface BandStateChangesInput {
   balance?: number;
   /** New absolute happiness per member. */
   memberHappiness?: Array<{ memberId: string; happiness: number }>;
+  /** New absolute skill set per member (e.g. after a release, ADR-0012). */
+  memberSkills?: Array<{ memberId: string; skills: Skills }>;
   /** New absolute level per canonical member pair (upserted). */
   relationshipLevels?: Array<{
     memberAId: string;
@@ -109,8 +112,9 @@ export interface BandsRepository {
   deleteByIdAndOwner(id: string, ownerId: string): Promise<boolean>;
 
   /**
-   * Applies absolute band-aggregate changes (fan count, member happiness,
-   * relationship levels) atomically. Used to persist event consequences.
+   * Applies absolute band-aggregate changes (fan count, member happiness and
+   * skills, relationship levels) atomically. Used to persist event
+   * consequences.
    *
    * @param bandId - The band id.
    * @param changes - The absolute values to apply.

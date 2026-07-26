@@ -15,8 +15,9 @@ export const SKILL_TYPES = [
 export type SkillType = (typeof SKILL_TYPES)[number];
 
 /**
- * A band member's skill set. Each value is an integer in the range 0..10
- * (initial generation caps at 3).
+ * A band member's skill set. Each value ranges from 0 to 10 (initial generation
+ * yields integers capped at 3). Skills grow with published works (ADR-0012), so
+ * values may carry up to 2 decimals — clients should round for display.
  */
 export interface Skills {
   vocal: number;

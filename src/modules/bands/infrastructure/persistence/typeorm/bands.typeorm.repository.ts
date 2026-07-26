@@ -201,7 +201,7 @@ export class BandsTypeormRepository implements BandsRepository {
 
   /**
    * Applies absolute band-aggregate changes atomically (fan count, member
-   * happiness, relationship levels).
+   * happiness and skills, relationship levels).
    *
    * @param bandId - The band id.
    * @param changes - The absolute values to apply.
@@ -231,6 +231,12 @@ export class BandsTypeormRepository implements BandsRepository {
             { id: change.memberId, bandId },
             { happiness: change.happiness },
           );
+      }
+
+      for (const change of changes.memberSkills ?? []) {
+        await manager
+          .getRepository(BandMemberOrmEntity)
+          .update({ id: change.memberId, bandId }, { skills: change.skills });
       }
 
       for (const rel of changes.relationshipLevels ?? []) {
