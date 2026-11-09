@@ -109,3 +109,12 @@
 - Environment Variables: Never hardcode secrets. Inject environment configurations exclusively via the NestJS `@nestjs/config` module.
 - Prohibited Actions: Do not modify `main.ts` unless explicitly directed. Do not delete existing configuration files (`tsconfig.json`, `nest-cli.json`).
 - **Frontend `game-music` is read-only reference**: The `game-music` frontend repository will be **completely rebuilt** in the future. Never modify it — use it **only** as a domain/reference base (types, game rules, data) when designing the backend.
+
+## 8. Game Design Skills (`.claude/`)
+Project skills for reviewing game mechanics live in `.claude/skills/` and load when Claude Code starts in this folder. Open `game-music.code-workspace` with `game-music-frontend` cloned as a sibling folder (`../game-music-frontend`).
+- `/tycoon-review` (own skill, Portuguese): critical review of economy, progression, decision quality, randomness and turn flow, with numbers taken from the code and an optional Monte Carlo simulation. Use it first for any change to mechanics or balance.
+- `/balance-review` (gstack-game, MIT): generic rubrics for currency flow, difficulty curves and progression pacing.
+- `/balance-check` (Claude Code Game Studios, MIT): finds outliers and degenerate strategies in formulas and data.
+- `/feel-pass` (gstack-game, MIT): judges whether a playable mechanic feels responsive, with a focus on feedback chains and dead time.
+- `/player-experience` (gstack-game, MIT): role-plays a player persona through the game to find friction and churn risks.
+- Agent `economy-designer` (Claude Code Game Studios, MIT): designs sources, sinks and progression curves.

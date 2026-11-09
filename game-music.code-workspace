@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "game-music-backend",
+			"path": "."
+		},
+		{
+			"name": "game-music-frontend",
+			"path": "../game-music-frontend"
+		}
+	],
+	"settings": {}
+}
