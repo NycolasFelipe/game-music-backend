@@ -1,6 +1,6 @@
 # 0032 — Clima da banda com peso nas escolhas
 
-- **Status:** Proposta
+- **Status:** Aceita
 - **Data:** 2026-11-10
 - **Decisores:** Dono do jogo + equipe de backend
 - **Relacionada:** [0017 — Confraternizações](0017-confraternizacoes.md),

@@ -58,6 +58,11 @@ não move relacionamento nenhum — só humor, e pela metade.
 > **Emenda (ADR-0029):** uma confraternização leva um par até +3, no máximo.
 > Os níveis +4 e +5 só vêm de eventos, e um par que já está acima de +3 fica
 > onde está.
+>
+> **Emenda (ADR-0031 §3):** a banda faz no máximo uma confraternização por
+> turno, e a segunda é recusada. A saturação desta seção deixa de agir.
+>
+> **Emenda (ADR-0032 §4):** o teto da confraternização baixa para +2.
 
 ### 3. A festa pode acabar mal, e vira decisão
 Toda atividade tem uma `troubleChance`. Ela **não é fixa**: sobe com a hostilidade

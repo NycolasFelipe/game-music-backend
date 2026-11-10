@@ -34,6 +34,9 @@ nunca age. Três modelos alcançáveis exigem relação de no máximo 3 ou 0 (00
 Uma confraternização leva um par **até +3** (`ACTIVITY_RELATIONSHIP_CAP`, em
 `activity.constant.ts`). Os níveis +4 e +5 só vêm de eventos.
 
+> **Emenda (ADR-0032 §4):** o teto baixa para **+2**. De +3 a +5, a relação só
+> vem de eventos.
+
 - O ganho para no teto: um par em +2 numa viagem (+2) vai a +3.
 - Um par que os eventos já levaram acima de +3 **fica onde está**. A noite não
   esfria uma amizade.

@@ -45,7 +45,7 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | [0029](0029-teto-do-convivio-nas-relacoes.md) | Teto do convívio nas relações | Aceita |
 | [0030](0030-estilo-da-banda-e-permanente.md) | O estilo da banda é permanente e vale para toda obra | Aceita |
 | [0031](0031-eventos-unicos-por-save.md) | Eventos únicos por save: todo semestre, todo show e todo convívio | Aceita |
-| [0032](0032-clima-da-banda-com-peso-nas-escolhas.md) | Clima da banda com peso nas escolhas | Proposta |
+| [0032](0032-clima-da-banda-com-peso-nas-escolhas.md) | Clima da banda com peso nas escolhas | Aceita |
 
 ## Veja também
 - [Trabalho futuro](../future-work.md) — backlog de ideias de gameplay ainda não
