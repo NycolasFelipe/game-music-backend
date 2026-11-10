@@ -33,7 +33,7 @@ cabelo. A aparência guarda só o que o emoji não diz.
 | `beard` | `none`, `stubble`, `full`, `goatee` |
 | `glasses` | `none`, `round`, `sun` |
 | `earring` | booleano |
-| `shirt` | `crew`, `v`, `jacket` |
+| `shirt` | `crew`, `v`, `jacket`, `hoodie`, `stripes`, `turtleneck`, `collar`, `tank`, `leather`, `print` |
 | `shirtTone` | `4`, `6`, `8`, `10` (escuridão na escala de retícula) |
 
 Regras de geração (`generateAppearance`, função pura com sorteio injetável):
@@ -46,7 +46,14 @@ Regras de geração (`generateAppearance`, função pura com sorteio injetável)
   `full` ou `goatee`).
 - Óculos: 12% `sun`, 15% `round`, resto `none`.
 - Brinco: 55% para mulher, 15% para homem.
-- Camisa: `crew`, `v`, `jacket`, `crew`; tom uniforme entre 4, 6, 8 e 10.
+- Camisa: sorteio uniforme em `SHIRT_DRAW`, em que `crew` aparece duas vezes e
+  cada um dos outros cortes uma vez; tom uniforme entre 4, 6, 8 e 10.
+
+> **Emenda (2026-11-10):** entraram sete cortes: moletom com capuz (`hoodie`),
+> camiseta listrada (`stripes`), gola alta (`turtleneck`), camisa de botão
+> (`collar`), regata (`tank`), jaqueta de couro (`leather`) e camiseta
+> estampada (`print`). A aparência fica em `jsonb`, então os integrantes
+> antigos não mudam e não há migração.
 
 Onde a aparência nasce:
 - Candidatos (`POST /band-members/candidates`) já vêm com `appearance`.
