@@ -148,7 +148,9 @@ dos 5 instrumentos de cada integrante.
 `B/activities`. Sem limite por turno, com saturação `[1, .5, .25, .1]`.
 Custo = `(base + porPessoa × n) × (1 + 0,06 × nívelDeFama)`. Chance de
 confusão cresce com o pior par e, quando acontece, gera um evento ativo que
-bloqueia o turno seguinte.
+bloqueia o turno seguinte. O ganho de relação vale para todos os pares de
+convidados e para em +3 (`ACTIVITY_RELATIONSHIP_CAP`, ADR-0029): +4 e +5 só vêm de
+eventos, e um par acima de +3 não muda.
 
 | Atividade | Base | Por pessoa | Humor | Relação | Confusão |
 |---|---|---|---|---|---|
@@ -174,8 +176,14 @@ um arquivo por grupo (`ported`, `garagem`, `bares`, `casas`, `nacional`,
   um traço, e os 32 traços aparecem em algum evento. Acima de 2 milhões de fãs
   só há o 0002, que ninguém alcança em 80 turnos. Um template não se repete em
   3 anos, `generate-active-event.use-case.ts`. A janela
-  (`Between(ano - 3, ano + 3)`) inclui as duas pontas, então na prática são 7
-  turnos, não os 6 da ADR-0025.
+  (`Between(ano - 3, ano + 3)`) cobre 7 anos-meio, mas o do ano atual ainda não
+  tem evento na hora do sorteio, então bloqueia os modelos dos 6 avanços
+  anteriores, como diz a ADR-0025. O gerador tira os recentes antes de sortear.
+- **Ritmo medido (2026-11-10, semente 20261110, 800 partidas de 80 turnos):** 28
+  eventos do avanço por partida (p10 22, p90 34), 35% em todas as fases, e o
+  sorteio sempre acha modelo. Quem faz convívio em 1 de cada 3 turnos soma ~5
+  tretas. Antes do teto da ADR-0029, esse perfil tinha 96% dos pares em +4/+5 no
+  T40; com o teto, 30%.
 - **Elenco (ADR-0028):** todo par que cumpre o modelo entra no sorteio. Brigas
   pesam `1 + hostilidade` (par em −5 pesa 6); os outros tipos sorteiam por igual.
   Cada integrante do evento anterior multiplica o peso por 0,5.
