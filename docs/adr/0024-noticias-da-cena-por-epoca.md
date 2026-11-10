@@ -65,3 +65,9 @@ inteiro.
 > por carta, na fila do show ou ao telefone da rádio em qualquer época, no
 > fanzine a partir de 1970, no fórum a partir de 1996 e nas redes a partir do
 > ano de cada uma; o Twitter vale até 2022 e o X a partir de 2023.
+
+> **Emenda (2026-11-10):** os nomes dos níveis de fama seguem o ano da banda
+> (`FameLevelEntry.modern`). O nível 6 fala de fanzines e passa a blogs em
+> 2000; o nível 9 é "Comentados · Sucesso no boca a boca" e vira "Virais ·
+> Sucesso nas redes sociais" em 2008; o nível 15 é "Febre nacional, do rádio à
+> televisão" e passa a "Trending topics e viralização global" em 2010.
