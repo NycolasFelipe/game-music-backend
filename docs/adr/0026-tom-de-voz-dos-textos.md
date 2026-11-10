@@ -53,8 +53,10 @@ já viu muita banda dar errado.
 7. **Sem época marcada.** Os textos valem de 1960 a 2050 (ADR-0024): nada de
    internet, celular, redes sociais, gírias ou memes de uma década. Notícias
    com marca de época continuam usando `desde`.
-8. **Gênero neutro** quando o integrante pode ser de qualquer gênero:
-   "chateado(a)" ou uma construção sem flexão.
+8. **Gênero do personagem**: o trecho que flexiona usa o marcador
+   `{characterN:masculino|feminino|neutro}`, com a forma neutra numa construção
+   sem flexão. Nada de "chateado(a)". As notícias com artistas reais ficam sem
+   flexão. Detalhes na [ADR-0027](0027-genero-dos-integrantes-e-flexao-dos-textos.md).
 9. **Sem palavrão.**
 10. **Artistas reais.** As notícias da cena citam artistas reais do catálogo
     (`artists.ts`). Nelas a ironia mira a indústria, a imprensa, as
