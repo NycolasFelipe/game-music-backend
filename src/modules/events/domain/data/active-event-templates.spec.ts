@@ -1,6 +1,7 @@
 import { ACTIVE_EVENT_TEMPLATES } from "@/modules/events/domain/data/active-event-templates";
 import type { ActiveEventType } from "@/modules/events/domain/constants/active-event-type.constant";
 import type { ActiveEventTemplate } from "@/modules/events/domain/types/active-event-template";
+import { CHARACTERISTIC_IDS } from "@/modules/band-members/domain/data/characteristics";
 import { FOUNDATION_YEARS } from "@/modules/bands/domain/constants/band.constant";
 import {
   RELATIONSHIP_LEVEL_MAX,
@@ -53,7 +54,7 @@ const PHASES: CoveragePhase[] = [
     minFans: 2001,
     maxFans: 100000,
     target: 12,
-    enforced: false,
+    enforced: true,
   },
   {
     name: "Nacional",
@@ -137,15 +138,15 @@ const within = (value: number, min?: number, max?: number): boolean =>
  *
  * @param phase - The fame phase.
  * @param filter - Extra condition on the template (category, cast size).
+ * @param templates - The catalog to measure (the real one by default).
  * @returns The minimum count and the point where it happens.
  */
 function minimumCoverage(
   phase: CoveragePhase,
   filter: (t: ActiveEventTemplate) => boolean = () => true,
+  templates: ActiveEventTemplate[] = ACTIVE_EVENT_TEMPLATES,
 ): { count: number; fans: number; year: number } {
-  const pool = ACTIVE_EVENT_TEMPLATES.filter(
-    (t) => isUniversal(t) && filter(t),
-  );
+  const pool = templates.filter((t) => isUniversal(t) && filter(t));
   const fanPoints = breakpoints(
     phase.minFans,
     phase.maxFans,
@@ -171,6 +172,68 @@ function minimumCoverage(
   return worst;
 }
 
+/**
+ * Every trait id a template references, in requirements or option gates.
+ *
+ * @param t - The template.
+ * @returns The referenced trait ids (may repeat).
+ */
+function referencedTraits(t: ActiveEventTemplate): string[] {
+  const lists: Array<string[] | string[][] | undefined> = [
+    t.requiredBandCharacteristics,
+    t.requiredBandCharacteristicsAll,
+    t.requiredInvolvedCharacteristics,
+    t.requiredInvolvedCharacteristicsAll,
+    t.requiredCharacterCharacteristics,
+    t.requiredCharacterCharacteristicsAll,
+    ...t.options.flatMap((o) => [
+      o.visibleIfAnyInvolvedHas,
+      o.visibleIfAnyInvolvedHasAll,
+      o.visibleIfCharacterHas,
+      o.visibleIfCharacterHasAll,
+    ]),
+  ];
+  return lists.flatMap((list) => (list ?? []).flat());
+}
+
+describe("ACTIVE_EVENT_TEMPLATES integrity", () => {
+  it("has unique ids", () => {
+    const ids = ACTIVE_EVENT_TEMPLATES.map((t) => t.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it.each(ACTIVE_EVENT_TEMPLATES.map((t) => [t.id, t] as const))(
+    "%s only uses placeholders for its own cast",
+    (_id, t) => {
+      const used = [
+        ...JSON.stringify(t).matchAll(/\{character(\d+)(?:_id)?\}/g),
+      ].map((m) => Number(m[1]));
+      expect(Math.max(0, ...used)).toBeLessThanOrEqual(t.requiredCharacters);
+    },
+  );
+
+  it.each(ACTIVE_EVENT_TEMPLATES.map((t) => [t.id, t] as const))(
+    "%s only references known traits",
+    (_id, t) => {
+      expect(
+        referencedTraits(t).filter((id) => !CHARACTERISTIC_IDS.has(id)),
+      ).toEqual([]);
+    },
+  );
+
+  it.each(ACTIVE_EVENT_TEMPLATES.map((t) => [t.id, t] as const))(
+    "%s has weighted outcomes that add up to 100",
+    (_id, t) => {
+      for (const option of t.options) {
+        if (Array.isArray(option.consequence)) {
+          const total = option.consequence.reduce((s, c) => s + c.chance, 0);
+          expect(total).toBe(100);
+        }
+      }
+    },
+  );
+});
+
 describe("ACTIVE_EVENT_TEMPLATES coverage (ADR-0025)", () => {
   describe("universal-template rule", () => {
     const byId = (id: string): ActiveEventTemplate => {
@@ -193,17 +256,41 @@ describe("ACTIVE_EVENT_TEMPLATES coverage (ADR-0025)", () => {
     });
 
     it("finds the lowest point of a phase, not the best one", () => {
-      const stars: CoveragePhase = {
-        name: "Estrelas",
-        minFans: 1000000,
-        maxFans: 3000000,
+      const phase: CoveragePhase = {
+        name: "Teste",
+        minFans: 1000,
+        maxFans: 3000,
         target: 0,
         enforced: false,
       };
-      // 0002 starts at 2,000,001: the start of this range has none.
-      expect(minimumCoverage(stars)).toMatchObject({
+      const solo = byId("0002-o-roubo-do-microfone");
+      const catalog: ActiveEventTemplate[] = [
+        { ...solo, id: "a", minFanCount: 1000, maxFanCount: 3000 },
+        { ...solo, id: "b", minFanCount: 2001, maxFanCount: undefined },
+        { ...solo, id: "c", minFanCount: undefined, maxFanCount: 1500 },
+      ];
+      // 1000–1500: a + c; 1501–2000: only a; 2001–3000: a + b.
+      expect(minimumCoverage(phase, undefined, catalog)).toMatchObject({
+        count: 1,
+        fans: 1501,
+      });
+    });
+
+    it("ignores templates that only cover part of the game's years", () => {
+      const phase: CoveragePhase = {
+        name: "Teste",
+        minFans: 0,
+        maxFans: 100,
+        target: 0,
+        enforced: false,
+      };
+      const solo = byId("0002-o-roubo-do-microfone");
+      const catalog: ActiveEventTemplate[] = [
+        { ...solo, id: "a", minFanCount: undefined, minYear: 2010 },
+      ];
+      expect(minimumCoverage(phase, undefined, catalog)).toMatchObject({
         count: 0,
-        fans: 1000000,
+        year: FIRST_GAME_YEAR,
       });
     });
   });
