@@ -56,3 +56,12 @@ inteiro.
   menor que três, raramente.
 - Notícias já gravadas no banco não mudam.
 - Textos novos precisam declarar `desde` quando citarem algo datado.
+
+> **Emenda (2026-11-10):** a regra vale também para os comentários da crítica
+> (`review-comments.ts`), escolhidos pelo ano de lançamento da obra. Frases
+> com "playlist" saem a partir de 2000, com "streaming" ou "salvar música" a
+> partir de 2008, e com "repeat" a partir de 1985. Portal, blog, podcast e
+> canal só assinam críticas depois que existem (1997 a 2006). O público fala
+> por carta, na fila do show ou ao telefone da rádio em qualquer época, no
+> fanzine a partir de 1970, no fórum a partir de 1996 e nas redes a partir do
+> ano de cada uma; o Twitter vale até 2022 e o X a partir de 2023.
