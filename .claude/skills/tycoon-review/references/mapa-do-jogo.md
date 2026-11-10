@@ -97,15 +97,20 @@ Módulo `B/releases`.
   - alcance = `1 + log10(1+fãs) × 0,4`.
   - saturação por obras no mesmo ano: `[1, .6, .35, .2]`.
 - Faixas de qualidade (`data/quality-tiers.ts`), mínimo → fãs× / receita×:
-  fracasso 0 → .3/.3, medíocre 35 → .7/.7, sólido 55 → 1/1, grande 75 →
+  fracasso 0 → .3/.3, medíocre 25 → .7/.7 (era 35 até a ADR-0019), sólido 55 → 1/1, grande 75 →
   1,6/1,7, obra-prima 90 → 2,5/3.
 - Receita: master = `receitaBase × faixa × alcance × saturação`; publishing
   = 25% do master. **Nada é pago na hora** (`UPFRONT_FRACTION = 0`); tudo vira
   royalty em 6 turnos (50, 25, 12,5, 6,25, 3,125, 3,125%) via `royaltyPayout`.
 - Eventos de criação (`domain/generation/creation-event.generator.ts`): até
-  3, ligados a traços ou a pares em conflito; multiplicam a qualidade
-  (ideia ousada: 25 a 50% de chance, ×1,15 a 1,22 no sucesso, ×0,82 a 0,9 na
-  falha).
+  3, um por turno de produção, cada tipo uma vez por obra; ligados a traços ou
+  a pares em conflito; multiplicam a qualidade. Ideia maluca: chance de 41 a
+  55%, valor esperado ≈ 1 (gênio 1,05). Desde a ADR-0019 as opções têm
+  `cost`: caprichar (×1,25) +1 turno de produção; insistir contra a preguiça
+  −2 de humor (cortar ×0,98); contrariar alguém −1 de humor;
+  escolher um lado no conflito −1 de humor para quem perdeu e −1 na relação.
+  Custo aplicado em `resolve-creation-event.use-case.ts` via
+  `domain/creation/creation-cost.calculator.ts`.
 - Notas de crítica e público (`review.calculator.ts`) são **só informativas**.
 - Crescimento de habilidade e orgulho: `domain/growth/growth.calculator.ts`.
 
@@ -148,7 +153,9 @@ bloqueia o turno seguinte.
 `consequence-resolver.ts`.
 
 - Só **5 templates sorteáveis** e 3 de "confraternização" (gerados por
-  atividade). Entre 151 e 10.000 fãs, só o template 0001 pode aparecer.
+  atividade). Entre 151 e 10.000 fãs, só o template 0001 pode aparecer, e ele
+  exige um integrante com o traço `plagiarist`. Um template não se repete em 3
+  anos (6 turnos), `generate-active-event.use-case.ts`.
 - `moneyChange` **não altera o saldo**; só desloca o humor em ±6%.
 
 ## Aleatoriedade
@@ -168,8 +175,10 @@ libera tipos de show nos níveis 3, 7 e 12.
 ## Decisões do jogador por turno
 
 Avançar turno; responder evento (bloqueia); iniciar, responder sessão de
-estúdio, finalizar e cancelar lançamento; 1 show; atividades; contratar,
-demitir e ajustar salário; ligar reajuste automático. `PUT relationships`
+estúdio, finalizar e cancelar lançamento; 1 show; atividades; ajustar
+salário; ligar reajuste automático. Contratar e demitir existem só no backend:
+o frontend não chama esses endpoints. O resultado do avanço de turno não
+devolve os royalties creditados. `PUT relationships`
 define qualquer nível de relação de graça e funciona como atalho de debug.
 A criação de banda aceita habilidades de 0 a 10 vindas do cliente.
 
