@@ -37,13 +37,23 @@ export class AdvanceTurnView {
    * is not recording anything.
    */
   production: ReleaseProductionView | null;
-  /** Members who left the band this turn over unpaid salary (full snapshots). */
+  /**
+   * Members who left the band this turn, over unpaid salary or a lasting bad
+   * mood (full snapshots, with the reason).
+   */
   departures: FormerMemberView[];
   /**
    * Ids of members in arrears who risk leaving if still unpaid. Deliberately
    * without a turn count — the exact deadline is hidden from the player.
    */
   atRiskMemberIds: string[];
+  /**
+   * Members in a bad mood who leave if it lasts one more advance (ADR-0032 §5).
+   * Only the risk is exposed.
+   */
+  moodAtRiskMemberIds: string[];
+  /** Fans lost this advance because members left (ADR-0032 §5). */
+  fansLostToDepartures: number;
   /**
    * Money and fans of the turn, explained (ADR-0020): cash before and after the
    * tick, royalties per release, salaries paid and the change since the

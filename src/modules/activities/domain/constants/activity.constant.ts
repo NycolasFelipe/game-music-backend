@@ -5,9 +5,13 @@
 
 /**
  * Effect multiplier by how many activities the band already held this turn
- * (ADR-0017 §2). The cost is never reduced — that is the brake.
+ * (ADR-0017 §2). With one activity per turn (ADR-0031 §3) only the first
+ * factor is ever used; the list stays for the calculator's contract.
  */
 export const ACTIVITY_SATURATION_FACTORS = [1, 0.5, 0.25, 0.1];
+
+/** Activities a band may hold per turn (ADR-0031 §3). */
+export const ACTIVITY_LIMIT_PER_TURN = 1;
 
 /** How much each fame level raises an activity's cost (expensive taste). */
 export const ACTIVITY_FAME_COST_STEP = 0.06;
@@ -19,11 +23,11 @@ export const ACTIVITY_FAME_COST_STEP = 0.06;
 export const ACTIVITY_HOSTILITY_RISK = 0.06;
 
 /**
- * Highest relationship level an activity can lift a pair to (ADR-0029). The
- * last two levels come only from events; a pair already above it keeps its
- * level.
+ * Highest relationship level an activity can lift a pair to (ADR-0029, lowered
+ * to +2 by ADR-0032 §4). Levels above it come only from events; a pair already
+ * above it keeps its level.
  */
-export const ACTIVITY_RELATIONSHIP_CAP = 3;
+export const ACTIVITY_RELATIONSHIP_CAP = 2;
 
 /** Upper bound for the chance of an activity going wrong. */
 export const ACTIVITY_TROUBLE_CHANCE_MAX = 0.8;

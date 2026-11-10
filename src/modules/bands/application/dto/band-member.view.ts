@@ -34,4 +34,9 @@ export class BandMemberView {
    * intentionally not exposed (kept gamified).
    */
   salaryAtRisk: boolean;
+  /**
+   * Whether the member is in a bad mood that, kept for another advance, makes
+   * them leave (ADR-0032 §5). Only the risk is exposed, like the salary.
+   */
+  moodAtRisk: boolean;
 }

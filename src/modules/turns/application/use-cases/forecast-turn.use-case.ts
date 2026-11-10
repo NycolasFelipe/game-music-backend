@@ -8,6 +8,10 @@ import {
   salaryPatience,
   targetSalary,
 } from "@/modules/band-members/domain/salary/salary.calculator";
+import {
+  computeMoodTick,
+  fansAfterDepartures,
+} from "@/modules/band-members/domain/mood/mood.calculator";
 import { royaltyPayout } from "@/modules/releases/domain/quality/release.calculator";
 import {
   RELEASES_REPOSITORY,
@@ -39,11 +43,13 @@ export class ForecastTurnUseCase {
    * Flow: sums the royalty payout of each release still earning; with the cash
    * plus royalties, applies the automatic raises when the save has them on and
    * the cash covers the new payroll; then runs the payroll on that cash, which
-   * pays only who it can and marks arrears and departures like the tick does.
+   * pays only who it can and marks arrears and departures like the tick does;
+   * finally applies the mood rules (drift, bad-mood departures) and the fans
+   * those departures cost (ADR-0032).
    *
    * @param input - The band id, cash, fans, auto-adjust flag and members.
-   * @returns The forecast: royalties, raises, payroll, final cash and who
-   *   would be left unpaid or leave.
+   * @returns The forecast: royalties, raises, payroll, final cash, who would be
+   *   left unpaid, in a bad mood or leave, and the fans lost.
    */
   async execute(input: ForecastTurnInput): Promise<TurnForecastView> {
     const releases = await this.releasesRepository.findActiveRoyaltyReleases(
@@ -116,6 +122,31 @@ export class ForecastTurnUseCase {
       cashBeforePayroll,
     );
 
+    // Mood after the payroll: drift to neutral and departures (ADR-0032).
+    const lowMoodTurns = new Map(
+      input.members.map((member) => [member.id, member.lowMoodTurns]),
+    );
+    const stayed = payroll.outcomes.filter((outcome) => !outcome.departed);
+    const mood = computeMoodTick(
+      stayed.map((outcome) => ({
+        memberId: outcome.memberId,
+        happiness: outcome.newHappiness,
+        lowMoodTurns: lowMoodTurns.get(outcome.memberId) ?? 0,
+      })),
+    );
+    const departingMemberIds = payroll.outcomes
+      .filter((outcome) => outcome.departed)
+      .map((outcome) => outcome.memberId);
+    const moodDepartingMemberIds = mood
+      .filter((outcome) => outcome.departed)
+      .map((outcome) => outcome.memberId);
+    const fansLost =
+      input.fanCount -
+      fansAfterDepartures(
+        input.fanCount,
+        departingMemberIds.length + moodDepartingMemberIds.length,
+      );
+
     return {
       balance: input.balance,
       royalties,
@@ -123,12 +154,18 @@ export class ForecastTurnUseCase {
       salaryRaises,
       payroll: payroll.totalDue,
       balanceAfter: round2(cashBeforePayroll - payroll.totalPaid),
-      atRiskMemberIds: payroll.outcomes
-        .filter((outcome) => !outcome.paid && !outcome.departed)
+      atRiskMemberIds: stayed
+        .filter(
+          (outcome) =>
+            !outcome.paid && !moodDepartingMemberIds.includes(outcome.memberId),
+        )
         .map((outcome) => outcome.memberId),
-      departingMemberIds: payroll.outcomes
-        .filter((outcome) => outcome.departed)
+      departingMemberIds,
+      moodAtRiskMemberIds: mood
+        .filter((outcome) => outcome.atRisk)
         .map((outcome) => outcome.memberId),
+      moodDepartingMemberIds,
+      fansLost,
     };
   }
 }

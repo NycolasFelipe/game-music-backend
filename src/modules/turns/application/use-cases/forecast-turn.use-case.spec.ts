@@ -33,6 +33,7 @@ const member = (
     happiness: 0,
     salary,
     salaryUnpaidTurns: 0,
+    lowMoodTurns: 0,
     ...extra,
   }) as BandMemberEntity;
 
@@ -164,5 +165,40 @@ describe("ForecastTurnUseCase", () => {
     expect(result.balanceAfter).toBe(20);
     expect(result.atRiskMemberIds).toEqual(["late"]);
     expect(result.departingMemberIds).toEqual(["leaving"]);
+  });
+
+  it("forecasts the mood drift, bad-mood departures and the fans they cost (ADR-0032)", async () => {
+    const result = await useCase.execute({
+      bandId: BAND_ID,
+      balance: 10000,
+      fanCount: 1000,
+      autoSalaryAdjust: false,
+      members: [
+        member("calm", 100),
+        member("sulking", 100, { happiness: -5 }),
+        member("leaving", 100, { happiness: -5, lowMoodTurns: 1 }),
+      ],
+    });
+
+    expect(result.departingMemberIds).toEqual([]);
+    expect(result.moodAtRiskMemberIds).toEqual(["sulking"]);
+    expect(result.moodDepartingMemberIds).toEqual(["leaving"]);
+    expect(result.fansLost).toBe(100);
+  });
+
+  it("charges fans for salary departures too", async () => {
+    const patience = salaryPatience([]);
+
+    const result = await useCase.execute({
+      bandId: BAND_ID,
+      balance: 0,
+      fanCount: 1000,
+      autoSalaryAdjust: false,
+      members: [member("leaving", 100, { salaryUnpaidTurns: patience - 1 })],
+    });
+
+    expect(result.departingMemberIds).toEqual(["leaving"]);
+    expect(result.moodDepartingMemberIds).toEqual([]);
+    expect(result.fansLost).toBe(100);
   });
 });

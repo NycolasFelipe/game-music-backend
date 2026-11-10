@@ -66,14 +66,14 @@ describe("computeBandStateChanges", () => {
   it("applies explicit happiness only to involved members", () => {
     const r = computeBandStateChanges({
       eventType: "decisao_criativa",
-      consequence: { description: "d", happinessChangePercent: 20 },
+      consequence: { description: "d", happinessChangePercent: 10 },
       involvedCharacterIds: ["m1"],
       currentFanCount: 100,
       members,
       relationships,
     });
-    // delta = 20 * 5 / 100 = 1.0; only m1 targeted
-    expect(r.memberHappiness).toEqual([{ memberId: "m1", happiness: 3 }]);
+    // delta = 10 * 15 / 100 = 1.5 (ADR-0032 §1); only m1 targeted
+    expect(r.memberHappiness).toEqual([{ memberId: "m1", happiness: 3.5 }]);
   });
 
   it("computes new relationship levels from deltas (clamped, canonical)", () => {
@@ -90,8 +90,28 @@ describe("computeBandStateChanges", () => {
       members,
       relationships,
     });
+    // 2 + (-3 × 2) = -4: events weigh double on relationships (ADR-0032 §1).
     expect(r.relationshipLevels).toEqual([
-      { memberAId: "m1", memberBId: "m2", level: -1 },
+      { memberAId: "m1", memberBId: "m2", level: -4 },
+    ]);
+  });
+
+  it("clamps the doubled relationship change at the scale's edge", () => {
+    const r = computeBandStateChanges({
+      eventType: "conflito_membros",
+      consequence: {
+        description: "d",
+        relationshipChanges: [
+          { character1Id: "m1", character2Id: "m2", change: 2 },
+        ],
+      },
+      involvedCharacterIds: ["m1", "m2"],
+      currentFanCount: 100,
+      members,
+      relationships,
+    });
+    expect(r.relationshipLevels).toEqual([
+      { memberAId: "m1", memberBId: "m2", level: 5 },
     ]);
   });
 });

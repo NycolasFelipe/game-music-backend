@@ -22,7 +22,7 @@ describe("GenerateActiveEventUseCase", () => {
   let useCase: GenerateActiveEventUseCase;
   let bandsRepository: { findByIdAndOwnerWithMembers: jest.Mock };
   let eventsRepository: {
-    recentTemplateIds: jest.Mock;
+    usedTemplateIds: jest.Mock;
     findByBandId: jest.Mock;
     create: jest.Mock;
   };
@@ -30,7 +30,7 @@ describe("GenerateActiveEventUseCase", () => {
   beforeEach(async () => {
     bandsRepository = { findByIdAndOwnerWithMembers: jest.fn() };
     eventsRepository = {
-      recentTemplateIds: jest.fn(),
+      usedTemplateIds: jest.fn(),
       findByBandId: jest.fn().mockResolvedValue([]),
       create: jest.fn(),
     };
@@ -50,8 +50,8 @@ describe("GenerateActiveEventUseCase", () => {
       members: [member("m1", ["plagiarist"]), member("m2", ["professional"])],
       relationships: [{ memberAId: "m1", memberBId: "m2", level: 0 }],
     });
-    // Every other template was used recently, so 0001 is the only candidate.
-    eventsRepository.recentTemplateIds.mockResolvedValue(
+    // The band already saw every other template, so 0001 is the only candidate.
+    eventsRepository.usedTemplateIds.mockResolvedValue(
       ALL_TEMPLATE_IDS.filter((id) => id !== "0001-melodia-familiar"),
     );
     eventsRepository.create.mockImplementation((data) =>
@@ -81,6 +81,7 @@ describe("GenerateActiveEventUseCase", () => {
       .execute(actor, BAND_ID, 2003)
       .finally(() => jest.restoreAllMocks());
 
+    expect(eventsRepository.usedTemplateIds).toHaveBeenCalledWith(BAND_ID);
     expect(eventsRepository.create).toHaveBeenCalled();
     expect(result.templateId).toBe("0001-melodia-familiar");
     expect(result.resolved).toBe(false);
@@ -93,8 +94,8 @@ describe("GenerateActiveEventUseCase", () => {
       members: [member("m1", ["professional"]), member("m2", ["stable"])],
       relationships: [{ memberAId: "m1", memberBId: "m2", level: 0 }],
     });
-    // Every template was used recently: nothing is left to draw.
-    eventsRepository.recentTemplateIds.mockResolvedValue(ALL_TEMPLATE_IDS);
+    // The band already saw every template: the catalog ran out (ADR-0031 §4).
+    eventsRepository.usedTemplateIds.mockResolvedValue(ALL_TEMPLATE_IDS);
 
     await expect(useCase.execute(actor, BAND_ID, 2003)).rejects.toBeInstanceOf(
       NotFoundException,

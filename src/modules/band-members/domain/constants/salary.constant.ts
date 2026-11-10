@@ -65,8 +65,11 @@ export const SALARY_TRAIT_PATIENCE: Readonly<Record<string, number>> = {
   loyal: 6, // Leal — banca a banda por muito tempo
 };
 
-/** Happiness gained when a member is paid at or above their target. */
-export const SALARY_PAID_HAPPINESS_BONUS = 0.15;
+/**
+ * Happiness gained when a member is paid at or above their target. Small on
+ * purpose (ADR-0032 §3): paying on time is expected, not a source of joy.
+ */
+export const SALARY_PAID_HAPPINESS_BONUS = 0.05;
 /**
  * Happiness lost per unit of relative shortfall (0..1) when paid below target.
  * A slow burn: paying half the target erodes ~0.25 happiness/turn, recoverable

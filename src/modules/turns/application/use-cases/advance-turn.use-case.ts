@@ -14,6 +14,10 @@ import { GeneratePassiveEventsUseCase } from "@/modules/events/application/use-c
 import { RecordMemberDeparturesUseCase } from "@/modules/events/application/use-cases/record-member-departures.use-case";
 import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
 import type { ActiveEventsRepository } from "@/modules/events/domain/repositories/active-events.repository";
+import {
+  computeMoodTick,
+  fansAfterDepartures,
+} from "@/modules/band-members/domain/mood/mood.calculator";
 import { ArchiveMemberDeparturesUseCase } from "@/modules/band-members/application/use-cases/archive-member-departures.use-case";
 import { AutoAdjustSalariesUseCase } from "@/modules/band-members/application/use-cases/auto-adjust-salaries.use-case";
 import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
@@ -134,10 +138,11 @@ export class AdvanceTurnUseCase {
     );
 
     // Accrue this turn's release royalties (income), then pay salaries (expense)
-    // from the resulting cash. Money, happiness (salary satisfaction/arrears) and
-    // member departures over unpaid salary are the band-state the tick moves
-    // (ADR-0008 + ADR-0010 emendas to ADR-0006 §6); fans and relationships still
-    // only change via event resolution.
+    // from the resulting cash. Money, happiness (salary satisfaction/arrears and
+    // the drift to neutral) and member departures (unpaid salary or bad mood,
+    // each costing fans) are the band-state the tick moves (ADR-0008 + ADR-0010
+    // emendas to ADR-0006 §6, ADR-0032); relationships still only change via
+    // events and activities.
     const accrual = await this.accrueReleaseRoyalties.execute(bandId);
     const royalties = accrual.total;
     const cashBeforePayroll =
@@ -163,14 +168,46 @@ export class AdvanceTurnUseCase {
     const balanceAfter =
       Math.round((cashBeforePayroll - payroll.totalPaid) * 100) / 100;
 
-    const survivors = payroll.outcomes.filter((o) => !o.departed);
-    const departingOutcomes = payroll.outcomes.filter((o) => o.departed);
+    const salaryDepartures = payroll.outcomes.filter((o) => o.departed);
+    const stayed = payroll.outcomes.filter((o) => !o.departed);
+
+    // The mood drifts back toward neutral and a member kept in a bad mood
+    // leaves (ADR-0032 §2 and §5), after the payroll moved the happiness.
+    const lowMoodTurns = await this.lowMoodTurnsByMember(actor, bandId);
+    const mood = new Map(
+      computeMoodTick(
+        stayed.map((o) => ({
+          memberId: o.memberId,
+          happiness: o.newHappiness,
+          lowMoodTurns: lowMoodTurns.get(o.memberId) ?? 0,
+        })),
+      ).map((outcome) => [outcome.memberId, outcome]),
+    );
+    const moodDepartures = stayed.filter((o) => mood.get(o.memberId)?.departed);
+    const survivors = stayed.filter((o) => !mood.get(o.memberId)?.departed);
+    const departingOutcomes = [
+      ...salaryDepartures.map((o) => ({
+        ...o,
+        reason: "salario_atrasado" as const,
+      })),
+      ...moodDepartures.map((o) => ({ ...o, reason: "humor" as const })),
+    ];
     const departedMemberIds = departingOutcomes.map((o) => o.memberId);
+
+    // Every departure costs a share of the fans (ADR-0032 §5).
+    const fanCountAfter = fansAfterDepartures(
+      band.fanCount,
+      departedMemberIds.length,
+    );
 
     // Members in arrears who have not left yet. The exact deadline is kept from
     // the player (more gamified) — only the risk is surfaced (ADR-0010 §6).
     const atRiskMemberIds = survivors
       .filter((o) => !o.paid)
+      .map((o) => o.memberId);
+    // Members in a bad mood who leave if it lasts one more advance (ADR-0032).
+    const moodAtRiskMemberIds = survivors
+      .filter((o) => mood.get(o.memberId)?.atRisk)
       .map((o) => o.memberId);
 
     // Archive the departing members BEFORE they are removed, so ex-members stay
@@ -181,20 +218,25 @@ export class AdvanceTurnUseCase {
       departingOutcomes.map((o) => ({
         memberId: o.memberId,
         unpaidTurns: o.newUnpaidTurns,
-        reason: "salario_atrasado" as const,
+        reason: o.reason,
       })),
     );
 
     if (balanceAfter !== band.balance || payroll.outcomes.length > 0) {
       await this.bandsRepository.applyBandStateChanges(bandId, {
         balance: balanceAfter,
+        fanCount: fanCountAfter !== band.fanCount ? fanCountAfter : undefined,
         memberHappiness: survivors.map((o) => ({
           memberId: o.memberId,
-          happiness: o.newHappiness,
+          happiness: mood.get(o.memberId)?.newHappiness ?? o.newHappiness,
         })),
         memberSalaryArrears: survivors.map((o) => ({
           memberId: o.memberId,
           unpaidTurns: o.newUnpaidTurns,
+        })),
+        memberLowMoodTurns: survivors.map((o) => ({
+          memberId: o.memberId,
+          lowMoodTurns: mood.get(o.memberId)?.newLowMoodTurns ?? 0,
         })),
         removedMemberIds: departedMemberIds.length
           ? departedMemberIds
@@ -209,6 +251,7 @@ export class AdvanceTurnUseCase {
       departingOutcomes.map((o) => ({
         memberName: o.name,
         unpaidTurns: o.newUnpaidTurns,
+        reason: o.reason,
       })),
     );
 
@@ -222,7 +265,7 @@ export class AdvanceTurnUseCase {
     await this.turnsRepository.create({
       bandId,
       year: newYear,
-      fanCountSnapshot: band.fanCount,
+      fanCountSnapshot: fanCountAfter,
       balanceSnapshot: balanceAfter,
       happinessAvgSnapshot: climate.happinessAvg,
       relationshipAvgSnapshot: climate.relationshipAvg,
@@ -237,7 +280,8 @@ export class AdvanceTurnUseCase {
         `${payroll.totalPaid > 0 ? ` — paid ${payroll.totalPaid} in salaries` : ""}` +
         `${salaryRaises.length ? ` — ${salaryRaises.length} salary(ies) auto-adjusted` : ""}` +
         `${production ? ` — "${production.title}" ${production.ready ? "ready to launch" : `has ${production.turnsLeft} production turn(s) left`}` : ""}` +
-        `${departedMemberIds.length ? ` — ${departedMemberIds.length} member(s) left over unpaid salary` : ""}`,
+        `${salaryDepartures.length ? ` — ${salaryDepartures.length} member(s) left over unpaid salary` : ""}` +
+        `${moodDepartures.length ? ` — ${moodDepartures.length} member(s) left over a bad mood` : ""}`,
     );
 
     return {
@@ -254,17 +298,19 @@ export class AdvanceTurnUseCase {
       production,
       departures,
       atRiskMemberIds,
+      moodAtRiskMemberIds,
+      fansLostToDepartures: band.fanCount - fanCountAfter,
       report: {
         balanceBefore: band.balance,
         royalties,
         royaltyPayouts: accrual.payouts,
         salariesPaid: payroll.totalPaid,
         balanceAfter,
-        fanCount: band.fanCount,
+        fanCount: fanCountAfter,
         sinceLastTurn: this.sinceLastTurn(
           previousTurn,
           balanceAfter,
-          band.fanCount,
+          fanCountAfter,
         ),
       },
     };
@@ -292,6 +338,26 @@ export class AdvanceTurnUseCase {
         Math.round((balanceAfter - previousTurn.balanceSnapshot) * 100) / 100,
       fanCountDelta: fanCount - previousTurn.fanCountSnapshot,
     };
+  }
+
+  /**
+   * Reads each member's bad-mood counter (ADR-0032 §5).
+   *
+   * @param actor - The authenticated owner.
+   * @param bandId - The band id.
+   * @returns The counter per member id (empty when the band is not found).
+   */
+  private async lowMoodTurnsByMember(
+    actor: AuthenticatedUserEntity,
+    bandId: string,
+  ): Promise<Map<string, number>> {
+    const band = await this.bandsRepository.findByIdAndOwnerWithMembers(
+      bandId,
+      actor.id,
+    );
+    return new Map(
+      (band?.members ?? []).map((member) => [member.id, member.lowMoodTurns]),
+    );
   }
 
   /**

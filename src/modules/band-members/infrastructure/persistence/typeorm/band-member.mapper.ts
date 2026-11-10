@@ -30,6 +30,7 @@ export function toBandMemberDomain(orm: BandMemberOrmEntity): BandMemberEntity {
     orm.createdAt,
     orm.updatedAt,
     orm.appearance,
+    orm.lowMoodTurns ?? 0,
   );
 }
 

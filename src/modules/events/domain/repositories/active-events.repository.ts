@@ -62,19 +62,13 @@ export interface ActiveEventsRepository {
   countUnresolved(bandId: string): Promise<number>;
 
   /**
-   * Returns the template ids used by a band's events within a year window,
-   * to avoid repeating recent events.
+   * Returns every template id a band's events ever used, so no template
+   * repeats within a save (ADR-0031 §1).
    *
    * @param bandId - The band id.
-   * @param year - The reference year.
-   * @param window - Half-width of the window, in years.
-   * @returns The recently used template ids.
+   * @returns The used template ids (deduplicated).
    */
-  recentTemplateIds(
-    bandId: string,
-    year: number,
-    window: number,
-  ): Promise<string[]>;
+  usedTemplateIds(bandId: string): Promise<string[]>;
 
   /**
    * Marks an event resolved with the chosen option and applied outcome.

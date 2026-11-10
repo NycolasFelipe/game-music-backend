@@ -60,8 +60,8 @@ describe("salary.calculator", () => {
 
   describe("salaryHappinessDelta", () => {
     it("gives a small bonus when paid at or above target", () => {
-      expect(salaryHappinessDelta(true, 400, 400)).toBe(0.15);
-      expect(salaryHappinessDelta(true, 500, 400)).toBe(0.15);
+      expect(salaryHappinessDelta(true, 400, 400)).toBe(0.05);
+      expect(salaryHappinessDelta(true, 500, 400)).toBe(0.05);
     });
 
     it("penalizes proportionally when paid below target", () => {
@@ -108,7 +108,7 @@ describe("salary.calculator", () => {
       expect(first).toMatchObject({
         paid: true,
         amountPaid: 300,
-        newHappiness: 1.15,
+        newHappiness: 1.05,
         newUnpaidTurns: 0,
         departed: false,
         turnsUntilDeparture: 0,

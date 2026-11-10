@@ -38,5 +38,7 @@ export class BandMemberEntity {
     public readonly updatedAt: Date,
     /** Stored look for the portraits (ADR-0023); skin and hair colour come from {@link avatar}. */
     public readonly appearance: MemberAppearance,
+    /** Consecutive turn advances ended in a bad mood (ADR-0032 §5). */
+    public readonly lowMoodTurns: number = 0,
   ) {}
 }

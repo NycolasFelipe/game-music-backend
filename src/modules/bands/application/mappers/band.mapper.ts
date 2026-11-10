@@ -1,3 +1,4 @@
+import { MOOD_DEPARTURE_THRESHOLD } from "@/modules/band-members/domain/constants/mood.constant";
 import { BandMemberView } from "@/modules/bands/application/dto/band-member.view";
 import { BandView } from "@/modules/bands/application/dto/band.view";
 import { FameView } from "@/modules/bands/application/dto/fame.view";
@@ -76,6 +77,7 @@ export function toBandMemberView(
     salaryTarget: targetSalary(member.skills, member.characteristics, fanCount),
     salaryUnpaidTurns: member.salaryUnpaidTurns,
     salaryAtRisk: member.salaryUnpaidTurns > 0,
+    moodAtRisk: member.happiness <= MOOD_DEPARTURE_THRESHOLD,
   };
 }
 

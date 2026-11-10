@@ -47,6 +47,8 @@ export interface BandStateChangesInput {
   }>;
   /** New absolute salary-arrears counter per member (ADR-0010). */
   memberSalaryArrears?: Array<{ memberId: string; unpaidTurns: number }>;
+  /** New absolute bad-mood counter per member (ADR-0032 §5). */
+  memberLowMoodTurns?: Array<{ memberId: string; lowMoodTurns: number }>;
   /** Members to remove from the band this step (e.g. departed over arrears). */
   removedMemberIds?: string[];
 }

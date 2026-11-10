@@ -25,6 +25,10 @@ export class ActivityOptionView {
 export class ActivityOptionsView {
   /** How many activities the band already held this turn. */
   heldThisTurn: number;
+  /** Activities allowed per turn (ADR-0031 §3). */
+  limitPerTurn: number;
+  /** Whether the band can still go out together this turn. */
+  canHold: boolean;
   /** Effect multiplier the next activity would get (ADR-0017 §2). */
   nextSaturation: number;
   /**

@@ -153,13 +153,13 @@ describe("evaluateActivity", () => {
     const result = evaluateActivity({
       activity,
       participants: [guest("a"), guest("c")],
-      relationships,
+      relationships: [{ memberAId: "a", memberBId: "c", level: 1 }],
       fameLevel: 0,
       heldThisTurn: 0,
     });
-    // 2 + 2 = 4, held at 3.
+    // 1 + 2 = 3, held at +2 (ADR-0032 §4).
     expect(result.relationshipLevels).toEqual([
-      { memberAId: "a", memberBId: "c", level: 3 },
+      { memberAId: "a", memberBId: "c", level: 2 },
     ]);
   });
 

@@ -23,6 +23,7 @@ describe("AdvanceTurnUseCase", () => {
   let useCase: AdvanceTurnUseCase;
   let bandsRepository: {
     findByIdAndOwner: jest.Mock;
+    findByIdAndOwnerWithMembers: jest.Mock;
     advanceTurn: jest.Mock;
     applyBandStateChanges: jest.Mock;
     getBandMemberAverages: jest.Mock;
@@ -52,6 +53,7 @@ describe("AdvanceTurnUseCase", () => {
   beforeEach(async () => {
     bandsRepository = {
       findByIdAndOwner: jest.fn(),
+      findByIdAndOwnerWithMembers: jest.fn().mockResolvedValue({ members: [] }),
       advanceTurn: jest.fn().mockResolvedValue(undefined),
       applyBandStateChanges: jest.fn().mockResolvedValue(undefined),
       getBandMemberAverages: jest
@@ -128,7 +130,7 @@ describe("AdvanceTurnUseCase", () => {
       currentYear: 2003,
       fanCount: 500,
     });
-    randomSpy.mockReturnValue(0.9); // above ACTIVE_EVENT_CHANCE
+    randomSpy.mockReturnValue(0.9);
 
     const result = await useCase.execute(actor, BAND_ID);
 
@@ -140,7 +142,12 @@ describe("AdvanceTurnUseCase", () => {
       newYear: 2003.5,
       ageMembers: false,
     });
-    expect(generateActiveEvent.execute).not.toHaveBeenCalled();
+    // Every semester draws an active event (ADR-0031 §1).
+    expect(generateActiveEvent.execute).toHaveBeenCalledWith(
+      actor,
+      BAND_ID,
+      2003.5,
+    );
     expect(turnsRepository.create).toHaveBeenCalledWith(
       expect.objectContaining({ year: 2003.5, fanCountSnapshot: 500 }),
     );
@@ -272,8 +279,10 @@ describe("AdvanceTurnUseCase", () => {
       BAND_ID,
       {
         balance: 1250.5,
+        fanCount: undefined,
         memberHappiness: [],
         memberSalaryArrears: [],
+        memberLowMoodTurns: [],
         removedMemberIds: undefined,
       },
     );
@@ -327,8 +336,11 @@ describe("AdvanceTurnUseCase", () => {
       BAND_ID,
       {
         balance: 1000,
+        // Every departure costs 10% of the fans (ADR-0032 §5).
+        fanCount: 9,
         memberHappiness: [{ memberId: "m-1", happiness: 0 }],
         memberSalaryArrears: [{ memberId: "m-1", unpaidTurns: 1 }],
+        memberLowMoodTurns: [{ memberId: "m-1", lowMoodTurns: 0 }],
         removedMemberIds: ["m-2"],
       },
     );
@@ -342,8 +354,10 @@ describe("AdvanceTurnUseCase", () => {
     expect(recordMemberDepartures.execute).toHaveBeenCalledWith(
       BAND_ID,
       2003.5,
-      [{ memberName: "Saiu", unpaidTurns: 3 }],
+      [{ memberName: "Saiu", unpaidTurns: 3, reason: "salario_atrasado" }],
     );
+    expect(result.fansLostToDepartures).toBe(1);
+    expect(result.report.fanCount).toBe(9);
     expect(result.salariesDue).toBe(700);
     expect(result.departures).toEqual([
       { id: "fm-1", name: "Saiu", unpaidTurns: 3 },
@@ -538,5 +552,128 @@ describe("AdvanceTurnUseCase", () => {
     const result = await useCase.execute(actor, BAND_ID);
 
     expect(result.report.sinceLastTurn).toBeNull();
+  });
+
+  describe("mood (ADR-0032)", () => {
+    const paidOutcome = (
+      memberId: string,
+      name: string,
+      newHappiness: number,
+    ) => ({
+      memberId,
+      name,
+      salary: 100,
+      paid: true,
+      amountPaid: 100,
+      newHappiness,
+      newUnpaidTurns: 0,
+      departed: false,
+      turnsUntilDeparture: 0,
+    });
+
+    beforeEach(() => {
+      bandsRepository.findByIdAndOwner.mockResolvedValue({
+        id: BAND_ID,
+        currentYear: 2003,
+        fanCount: 1000,
+        balance: 1000,
+      });
+      randomSpy.mockReturnValue(0.9);
+    });
+
+    it("drifts every member's mood toward neutral after the payroll", async () => {
+      paySalaries.execute.mockResolvedValue({
+        totalDue: 200,
+        totalPaid: 200,
+        fullyPaid: true,
+        outcomes: [
+          paidOutcome("m-1", "Alegre", 4),
+          paidOutcome("m-2", "Tristonho", -2),
+        ],
+      });
+
+      await useCase.execute(actor, BAND_ID);
+
+      expect(bandsRepository.applyBandStateChanges).toHaveBeenCalledWith(
+        BAND_ID,
+        expect.objectContaining({
+          fanCount: undefined,
+          memberHappiness: [
+            { memberId: "m-1", happiness: 3.8 },
+            { memberId: "m-2", happiness: -1.9 },
+          ],
+          memberLowMoodTurns: [
+            { memberId: "m-1", lowMoodTurns: 0 },
+            { memberId: "m-2", lowMoodTurns: 0 },
+          ],
+        }),
+      );
+    });
+
+    it("counts a bad turn and flags the member at risk without removing them", async () => {
+      paySalaries.execute.mockResolvedValue({
+        totalDue: 100,
+        totalPaid: 100,
+        fullyPaid: true,
+        outcomes: [paidOutcome("m-1", "Emburrado", -5)],
+      });
+
+      const result = await useCase.execute(actor, BAND_ID);
+
+      expect(bandsRepository.applyBandStateChanges).toHaveBeenCalledWith(
+        BAND_ID,
+        expect.objectContaining({
+          memberHappiness: [{ memberId: "m-1", happiness: -4.75 }],
+          memberLowMoodTurns: [{ memberId: "m-1", lowMoodTurns: 1 }],
+          removedMemberIds: undefined,
+        }),
+      );
+      expect(result.moodAtRiskMemberIds).toEqual(["m-1"]);
+      expect(result.fansLostToDepartures).toBe(0);
+    });
+
+    it("removes a member on the second bad turn, archives the reason and costs fans", async () => {
+      bandsRepository.findByIdAndOwnerWithMembers.mockResolvedValue({
+        members: [
+          { id: "m-1", lowMoodTurns: 1 },
+          { id: "m-2", lowMoodTurns: 0 },
+        ],
+      });
+      paySalaries.execute.mockResolvedValue({
+        totalDue: 200,
+        totalPaid: 200,
+        fullyPaid: true,
+        outcomes: [
+          paidOutcome("m-1", "Emburrado", -4.5),
+          paidOutcome("m-2", "Fica", 1),
+        ],
+      });
+
+      const result = await useCase.execute(actor, BAND_ID);
+
+      expect(archiveMemberDepartures.execute).toHaveBeenCalledWith(
+        BAND_ID,
+        2003.5,
+        [{ memberId: "m-1", unpaidTurns: 0, reason: "humor" }],
+      );
+      expect(recordMemberDepartures.execute).toHaveBeenCalledWith(
+        BAND_ID,
+        2003.5,
+        [{ memberName: "Emburrado", unpaidTurns: 0, reason: "humor" }],
+      );
+      expect(bandsRepository.applyBandStateChanges).toHaveBeenCalledWith(
+        BAND_ID,
+        expect.objectContaining({
+          fanCount: 900,
+          memberHappiness: [{ memberId: "m-2", happiness: 0.95 }],
+          removedMemberIds: ["m-1"],
+        }),
+      );
+      expect(result.fansLostToDepartures).toBe(100);
+      expect(result.moodAtRiskMemberIds).toEqual([]);
+      expect(turnsRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining({ fanCountSnapshot: 900 }),
+      );
+    });
   });
 });

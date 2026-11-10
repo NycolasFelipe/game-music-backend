@@ -285,6 +285,15 @@ export class BandsTypeormRepository implements BandsRepository {
           );
       }
 
+      for (const counter of changes.memberLowMoodTurns ?? []) {
+        await manager
+          .getRepository(BandMemberOrmEntity)
+          .update(
+            { id: counter.memberId, bandId },
+            { lowMoodTurns: counter.lowMoodTurns },
+          );
+      }
+
       // Remove departed members last; cascades their relationships and salary
       // history (FKs `ON DELETE CASCADE`).
       if (changes.removedMemberIds?.length) {

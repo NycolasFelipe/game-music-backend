@@ -79,6 +79,10 @@ export class BandMemberOrmEntity {
   @Column({ name: "salary_unpaid_turns", type: "smallint", default: 0 })
   salaryUnpaidTurns: number;
 
+  /** Consecutive turn advances ended in a bad mood (ADR-0032 §5). */
+  @Column({ name: "low_mood_turns", type: "smallint", default: 0 })
+  lowMoodTurns: number;
+
   @CreateDateColumn({ name: "created_at", type: "timestamptz" })
   createdAt: Date;
 

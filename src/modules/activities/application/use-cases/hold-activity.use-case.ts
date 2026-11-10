@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Inject,
   Injectable,
   Logger,
@@ -11,6 +12,7 @@ import { HoldActivityInput } from "@/modules/activities/application/dto/hold-act
 import { toBandActivityView } from "@/modules/activities/application/mappers/activity.mapper";
 import { generateActivityStory } from "@/modules/activities/domain/activity/activity-story.generator";
 import { evaluateActivity } from "@/modules/activities/domain/activity/activity.calculator";
+import { ACTIVITY_LIMIT_PER_TURN } from "@/modules/activities/domain/constants/activity.constant";
 import { findActivity } from "@/modules/activities/domain/data/activities";
 import {
   BAND_ACTIVITIES_REPOSITORY,
@@ -56,6 +58,8 @@ export class HoldActivityUseCase {
    * @returns What the activity changed, and the trouble it raised (if any).
    * @throws {NotFoundException} When the band or the activity does not exist.
    * @throws {BadRequestException} When the guest list or the cash do not allow it.
+   * @throws {ConflictException} When the band already held an activity this
+   *   turn (one per turn, ADR-0031 §3).
    */
   async execute(
     actor: AuthenticatedUserEntity,
@@ -97,6 +101,11 @@ export class HoldActivityUseCase {
       bandId,
       composed.band.currentYear,
     );
+    if (heldThisTurn >= ACTIVITY_LIMIT_PER_TURN) {
+      throw new ConflictException(
+        "The band already went out together this turn.",
+      );
+    }
 
     const evaluation = evaluateActivity({
       activity,

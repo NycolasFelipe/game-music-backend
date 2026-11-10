@@ -8,9 +8,6 @@ import { generateActiveEvent } from "@/modules/events/domain/generation/active-e
 import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
 import type { ActiveEventsRepository } from "@/modules/events/domain/repositories/active-events.repository";
 
-/** Year window (in years) used to avoid repeating recent event templates. */
-const RECENT_EVENT_WINDOW = 3;
-
 /**
  * Generates and persists one eligible active event for a band at a given year.
  */
@@ -26,9 +23,9 @@ export class GenerateActiveEventUseCase {
   ) {}
 
   /**
-   * Loads the band state, generates an eligible event and persists it. The
-   * cast spreads across the band: whoever was in the previous event weighs
-   * less (ADR-0028).
+   * Loads the band state, generates an eligible event the band has never seen
+   * and persists it (ADR-0031). The cast spreads across the band: whoever was
+   * in the previous event weighs less (ADR-0028).
    *
    * @param actor - The authenticated owner.
    * @param bandId - The band id.
@@ -50,11 +47,9 @@ export class GenerateActiveEventUseCase {
       throw new NotFoundException("Band not found");
     }
 
-    const recent = await this.activeEventsRepository.recentTemplateIds(
-      bandId,
-      year,
-      RECENT_EVENT_WINDOW,
-    );
+    // No template repeats within a save (ADR-0031 §1): once the catalog for
+    // the band's state runs out, the semester simply has no event (§4).
+    const used = await this.activeEventsRepository.usedTemplateIds(bandId);
     // Most recent first: whoever was in the last event weighs less (ADR-0028).
     const [lastEvent] = await this.activeEventsRepository.findByBandId(bandId);
 
@@ -72,7 +67,7 @@ export class GenerateActiveEventUseCase {
         level: r.level,
       })),
       fanCount: band.band.fanCount,
-      recentTemplateIds: new Set(recent),
+      recentTemplateIds: new Set(used),
       lastInvolvedIds: lastEvent?.involvedCharacterIds ?? [],
     });
 

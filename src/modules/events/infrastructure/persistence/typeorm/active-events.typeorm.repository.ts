@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Between, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { ActiveEventEntity } from "@/modules/events/domain/entities/active-event.entity";
 import {
   ActiveEventsRepository,
@@ -84,20 +84,14 @@ export class ActiveEventsTypeormRepository implements ActiveEventsRepository {
   }
 
   /**
-   * Returns the template ids used by a band's events within a year window.
+   * Returns every template id a band's events ever used (ADR-0031 §1).
    *
    * @param bandId - The band id.
-   * @param year - The reference year.
-   * @param window - Half-width of the window, in years.
-   * @returns The recently used template ids (deduplicated).
+   * @returns The used template ids (deduplicated).
    */
-  async recentTemplateIds(
-    bandId: string,
-    year: number,
-    window: number,
-  ): Promise<string[]> {
+  async usedTemplateIds(bandId: string): Promise<string[]> {
     const orms = await this.repository.find({
-      where: { bandId, year: Between(year - window, year + window) },
+      where: { bandId },
       select: { templateId: true },
     });
     return [...new Set(orms.map((o) => o.templateId))];

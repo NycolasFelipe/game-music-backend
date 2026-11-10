@@ -1,4 +1,8 @@
-import { BadRequestException, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { AuthenticatedUserEntity } from "@/common/entities/authenticated-user.entity";
 import { HoldActivityUseCase } from "@/modules/activities/application/use-cases/hold-activity.use-case";
@@ -116,6 +120,19 @@ describe("HoldActivityUseCase", () => {
         participantIds: ["m1", "m2"],
       }),
     ).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it("refuses a second activity in the same turn (ADR-0031 §3)", async () => {
+    activitiesRepository.countByBandAndYear.mockResolvedValue(1);
+
+    await expect(
+      useCase.execute(actor, "band-1", {
+        activityId: "jantar",
+        participantIds: ["m1", "m2"],
+      }),
+    ).rejects.toBeInstanceOf(ConflictException);
+    expect(bandsRepository.applyBandStateChanges).not.toHaveBeenCalled();
+    expect(activitiesRepository.create).not.toHaveBeenCalled();
   });
 
   it("refuses when the cash does not cover it", async () => {

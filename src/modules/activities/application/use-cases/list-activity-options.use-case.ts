@@ -7,6 +7,7 @@ import {
 } from "@/modules/activities/domain/activity/activity.calculator";
 import {
   ACTIVITY_HOSTILITY_RISK,
+  ACTIVITY_LIMIT_PER_TURN,
   ACTIVITY_RELATIONSHIP_CAP,
   ACTIVITY_TROUBLE_CHANCE_MAX,
 } from "@/modules/activities/domain/constants/activity.constant";
@@ -60,6 +61,8 @@ export class ListActivityOptionsUseCase {
 
     return {
       heldThisTurn,
+      limitPerTurn: ACTIVITY_LIMIT_PER_TURN,
+      canHold: heldThisTurn < ACTIVITY_LIMIT_PER_TURN,
       nextSaturation: saturationFactor(heldThisTurn),
       hostilityRisk: ACTIVITY_HOSTILITY_RISK,
       troubleChanceMax: ACTIVITY_TROUBLE_CHANCE_MAX,

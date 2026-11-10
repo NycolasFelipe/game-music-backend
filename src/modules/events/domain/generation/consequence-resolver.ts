@@ -1,3 +1,7 @@
+import {
+  EVENT_HAPPINESS_POINTS_PER_100_PERCENT,
+  EVENT_RELATIONSHIP_MULTIPLIER,
+} from "@/modules/events/domain/constants/consequence-weight.constant";
 import type { ActiveEventType } from "@/modules/events/domain/constants/active-event-type.constant";
 import type {
   EventConsequence,
@@ -186,7 +190,8 @@ export function computeBandStateChanges(params: {
     consequence.happinessChangePercent !== undefined
       ? consequence.happinessChangePercent
       : deriveHappinessChangePercent(eventType, consequence, fameImpactPercent);
-  const happinessDelta = (effectivePercent * 5) / 100;
+  const happinessDelta =
+    (effectivePercent * EVENT_HAPPINESS_POINTS_PER_100_PERCENT) / 100;
 
   const targetIds =
     involvedCharacterIds.length > 0
@@ -214,7 +219,11 @@ export function computeBandStateChanges(params: {
       return {
         memberAId,
         memberBId,
-        level: clamp(current.level + change.change, -5, 5),
+        level: clamp(
+          current.level + change.change * EVENT_RELATIONSHIP_MULTIPLIER,
+          -5,
+          5,
+        ),
       };
     })
     .filter(

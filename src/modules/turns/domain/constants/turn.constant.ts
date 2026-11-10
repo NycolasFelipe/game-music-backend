@@ -18,6 +18,7 @@ export const PASSIVE_EVENTS_PER_TURN = 3;
 
 /**
  * Probability (0..1) that advancing a turn spawns a blocking active (decision)
- * event, mirroring the frontend's 35% roll.
+ * event. Every semester has one (ADR-0031 §1); the semester goes without only
+ * when the band has seen every eligible template.
  */
-export const ACTIVE_EVENT_CHANCE = 0.35;
+export const ACTIVE_EVENT_CHANCE = 1;

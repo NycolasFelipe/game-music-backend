@@ -453,7 +453,7 @@ export function instantiateActiveEvent(
  * when no suitable event could be built.
  *
  * @param params - Year, characters, relationships, fan count and the set of
- * recently used template ids to avoid repeats.
+ * template ids to skip (every template the band already saw, ADR-0031).
  * @returns The generated active event, or `null`.
  */
 export function generateActiveEvent(params: {
@@ -461,6 +461,7 @@ export function generateActiveEvent(params: {
   characters: EventCharacter[];
   relationships: EventRelationship[];
   fanCount: number;
+  /** Templates to skip: every one the band already saw (ADR-0031 §1). */
   recentTemplateIds?: ReadonlySet<string>;
   /** Who was in the band's previous event; they weigh less (ADR-0028). */
   lastInvolvedIds?: readonly string[];
@@ -483,8 +484,8 @@ export function generateActiveEvent(params: {
       selectedType = "decisao_criativa";
     }
 
-    // Recent templates leave the pool before the draw, so a recent pick never
-    // burns one of the attempts.
+    // Seen templates leave the pool before the draw, so a repeat never burns
+    // one of the attempts.
     const compatible = ACTIVE_EVENT_TEMPLATES.filter((t) => {
       if (recent.has(t.id)) return false;
       if (t.type !== "" && t.type !== selectedType) return false;
