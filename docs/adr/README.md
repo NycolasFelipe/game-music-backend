@@ -38,6 +38,7 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | [0022](0022-painel-do-turno.md) | Painel do turno (pendências, prévias e previsão) | Aceita |
 | [0023](0023-aparencia-dos-integrantes-e-cenario-da-banda.md) | Aparência dos integrantes e cenário da foto da banda | Aceita |
 | [0024](0024-noticias-da-cena-por-epoca.md) | Notícias da cena por época e três por turno | Aceita |
+| [0025](0025-cobertura-minima-de-eventos-ativos.md) | Cobertura mínima de eventos ativos por fase de fama | Aceita |
 
 ## Veja também
 - [Trabalho futuro](../future-work.md) — backlog de ideias de gameplay ainda não
