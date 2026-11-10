@@ -2,7 +2,8 @@ import type { PassiveEventTemplate } from "@/modules/events/domain/types/passive
 
 /**
  * Static passive-event templates, ported from the `game-music` frontend. Stable
- * ids were added on the backend for anti-repeat tracking.
+ * ids were added on the backend for anti-repeat tracking; `desde` keeps modern
+ * texts (streaming, viral videos…) out of the years before them.
  */
 export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
   {
@@ -44,6 +45,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     compatibilidade: ["ativo_recente"],
     template:
       "{artista} lança álbum surpresa - '{nome_album}' - e quebra recordes de streaming.",
+    desde: 2010,
   },
   {
     id: "pe-06",
@@ -83,6 +85,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     compatibilidade: ["qualquer_um"],
     template:
       "{artista} anuncia pausa na carreira para cuidar da saúde mental.",
+    desde: 2010,
   },
   {
     id: "pe-11",
@@ -91,6 +94,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     compatibilidade: ["ambos_ativos"],
     template:
       "{artista1} lança remix de {artista2} e música viraliza nas plataformas digitais.",
+    desde: 2008,
   },
   {
     id: "pe-12",
@@ -114,6 +118,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     compatibilidade: ["qualquer_um"],
     template:
       "{artista} confirma participação em grande festival internacional.",
+    desde: 1967,
   },
   {
     id: "pe-15",
@@ -137,6 +142,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     compatibilidade: ["carreira_longa"],
     template:
       "Documentário sobre a vida de {artista} estreia e recebe elogios da crítica.",
+    desde: 1965,
   },
   {
     id: "pe-18",
@@ -169,6 +175,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     compatibilidade: ["qualquer_um"],
     template:
       "{artista} lança linha de produtos e fãs esgotam estoque em horas.",
+    desde: 1964,
   },
   {
     id: "pe-22",
@@ -192,6 +199,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
     template: "{artista} anuncia álbum triplo com mais de 40 faixas inéditas.",
+    desde: 1970,
   },
   {
     id: "pe-25",
@@ -200,6 +208,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     compatibilidade: ["qualquer_um"],
     template:
       "Música antiga de {artista} volta às paradas após viralizar em rede social.",
+    desde: 2010,
   },
   {
     id: "pe-26",
@@ -215,6 +224,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     compatibilidade: ["ambos_ativos"],
     template:
       "{artista1} e {artista2} anunciam festival beneficente com toda renda revertida.",
+    desde: 1971,
   },
   {
     id: "pe-28",
@@ -231,6 +241,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     compatibilidade: ["ativo_recente"],
     template:
       "Clipe de {artista} bate 1 bilhão de visualizações em tempo recorde.",
+    desde: 2012,
   },
   {
     id: "pe-30",

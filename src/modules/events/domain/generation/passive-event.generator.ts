@@ -117,15 +117,32 @@ function filterByCompatibility(
 }
 
 /**
- * Produces a public-review phrase (positive/neutral/negative).
+ * Whether a dated text already makes sense in the game year.
  *
+ * @param item - Something with an optional `desde` year.
+ * @param year - The game year.
+ * @returns `true` when the text fits the year.
+ */
+export function fitsEra(item: { desde?: number }, year: number): boolean {
+  return (item.desde ?? -Infinity) <= year;
+}
+
+/**
+ * Produces a public-review phrase (positive/neutral/negative) that fits the
+ * game year.
+ *
+ * @param year - The game year.
  * @returns The review phrase.
  */
-function generateReview(): string {
+function generateReview(year: number): string {
   const random = Math.random();
-  if (random < 0.5) return pick(PUBLIC_REVIEWS.positivas);
-  if (random < 0.8) return pick(PUBLIC_REVIEWS.neutras);
-  return pick(PUBLIC_REVIEWS.negativas);
+  const tone =
+    random < 0.5
+      ? PUBLIC_REVIEWS.positivas
+      : random < 0.8
+        ? PUBLIC_REVIEWS.neutras
+        : PUBLIC_REVIEWS.negativas;
+  return pick(tone.filter((phrase) => fitsEra(phrase, year))).text;
 }
 
 /**
@@ -170,7 +187,7 @@ function fillTemplate(
     text = text.replace("{motivo}", pick(CANCELLATION_REASONS));
   }
   if (text.includes("{avaliacao}")) {
-    text = text.replace("{avaliacao}", generateReview());
+    text = text.replace("{avaliacao}", generateReview(year));
   }
 
   return text;
@@ -222,7 +239,7 @@ export function generatePassiveEvent(
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     const type = selectType();
     const compatibleTemplates = PASSIVE_EVENT_TEMPLATES.filter(
-      (t) => t.type === type,
+      (t) => t.type === type && fitsEra(t, year),
     );
     if (compatibleTemplates.length === 0) continue;
 

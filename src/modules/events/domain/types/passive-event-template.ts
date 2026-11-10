@@ -14,4 +14,9 @@ export interface PassiveEventTemplate {
   requiredArtists: number;
   /** Compatibility tags used to filter eligible artists. */
   compatibilidade: string[];
+  /**
+   * First game year in which the text makes sense (streaming, viral videos,
+   * mental-health breaks…). Absent means any year.
+   */
+  desde?: number;
 }

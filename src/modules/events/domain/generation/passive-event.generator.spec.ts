@@ -1,6 +1,7 @@
 import { PASSIVE_EVENT_TEMPLATES } from "@/modules/events/domain/data/passive-event-templates";
 import {
   careerYears,
+  fitsEra,
   generatePassiveEvent,
 } from "@/modules/events/domain/generation/passive-event.generator";
 import type { RecentPassiveEvent } from "@/modules/events/domain/generation/generated-passive-event";
@@ -91,5 +92,37 @@ describe("careerYears", () => {
 
   it("counts at least one year", () => {
     expect(careerYears(1956.5, 1956)).toBe(1);
+  });
+});
+
+describe("era of the scene news", () => {
+  const MODERN =
+    /stream|viraliz|visualiza|plataformas digitais|saúde mental|rede social|redes sociais/i;
+
+  it("keeps streaming, viral videos and social media out of the past", () => {
+    const events = Array.from({ length: 3000 }, () =>
+      generatePassiveEvent(1975),
+    ).filter((e) => e !== null);
+    expect(events.length).toBeGreaterThan(0);
+    for (const e of events) {
+      expect(e.description).not.toMatch(MODERN);
+      const template = PASSIVE_EVENT_TEMPLATES.find(
+        (t) => t.id === e.templateId,
+      );
+      expect(fitsEra(template!, 1975)).toBe(true);
+    }
+  });
+
+  it("lets the modern texts in once their time comes", () => {
+    const events = Array.from({ length: 3000 }, () =>
+      generatePassiveEvent(2015),
+    ).filter((e) => e !== null);
+    expect(events.some((e) => MODERN.test(e.description))).toBe(true);
+  });
+
+  it("reads an absent year as any year", () => {
+    expect(fitsEra({}, 1960)).toBe(true);
+    expect(fitsEra({ desde: 2012 }, 2011.5)).toBe(false);
+    expect(fitsEra({ desde: 2012 }, 2012)).toBe(true);
   });
 });

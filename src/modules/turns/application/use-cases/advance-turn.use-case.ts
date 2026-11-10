@@ -26,6 +26,7 @@ import type { TurnDeltaView } from "@/modules/turns/application/dto/turn-delta.v
 import { formatPeriod } from "@/modules/turns/application/mappers/turn.mapper";
 import {
   ACTIVE_EVENT_CHANCE,
+  PASSIVE_EVENTS_PER_TURN,
   TURN_STEP,
 } from "@/modules/turns/domain/constants/turn.constant";
 import type { TurnEntity } from "@/modules/turns/domain/entities/turn.entity";
@@ -110,12 +111,12 @@ export class AdvanceTurnUseCase {
     const newYear = previousYear + TURN_STEP;
     const agedMembers = Math.floor(newYear) !== Math.floor(previousYear);
 
-    // Passive flavor event for the new period (empty when nothing eligible).
+    // Scene news for the new period (ADR-0024); the report keeps the first one.
     const passiveViews = await this.generatePassiveEvents.execute(
       actor,
       bandId,
       newYear,
-      1,
+      PASSIVE_EVENTS_PER_TURN,
     );
     const passiveEvent = passiveViews[0] ?? null;
 

@@ -10,6 +10,13 @@
 export const TURN_STEP = 0.5;
 
 /**
+ * Scene news (passive events) generated per turn (ADR-0024). Three per
+ * semester give the newspaper on the turn tab a lead and a few briefs for the
+ * current year.
+ */
+export const PASSIVE_EVENTS_PER_TURN = 3;
+
+/**
  * Probability (0..1) that advancing a turn spawns a blocking active (decision)
  * event, mirroring the frontend's 35% roll.
  */

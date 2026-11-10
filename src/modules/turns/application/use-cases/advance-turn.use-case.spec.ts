@@ -10,6 +10,7 @@ import { ArchiveMemberDeparturesUseCase } from "@/modules/band-members/applicati
 import { AutoAdjustSalariesUseCase } from "@/modules/band-members/application/use-cases/auto-adjust-salaries.use-case";
 import { PaySalariesUseCase } from "@/modules/band-members/application/use-cases/pay-salaries.use-case";
 import { AccrueReleaseRoyaltiesUseCase } from "@/modules/releases/application/use-cases/accrue-release-royalties.use-case";
+import { PASSIVE_EVENTS_PER_TURN } from "@/modules/turns/domain/constants/turn.constant";
 import { AdvanceReleaseProductionUseCase } from "@/modules/releases/application/use-cases/advance-release-production.use-case";
 import { RELEASES_REPOSITORY } from "@/modules/releases/domain/repositories/releases.repository";
 import { AdvanceTurnUseCase } from "@/modules/turns/application/use-cases/advance-turn.use-case";
@@ -191,6 +192,31 @@ describe("AdvanceTurnUseCase", () => {
         activeEventId: "ae-1",
       }),
     );
+  });
+
+  it("asks for three scene news per turn and keeps the first in the report", async () => {
+    bandsRepository.findByIdAndOwner.mockResolvedValue({
+      id: BAND_ID,
+      currentYear: 2003,
+      fanCount: 10,
+    });
+    generatePassiveEvents.execute.mockResolvedValue([
+      { id: "pe-1" },
+      { id: "pe-2" },
+      { id: "pe-3" },
+    ]);
+    randomSpy.mockReturnValue(0.99); // no active event
+
+    const result = await useCase.execute(actor, BAND_ID);
+
+    expect(generatePassiveEvents.execute).toHaveBeenCalledWith(
+      actor,
+      BAND_ID,
+      2003.5,
+      PASSIVE_EVENTS_PER_TURN,
+    );
+    expect(PASSIVE_EVENTS_PER_TURN).toBe(3);
+    expect(result.passiveEvent).toEqual({ id: "pe-1" });
   });
 
   it("tolerates no eligible active event (NotFound) as no event this turn", async () => {

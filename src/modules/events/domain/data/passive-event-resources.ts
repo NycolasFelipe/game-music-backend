@@ -51,21 +51,31 @@ export const CANCELLATION_REASONS = [
   "recomendação médica",
 ];
 
-export const PUBLIC_REVIEWS = {
+/** A filler phrase, optionally only from a given game year on. */
+export interface DatedPhrase {
+  text: string;
+  /** First game year in which the phrase makes sense; absent means any year. */
+  desde?: number;
+}
+
+export const PUBLIC_REVIEWS: Record<
+  "positivas" | "neutras" | "negativas",
+  DatedPhrase[]
+> = {
   positivas: [
-    "O público adorou a nova música!",
-    "A música rapidamente se tornou um hit nas rádios.",
-    "Críticos elogiaram a colaboração inovadora.",
-    "A música viralizou nas redes sociais.",
+    { text: "O público adorou a nova música!" },
+    { text: "A música rapidamente se tornou um hit nas rádios." },
+    { text: "Críticos elogiaram a colaboração inovadora." },
+    { text: "A música viralizou nas redes sociais.", desde: 2010 },
   ],
   neutras: [
-    "A recepção do público foi mista.",
-    "A música não impressionou, mas também não desagradou.",
-    "Alguns fãs gostaram, outros não viram graça.",
+    { text: "A recepção do público foi mista." },
+    { text: "A música não impressionou, mas também não desagradou." },
+    { text: "Alguns fãs gostaram, outros não viram graça." },
   ],
   negativas: [
-    "Infelizmente não foi recebido com muito carinho pelo público.",
-    "A música foi mal recebida pelos fãs mais antigos.",
-    "Críticos consideraram a colaboração forçada.",
+    { text: "Infelizmente não foi recebido com muito carinho pelo público." },
+    { text: "A música foi mal recebida pelos fãs mais antigos." },
+    { text: "Críticos consideraram a colaboração forçada." },
   ],
 };
