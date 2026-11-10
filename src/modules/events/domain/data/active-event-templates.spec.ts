@@ -213,6 +213,21 @@ describe("ACTIVE_EVENT_TEMPLATES integrity", () => {
   );
 
   it.each(ACTIVE_EVENT_TEMPLATES.map((t) => [t.id, t] as const))(
+    "%s writes every gendered fragment in three forms for its own cast (ADR-0027)",
+    (_id, t) => {
+      const text = JSON.stringify(t);
+      const opened = [...text.matchAll(/\{character\d+:/g)].length;
+      const complete = [
+        ...text.matchAll(/\{character(\d+):[^|{}]*\|[^|{}]*\|[^|{}]*\}/g),
+      ];
+      expect(complete).toHaveLength(opened);
+      for (const match of complete) {
+        expect(Number(match[1])).toBeLessThanOrEqual(t.requiredCharacters);
+      }
+    },
+  );
+
+  it.each(ACTIVE_EVENT_TEMPLATES.map((t) => [t.id, t] as const))(
     "%s only references known traits",
     (_id, t) => {
       expect(

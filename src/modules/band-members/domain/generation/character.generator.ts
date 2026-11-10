@@ -1,5 +1,8 @@
 import { generateAppearance } from "@/modules/band-members/domain/generation/appearance.generator";
-import type { Gender } from "@/modules/band-members/domain/constants/gender.constant";
+import {
+  NEUTRAL_CANDIDATE_SHARE,
+  type Gender,
+} from "@/modules/band-members/domain/constants/gender.constant";
 import {
   SKILL_TYPES,
   type Skills,
@@ -46,13 +49,16 @@ function pick<T>(array: readonly T[]): T {
 }
 
 /**
- * Generates a full name for the given gender.
+ * Generates a full name for the given gender. A neutral member draws its
+ * first name from either list.
  *
  * @param gender - The member's gender.
  * @returns A "first last" name.
  */
 function generateName(gender: Gender): string {
-  const firstNames = gender === "male" ? MALE_NAMES : FEMALE_NAMES;
+  const male =
+    gender === "male" || (gender === "neutral" && Math.random() < 0.5);
+  const firstNames = male ? MALE_NAMES : FEMALE_NAMES;
   return `${pick(firstNames)} ${pick(LAST_NAMES)}`;
 }
 
@@ -107,7 +113,12 @@ function weightedPick<T>(options: Array<{ value: T; weight: number }>): T {
  * @returns The composed emoji string.
  */
 export function generateAvatar(gender: Gender): string {
-  const base = gender === "male" ? "\u{1F468}" : "\u{1F469}";
+  const base =
+    gender === "male"
+      ? "\u{1F468}"
+      : gender === "female"
+        ? "\u{1F469}"
+        : "\u{1F9D1}";
   return `${base}${pick(SKIN_TONES)}${weightedPick(HAIR_OPTIONS)}`;
 }
 
@@ -288,6 +299,8 @@ function resolveBiography(
   gender: Gender,
 ): string {
   let bio = template.replace(/\[nome( do personagem)?\]/g, name);
+  // Neutral members only get templates without gender markers.
+  if (gender === "neutral") return bio;
 
   const generic = gender === "male" ? MALE_REPLACEMENTS : FEMALE_REPLACEMENTS;
   for (const [pattern, replacement] of generic) {
@@ -299,6 +312,28 @@ function resolveBiography(
   }
 
   return bio;
+}
+
+/**
+ * Whether a biography template inflects gender (anything in brackets other
+ * than the name marker). Neutral members only draw templates without them.
+ *
+ * @param text - The raw template text.
+ * @returns `true` when the template has gender markers.
+ */
+export function hasGenderMarkers(text: string): boolean {
+  return /\[(?!nome)[^\]]*\]/.test(text);
+}
+
+/**
+ * Rolls a candidate's gender: {@link NEUTRAL_CANDIDATE_SHARE} neutral, the
+ * rest split evenly between male and female (ADR-0027).
+ *
+ * @returns The gender.
+ */
+function rollGender(): Gender {
+  if (Math.random() < NEUTRAL_CANDIDATE_SHARE) return "neutral";
+  return Math.random() < 0.5 ? "male" : "female";
 }
 
 /**
@@ -314,7 +349,13 @@ function generateBiography(
   gender: Gender,
   skill: SkillType,
 ): string {
-  const templates = BIOGRAPHIES.filter((b) => b.skill === skill);
+  const fits = (text: string) =>
+    gender !== "neutral" || !hasGenderMarkers(text);
+  const forSkill = BIOGRAPHIES.filter((b) => b.skill === skill && fits(b.text));
+  // A skill with no neutral biography borrows one from another skill rather
+  // than inflecting a neutral member (the catalog test keeps this rare).
+  const templates =
+    forSkill.length > 0 ? forSkill : BIOGRAPHIES.filter((b) => fits(b.text));
   return resolveBiography(pick(templates).text, name, gender);
 }
 
@@ -325,7 +366,7 @@ function generateBiography(
  * @returns The generated member candidate.
  */
 export function generateBandMember(): GeneratedBandMember {
-  const gender: Gender = Math.random() < 0.5 ? "male" : "female";
+  const gender = rollGender();
   const name = generateName(gender);
   const skills = generateSkills();
   const primarySkill = findPrimarySkill(skills);

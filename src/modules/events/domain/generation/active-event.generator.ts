@@ -68,8 +68,39 @@ function relationshipLevelOf(
   return rel ? rel.level : null;
 }
 
-function fillTemplate(text: string, characters: EventCharacter[]): string {
-  let result = text;
+/**
+ * Matches an inflected fragment, `{characterN:masculine|feminine|neutral}`
+ * (ADR-0027). The neutral form is a construction without inflection.
+ */
+const INFLECTION_MARKER = /\{character(\d):([^|{}]*)\|([^|{}]*)\|([^|{}]*)\}/g;
+
+/**
+ * Fills a template: first the inflected fragments, by the gender of the
+ * character each one refers to, then the names and ids.
+ *
+ * @param text - The template text.
+ * @param characters - The cast, in position order.
+ * @returns The text ready to show.
+ */
+export function fillTemplate(
+  text: string,
+  characters: EventCharacter[],
+): string {
+  let result = text.replace(
+    INFLECTION_MARKER,
+    (
+      _match,
+      position: string,
+      masculine: string,
+      feminine: string,
+      neutral: string,
+    ) => {
+      const gender = characters[Number(position) - 1]?.gender;
+      if (gender === "female") return feminine;
+      if (gender === "male") return masculine;
+      return neutral;
+    },
+  );
   characters.forEach((char, index) => {
     result = result.replace(
       new RegExp(`\\{character${index + 1}\\}`, "g"),
@@ -123,9 +154,13 @@ function resolveSingleConsequence(
   template: TemplateConsequence,
   involved: EventCharacter[],
 ): EventConsequence {
-  const { descriptionTemplate, relationshipChanges, ...rest } = template;
+  const { descriptionTemplate, relationshipChanges, resultLabel, ...rest } =
+    template;
   return {
     ...rest,
+    ...(resultLabel !== undefined
+      ? { resultLabel: fillTemplate(resultLabel, involved) }
+      : {}),
     description: fillTemplate(descriptionTemplate, involved),
     relationshipChanges: relationshipChanges?.map((change) => ({
       character1Id: fillTemplate(change.character1Id, involved),

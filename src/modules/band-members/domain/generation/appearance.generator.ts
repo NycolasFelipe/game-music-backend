@@ -55,6 +55,11 @@ function hairStyle(source: AppearanceSource, random: RandomSource): HairStyle {
       ? "curlylong"
       : pick(["long", "long", "bob", "bun", "long"] as const, random);
   }
+  if (source.gender === "neutral") {
+    return curly
+      ? pick(["curly", "afro", "curlylong"] as const, random)
+      : pick(["short", "long", "bob", "buzz", "bun"] as const, random);
+  }
   return curly
     ? pick(["curly", "afro"] as const, random)
     : pick(["short", "quiff", "long", "buzz", "short"] as const, random);

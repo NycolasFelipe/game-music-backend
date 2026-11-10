@@ -3,7 +3,11 @@ import {
   areCharacteristicsCompatible,
   CHARACTERISTIC_IDS,
 } from "@/modules/band-members/domain/data/characteristics";
-import { generateBandMember } from "@/modules/band-members/domain/generation/character.generator";
+import { BIOGRAPHIES } from "@/modules/band-members/domain/data/biographies";
+import {
+  generateBandMember,
+  hasGenderMarkers,
+} from "@/modules/band-members/domain/generation/character.generator";
 
 describe("generateBandMember", () => {
   const samples = Array.from({ length: 300 }, () => generateBandMember());
@@ -46,7 +50,7 @@ describe("generateBandMember", () => {
     for (const member of samples) {
       expect(member.age).toBeGreaterThanOrEqual(16);
       expect(member.age).toBeLessThanOrEqual(30);
-      expect(["male", "female"]).toContain(member.gender);
+      expect(["male", "female", "neutral"]).toContain(member.gender);
       expect(member.avatar.length).toBeGreaterThan(0);
       expect(member.happiness).toBeGreaterThanOrEqual(-5);
       expect(member.happiness).toBeLessThanOrEqual(5);
@@ -58,5 +62,26 @@ describe("generateBandMember", () => {
       expect(member.biography.length).toBeGreaterThan(0);
       expect(member.biography).not.toContain("[");
     }
+  });
+
+  it("gives neutral members a neutral avatar and an uninflected biography", () => {
+    // Every roll at 0.05 lands in the neutral share (ADR-0027).
+    jest.spyOn(Math, "random").mockReturnValue(0.05);
+    const member = generateBandMember();
+    jest.restoreAllMocks();
+
+    expect(member.gender).toBe("neutral");
+    expect(member.avatar.startsWith("\u{1F9D1}")).toBe(true);
+    const neutralTexts = BIOGRAPHIES.filter(
+      (b) => !hasGenderMarkers(b.text),
+    ).map((b) => b.text.replace(/\[nome( do personagem)?\]/g, member.name));
+    expect(neutralTexts).toContain(member.biography);
+  });
+
+  it("tells inflected biography templates from neutral ones", () => {
+    expect(hasGenderMarkers("Criad[o-a] em coral, [nome] canta.")).toBe(true);
+    expect(
+      hasGenderMarkers("[nome] passou anos cantando em filas de banco."),
+    ).toBe(false);
   });
 });

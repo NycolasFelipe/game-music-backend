@@ -94,4 +94,21 @@ describe("generateAppearance", () => {
       expect(typeof result.earring).toBe("boolean");
     }
   });
+
+  it("never gives a beard to a neutral member and keeps the earring chance between the two", () => {
+    for (let i = 0; i < 50; i++) {
+      expect(
+        generateAppearance(
+          { gender: "neutral", age: 28, avatar: "🧑🏽" },
+          sequence(0.5, 0),
+        ).beard,
+      ).toBe("none");
+    }
+    // 0.3 is over the male chance (0.15) and under the neutral one (0.35).
+    const earring = (gender: "male" | "neutral") =>
+      generateAppearance({ gender, age: 28, avatar: "🧑🏽" }, sequence(0.5, 0.3))
+        .earring;
+    expect(earring("neutral")).toBe(true);
+    expect(earring("male")).toBe(false);
+  });
 });

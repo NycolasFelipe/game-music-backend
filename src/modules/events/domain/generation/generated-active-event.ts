@@ -1,3 +1,4 @@
+import type { Gender } from "@/modules/band-members/domain/constants/gender.constant";
 import type { ActiveEventType } from "@/modules/events/domain/constants/active-event-type.constant";
 import type { ResolvedEventOption } from "@/modules/events/domain/types/event-consequence";
 
@@ -6,6 +7,8 @@ export interface EventCharacter {
   id: string;
   name: string;
   characteristics: string[];
+  /** Picks the inflected form in `{characterN:masc|fem|neutral}` (ADR-0027). */
+  gender?: Gender;
 }
 
 /** Minimal relationship shape the generator needs (canonical pair + level). */

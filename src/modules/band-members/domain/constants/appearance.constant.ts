@@ -62,4 +62,8 @@ export const SUNGLASSES_CHANCE = 0.12;
 /** Chance of round glasses (on top of the sunglasses band). */
 export const ROUND_GLASSES_CHANCE = 0.15;
 /** Chance of an earring, by gender. */
-export const EARRING_CHANCE = { female: 0.55, male: 0.15 } as const;
+export const EARRING_CHANCE = {
+  female: 0.55,
+  male: 0.15,
+  neutral: 0.35,
+} as const;

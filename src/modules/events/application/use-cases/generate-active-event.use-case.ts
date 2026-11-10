@@ -60,6 +60,7 @@ export class GenerateActiveEventUseCase {
         id: m.id,
         name: m.name,
         characteristics: m.characteristics,
+        gender: m.gender,
       })),
       relationships: band.relationships.map((r) => ({
         memberAId: r.memberAId,

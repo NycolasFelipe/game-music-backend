@@ -1,5 +1,9 @@
 import { ACTIVE_EVENT_TEMPLATES } from "@/modules/events/domain/data/active-event-templates";
-import { generateActiveEvent } from "@/modules/events/domain/generation/active-event.generator";
+import {
+  fillTemplate,
+  generateActiveEvent,
+  instantiateActiveEvent,
+} from "@/modules/events/domain/generation/active-event.generator";
 import type {
   EventCharacter,
   EventRelationship,
@@ -88,5 +92,60 @@ describe("generateActiveEvent", () => {
         fanCount: 200,
       }),
     ).toBeNull();
+  });
+
+  describe("gender inflection (ADR-0027)", () => {
+    const cast = (gender: "male" | "female" | "neutral") => [
+      { id: "a", name: "Ana", characteristics: [], gender },
+      { id: "b", name: "Beto", characteristics: [], gender: "male" as const },
+    ];
+    const text =
+      "{character1} passa a noite {character1:calado|calada|em silêncio}.";
+
+    it("picks the form by the gender of the character it refers to", () => {
+      expect(fillTemplate(text, cast("male"))).toBe(
+        "Ana passa a noite calado.",
+      );
+      expect(fillTemplate(text, cast("female"))).toBe(
+        "Ana passa a noite calada.",
+      );
+      expect(fillTemplate(text, cast("neutral"))).toBe(
+        "Ana passa a noite em silêncio.",
+      );
+    });
+
+    it("falls back to the uninflected form when the gender is unknown", () => {
+      expect(
+        fillTemplate(text, [{ id: "a", name: "Ana", characteristics: [] }]),
+      ).toBe("Ana passa a noite em silêncio.");
+    });
+
+    it("inflects result labels too", () => {
+      const event = instantiateActiveEvent(
+        {
+          id: "x",
+          type: "",
+          title: "Teste",
+          descriptionTemplate: "{character1} e {character2}.",
+          requiredCharacters: 2,
+          options: [
+            {
+              label: "Ok",
+              description: "Ok",
+              consequence: {
+                resultLabel: "{character1:Exposto|Exposta|Exposição}",
+                descriptionTemplate: "Fim.",
+              },
+            },
+          ],
+        },
+        cast("female"),
+        1990,
+      );
+      const consequence = event?.options[0].consequence;
+      expect(
+        Array.isArray(consequence) ? undefined : consequence?.resultLabel,
+      ).toBe("Exposta");
+    });
   });
 });
