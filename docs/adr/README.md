@@ -34,6 +34,7 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | [0018](0018-preferencias-do-usuario.md) | Preferências do usuário (da conta, não do save) | Aceita |
 | [0019](0019-custos-nas-sessoes-de-estudio.md) | Custos nas sessões de estúdio e primeiro disco viável | Aceita |
 | [0020](0020-relatorio-do-turno.md) | Relatório do turno (dinheiro e fãs explicados) | Aceita |
+| [0021](0021-humor-do-show-relativo-a-casa.md) | Humor do show relativo ao que a casa espera | Aceita |
 
 ## Veja também
 - [Trabalho futuro](../future-work.md) — backlog de ideias de gameplay ainda não
