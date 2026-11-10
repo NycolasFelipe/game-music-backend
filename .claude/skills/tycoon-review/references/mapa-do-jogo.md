@@ -231,10 +231,11 @@ frontend "revista".
 
 ## Documentação de design
 
-- `game-music-backend/docs/adr/0001` a `0025`: uma ADR por sistema (turnos
+- `game-music-backend/docs/adr/0001` a `0026`: uma ADR por sistema (turnos
   0006, fama 0007, obras 0008, salários 0010, shows 0016, atividades 0017,
   relatório do turno 0020, humor do show 0021, painel do turno 0022,
-  aparência 0023, notícias por época 0024, cobertura de eventos ativos 0025).
+  aparência 0023, notícias por época 0024, cobertura de eventos ativos 0025,
+  tom de voz dos textos 0026).
   Leia a ADR do sistema antes de julgar: ela registra a intenção.
 - `game-music-backend/docs/future-work.md`: backlog de ideias.
 - `game-music-frontend/docs/adr/0001-central-de-decisoes.md`.

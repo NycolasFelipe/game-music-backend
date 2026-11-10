@@ -11,7 +11,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
     type: "conflito_membros",
     title: "Melodia Familiar",
     descriptionTemplate:
-      "{character1} percebe que a nova composição de {character2} é idêntica a um rascunho antigo que {character1} descartou.",
+      "{character1} percebe que a nova composição de {character2} é idêntica a um rascunho que {character1} jogou no lixo meses atrás. Ao que parece, alguém anda revirando o lixo da banda.",
     minFanCount: 101,
     maxRelationshipLevel: 3,
     requiredCharacterCharacteristicsAll: [["plagiarist"], []],
@@ -20,12 +20,12 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Exigir créditos",
         description:
-          "[{character1}] Confrontar {character2} e exigir que a música seja registrada como coautoria.",
+          "[{character1}] Confrontar {character2} e exigir que a música seja registrada em coautoria. Lixo também tem direito autoral.",
         consequence: [
           {
             resultLabel: "Neutro",
             descriptionTemplate:
-              '{character2} aceita, mas fica ressentido(a) por ter sido "pego(a)".',
+              "{character2} aceita a coautoria, ressentido(a) por ter sido pego(a), não por ter copiado.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -38,7 +38,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Confronto",
             descriptionTemplate:
-              "{character2} nega tudo e diz que teve a ideia de forma independente.",
+              "{character2} nega tudo e jura que teve a mesma ideia sozinho(a), nota por nota. Coincidências acontecem, diz.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -54,19 +54,19 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Sabotagem",
         description:
-          "[{character1}] Alterar discretamente os arranjos finais para que a parte plagiada soe mal ou perca o impacto original.",
+          "[{character1}] Mexer discretamente nos arranjos finais para que a parte copiada soe mal. Sabotar a própria banda para provar um ponto: um clássico.",
         consequence: [
           {
             resultLabel: "Sucesso",
             descriptionTemplate:
-              "A música fracassa e {character2} perde confiança na banda para propor novas ideias.",
+              "A música fracassa, como planejado, e {character2} perde a coragem de propor ideias novas. Ou de revirar o lixo.",
             fanCountChangeAbsolute: -5,
             chance: 60,
           },
           {
             resultLabel: "Exposto(a)",
             descriptionTemplate:
-              "A banda percebe a sabotagem e {character1} sofre críticas pesadas de todos os membros e fãs.",
+              "A banda percebe a sabotagem, e {character1} consegue a proeza de sair como culpado(a) de um plágio que sofreu.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -87,7 +87,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Produtivo",
             descriptionTemplate:
-              "{character2} fica sem saída e aceita a parceria, resultando em uma música excelente.",
+              "{character2} fica sem saída e aceita a parceria. A música sai excelente, e ninguém fala sobre como ela começou.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -101,7 +101,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Paranoia",
             descriptionTemplate:
-              "{character2} se sente vigiado e decide deletar a música por medo de ser exposto.",
+              "{character2} se sente vigiado(a) e rasga a partitura por medo de ser descoberto(a). Ninguém vai saber como era o refrão, nem de quem.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -120,7 +120,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
     type: "",
     title: "O Roubo do Microfone",
     descriptionTemplate:
-      'Durante uma premiação do VMA, {character1} ganha o prêmio de "Melhor Composição". Enquanto {character1} discursa, um rapper mundialmente famoso invade o palco, arranca seu microfone e grita que outra pessoa merecia o prêmio.',
+      'Numa cerimônia de premiação da música, {character1} ganha o troféu de "Melhor Composição". No meio do discurso, um astro famoso invade o palco, arranca o microfone e anuncia que outra pessoa merecia o prêmio. Ninguém convidou o astro a subir, nem à cerimônia.',
     minFanCount: 2000001,
     maxRelationshipLevel: 1,
     requiredCharacters: 1,
@@ -128,30 +128,30 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Manter a compostura",
         description:
-          "[{character1}] Ficar em silêncio, demonstrar choque contido e esperar a segurança agir para retomar o discurso.",
+          "[{character1}] Ficar em silêncio, demonstrar choque contido e esperar a segurança agir. A segurança, como sempre, está no bufê.",
         consequence: {
           resultLabel: "Compostura",
           descriptionTemplate:
-            "O público e a mídia abraçam {character1} pela elegância sob pressão.",
+            "O público e a imprensa abraçam {character1} pela elegância sob pressão. O astro ganha uma semana de manchetes, que era o plano dele.",
           fanCountChange: 5,
         },
       },
       {
         label: "Transformar em performance",
         description:
-          "[{character1}] Começar a cantar por cima da fala do rapper, transformando a interrupção em um show improvisado.",
+          "[{character1}] Cantar por cima da fala do astro e transformar a interrupção em show. Sem microfone, no gogó.",
         consequence: [
           {
-            resultLabel: "Viral",
+            resultLabel: "Lendário",
             descriptionTemplate:
-              "A internet vai à loucura com a capacidade de improviso.",
+              "O país inteiro comenta o improviso por semanas, e o astro descobre que não é o único que sabe roubar a cena.",
             fanCountChange: 10,
             chance: 70,
           },
           {
             resultLabel: "Constrangedor",
             descriptionTemplate:
-              "O público não entende a piada e o clima fica apenas estranho.",
+              "O público não entende a piada, e a cerimônia ganha cinco minutos de constrangimento ao vivo. A transmissão corta para os comerciais.",
             fanCountChange: -5,
             chance: 30,
           },
@@ -160,11 +160,11 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Abandonar o palco",
         description:
-          "[{character1}] Simplesmente largar o prêmio e sair de cena, recusando-se a participar do circo midiático.",
+          "[{character1}] Largar o troféu no palco e sair de cena, recusando-se a participar do circo. O circo continua sem {character1}.",
         consequence: {
           resultLabel: "Recuo",
           descriptionTemplate:
-            'A imprensa diz que {character1} não tem "casca grossa" para a fama.',
+            'A imprensa conclui que {character1} não tem "casca grossa" para a fama. O troféu fica com o astro, que agradece.',
           fanCountChange: -10,
         },
       },
@@ -175,7 +175,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
     type: "",
     title: "Invasão de Privacidade",
     descriptionTemplate:
-      "Um grupo de fãs extremistas descobriu o endereço do hotel da banda e cercou a saída. Eles estão batendo nos vidros e impedindo que o carro se mova.",
+      "Um grupo de fãs descobriu o hotel da banda e cercou a saída. Batem nos vidros do carro com o carinho de quem quer uma lembrança, de preferência um pedaço da banda.",
     minFanCount: 10001,
     maxRelationshipLevel: 0,
     requiredCharacterCharacteristics: [[], ["creative", "erratic"]],
@@ -188,7 +188,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Repressão",
           descriptionTemplate:
-            "A banda se protege, mas a imagem de policiais retirando fãs gera fotos terríveis na mídia.",
+            "A banda se protege, e os jornais do dia seguinte trazem fotos de policiais arrastando adolescentes. Ótimo para a imagem.",
           fanCountChange: -7,
         },
       },
@@ -199,7 +199,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Frieza",
           descriptionTemplate:
-            'Chegam ao compromisso no horário, mas vídeos "ignorando fãs" viralizam negativamente.',
+            'A banda chega ao compromisso no horário, e os jornais estampam "Banda ignora fãs". Pontualidade nunca deu capa.',
           fanCountChange: -5,
         },
       },
@@ -211,14 +211,14 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Humildade",
             descriptionTemplate:
-              "{character1} é visto como a pessoa mais humilde do mundo.",
+              "{character1} passa a ser visto(a) como a pessoa mais humilde do mundo, título que ninguém na banda contesta em público.",
             fanCountChange: 6,
             chance: 65,
           },
           {
             resultLabel: "Pânico",
             descriptionTemplate:
-              "A multidão se descontrola, {character1} sai levemente ferido(a) e assustado(a). Os fãs ficam decepcionados.",
+              "A multidão se descontrola, e {character1} sai levemente ferido(a) e sem um dos sapatos. Os fãs ficam decepcionados, menos o que levou o sapato.",
             fanCountChange: -3,
             chance: 35,
           },
@@ -233,14 +233,14 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Transcendente",
             descriptionTemplate:
-              "O momento é tão visceral e artístico que {character2} se sente transcendente.",
+              "O momento é tão visceral que {character2} se sente transcendente. Os fãs também, ou pelo menos param de bater no vidro.",
             fanCountChange: 10,
             chance: 50,
           },
           {
-            resultLabel: "Colapso",
+            resultLabel: "Mal-entendido",
             descriptionTemplate:
-              "As pessoas acham que {character2} está tendo um colapso mental público.",
+              'A plateia acha que {character2} surtou, e a música inédita sai no jornal como "o grito do teto solar".',
             fanCountChange: 3,
             chance: 50,
           },
@@ -253,7 +253,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
     type: "",
     title: "Tá pegando fogo, meu!",
     descriptionTemplate:
-      "No meio de um show em um barzinho de esquina, o amplificador principal da banda começa a soltar fumaça.",
+      "No meio de um show num barzinho de esquina, o amplificador principal da banda começa a soltar fumaça. Pela cara do dono do bar, isso não está incluído no cachê.",
     maxFanCount: 150,
     maxRelationshipLevel: 0,
     requiredCharacterCharacteristics: [[], ["creative", "experimental"]],
@@ -262,19 +262,19 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Conserto gambiarra",
         description:
-          "[{character1}] Tentar um reparo rápido com fita isolante e fios soltos para terminar o show.",
+          "[{character1}] Tentar um reparo rápido com fita isolante e fios soltos para terminar o show. Toda a engenharia da banda cabe num rolo de fita.",
         consequence: [
           {
             resultLabel: "Sucesso",
             descriptionTemplate:
-              'A música volta com um som "sujo" que o público adora.',
+              'A música volta com um som "sujo" que o público adora e que nenhum técnico consegue reproduzir de propósito.',
             fanCountChangeAbsolute: 15,
             chance: 50,
           },
           {
             resultLabel: "Desastre",
             descriptionTemplate:
-              "O amplificador explode de vez, causando um silêncio constrangedor.",
+              "O amplificador desiste de vez, e o silêncio que fica é o som mais alto da noite.",
             fanCountChangeAbsolute: -10,
             chance: 50,
           },
@@ -289,14 +289,14 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Conceitual",
             descriptionTemplate:
-              'O público acha o momento íntimo e "conceitual". A banda ganha respeito.',
+              'O público acha o momento íntimo e "conceitual". A banda aceita o elogio sem explicar que foi o amplificador.',
             fanCountChangeAbsolute: 20,
             chance: 70,
           },
           {
             resultLabel: "Fracasso",
             descriptionTemplate:
-              "O bar é barulhento demais e ninguém consegue ouvir nada. O show morre.",
+              "O bar é barulhento demais, e ninguém ouve nada. O show acústico morre sem testemunhas.",
             fanCountChangeAbsolute: -8,
             chance: 30,
           },
@@ -305,19 +305,19 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Pausa para manutenção",
         description:
-          "[{character1}] Interromper o show imediatamente, explicar a situação ao público com honestidade e prometer compensar o tempo perdido assim que estabilizarem o som.",
+          "[{character1}] Parar o show, explicar a situação ao público com honestidade e prometer compensar o tempo perdido. Honestidade em bar: estratégia arriscada.",
         consequence: [
           {
             resultLabel: "Respeito",
             descriptionTemplate:
-              "O público aproveita a pausa para ir ao balcão. O dono do bar fica feliz com as vendas extras e a banda volta com som limpo.",
+              "O público aproveita a pausa para ir ao balcão. O dono do bar vende como nunca e passa a torcer por mais incêndios.",
             fanCountChangeAbsolute: 6,
             chance: 60,
           },
           {
             resultLabel: "Clima morre",
             descriptionTemplate:
-              "A demora esfria o clima da festa. Algumas pessoas vão embora antes da banda retomar.",
+              "A demora esfria a festa, e algumas pessoas vão embora antes da volta. O amplificador, pelo menos, sobrevive.",
             fanCountChangeAbsolute: -8,
             chance: 40,
           },
@@ -330,7 +330,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
     type: "",
     title: "Caos no Churrasco",
     descriptionTemplate:
-      'A banda foi contratada para tocar no aniversário do tio de {character1}. O "palco" é ao lado da churrasqueira, o som vive dando choque e as crianças não param de correr entre os pedestais.',
+      'A banda foi contratada para tocar no aniversário do tio de {character1}. O "palco" fica ao lado da churrasqueira, o som dá choque e as crianças correm entre os pedestais. O cachê é pago em linguiça.',
     maxFanCount: 50,
     maxRelationshipLevel: 5,
     requiredCharacterCharacteristics: [[], ["hothead"]],
@@ -339,19 +339,19 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Manter o profissionalismo",
         description:
-          "Ignorar a fumaça de gordura e o som ruim, tocando o setlist como se estivessem no Rock in Rio.",
+          "Ignorar a fumaça de gordura e o som ruim e tocar o repertório como se fosse o maior festival do país.",
         consequence: [
           {
             resultLabel: "Profissional",
             descriptionTemplate:
-              "O tio de {character1} fica impressionado com a postura e indica a banda para um bar local.",
+              "O tio de {character1} fica impressionado com a postura e indica a banda para um bar local. O bar também tem churrasqueira.",
             fanCountChangeAbsolute: 10,
             chance: 70,
           },
           {
             resultLabel: "Frustração",
             descriptionTemplate:
-              "Ninguém presta atenção e a banda termina o show frustrada e cheirando a carvão.",
+              "Ninguém presta atenção, e a banda termina o show frustrada e defumada.",
             fanCountChangeAbsolute: 0,
             chance: 30,
           },
@@ -360,20 +360,20 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Impor Respeito",
         description:
-          "[{character2}] Parar a música abruptamente, aumentar o volume do amplificador no máximo e exigir que todos parem de comer para ouvir, e afirmar que a banda não é som de fundo e deve ser respeitada.",
+          "[{character2}] Parar a música, aumentar o volume no máximo e exigir que todo mundo pare de comer para ouvir. A banda não é som de fundo, nem num churrasco.",
         visibleIfAnyInvolvedHas: ["hothead"],
         consequence: [
           {
             resultLabel: "Briga",
             descriptionTemplate:
-              'A festa acaba em briga. O tio se recusa a pagar o "cachê" (em carne e cerveja).',
+              "A festa acaba em briga, e o tio se recusa a pagar o cachê. A banda perde a linguiça e a dignidade, nessa ordem.",
             fanCountChangeAbsolute: -12,
             chance: 50,
           },
           {
             resultLabel: "Rebeldes",
             descriptionTemplate:
-              'O silêncio constrangedor faz as pessoas finalmente ouvirem. Ganham fama de "rebeldes".',
+              "O silêncio constrangedor faz as pessoas finalmente ouvirem, e a banda ganha fama de rebelde no bairro. O tio nunca mais faz aniversário.",
             fanCountChangeAbsolute: 8,
             chance: 50,
           },
@@ -387,14 +387,14 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Sucesso",
             descriptionTemplate:
-              'A festa vira um sucesso, ganham gorjetas extras, mas os membros se sentem "vendidos".',
+              "A festa vira um sucesso, e a banda ganha gorjetas extras. Os integrantes se sentem vendidos, mas pelo menos bem pagos.",
             fanCountChangeAbsolute: 13,
             chance: 80,
           },
           {
             resultLabel: "Humilhação",
             descriptionTemplate:
-              "A banda toca tão mal os covers que pedem para eles pararem. Humilhação total.",
+              "A banda toca os covers tão mal que os convidados pedem para voltar às músicas autorais. Humilhação total.",
             fanCountChangeAbsolute: -5,
             chance: 20,
           },

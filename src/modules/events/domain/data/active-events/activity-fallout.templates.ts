@@ -11,13 +11,13 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
     type: "confraternizacao",
     title: "O copo a mais",
     descriptionTemplate:
-      "Já era tarde quando {character1} olhou para {character2} e disse, na frente de todo mundo, o que andava guardando havia meses.",
+      "Já era tarde quando {character1} olhou para {character2} e disse, na frente de todo mundo, o que andava guardando havia meses. O garçom, discreto, trouxe mais uma rodada.",
     requiredCharacters: 2,
     options: [
       {
         label: "Cobrar um pedido de desculpas",
         description:
-          "[{character1}] Exigir que {character1} procure {character2} no dia seguinte e desfaça o estrago.",
+          "Exigir que {character1} procure {character2} no dia seguinte e desfaça o estrago, de preferência sóbrio(a).",
         consequence: [
           {
             resultLabel: "Constrangido",
@@ -35,7 +35,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Sem recuo",
             descriptionTemplate:
-              '{character1} se recusa: "eu disse o que todo mundo pensa". {character2} não esquece.',
+              '{character1} se recusa: "eu só disse o que todo mundo pensa". Todo mundo jura que não pensa. {character2} não esquece.',
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -112,11 +112,11 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "A banda paga",
         description:
-          "Encerrar a discussão pagando a diferença com o caixa da banda.",
+          "Encerrar a discussão pagando a diferença com o caixa da banda, que existe exatamente para isso, segundo ninguém.",
         consequence: {
           resultLabel: "Resolvido no dinheiro",
           descriptionTemplate:
-            "A conta some, o constrangimento não. {character2} passa a noite calado.",
+            "A conta some; o constrangimento, não. {character2} passa a noite calado(a).",
           moneyChange: -150,
           relationshipChanges: [
             {
@@ -191,7 +191,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Exposto",
             descriptionTemplate:
-              "A discussão expõe mais do que devia e a noite acaba com metade da banda indo embora.",
+              "A discussão expõe mais do que devia, e a noite acaba com metade da banda indo embora sem pagar a conta.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",

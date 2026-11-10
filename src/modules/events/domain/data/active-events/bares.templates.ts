@@ -11,7 +11,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     type: "conflito_membros",
     title: "Pago em cerveja",
     descriptionTemplate:
-      "O bar paga a banda em cerveja. {character1} bebe a parte de todo mundo antes do show, e {character2} perde a paciência.",
+      "O bar paga a banda em cerveja, e {character1} recebe adiantado: a parte de todo mundo, antes do show. {character2} perde a paciência, que já estava curta.",
     minFanCount: 151,
     maxFanCount: 2000,
     requiredCharacters: 2,
@@ -22,7 +22,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Lei seca",
           descriptionTemplate:
-            "Os shows melhoram, e {character1} toca de cara amarrada.",
+            "Os shows melhoram. {character1} toca de cara amarrada e jura que o som piorou.",
           fanCountChange: 2,
           relationshipChanges: [
             {
@@ -36,12 +36,12 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Deixar como está",
-        description: "Faz parte do pacote.",
+        description: "Faz parte do pacote. Do engradado, na verdade.",
         consequence: [
           {
             resultLabel: "Noite animada",
             descriptionTemplate:
-              "{character1} faz o show mais solto da história da banda.",
+              "{character1} faz o show mais solto da história da banda e não lembra de nenhum segundo.",
             fanCountChange: 3,
             relationshipChanges: [
               {
@@ -56,7 +56,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Desastre",
             descriptionTemplate:
-              "{character1} esquece a letra no meio da música e o público vaia.",
+              "{character1} esquece a letra no meio da música e decide improvisar. O público prefere vaiar.",
             fanCountChange: -4,
             relationshipChanges: [
               {
@@ -72,11 +72,13 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Pedir ao bar que pague em dinheiro",
-        description: "Assim cada um faz o que quiser com a sua parte.",
+        description:
+          "Assim cada um bebe a própria parte, como manda a civilização.",
         consequence: [
           {
             resultLabel: "Combinado",
-            descriptionTemplate: "O dono aceita, e a briga perde o motivo.",
+            descriptionTemplate:
+              "O dono aceita, um pouco ofendido, e a briga perde o motivo.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -89,7 +91,8 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           },
           {
             resultLabel: "Sem acordo",
-            descriptionTemplate: "O dono diz que é cerveja ou nada.",
+            descriptionTemplate:
+              "O dono explica que é cerveja ou nada, e que o nada também está em promoção.",
             happinessChangePercent: -2,
             chance: 50,
           },
@@ -98,12 +101,12 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Levar na brincadeira",
         description:
-          "[{character1}] Prometer pagar uma rodada para a banda inteira no próximo show.",
+          "[{character1}] Prometer pagar uma rodada para a banda inteira no próximo show. Com a cerveja do bar, claro.",
         visibleIfAnyInvolvedHas: ["informal", "playful"],
         consequence: {
           resultLabel: "Rodada",
           descriptionTemplate:
-            "A banda ri, a rodada acontece e ninguém lembra mais da briga.",
+            "A banda ri, a rodada acontece e ninguém lembra mais da briga. Nem de muita coisa.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -121,19 +124,20 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     type: "conflito_membros",
     title: "A data ruim",
     descriptionTemplate:
-      "{character1} fechou sozinho(a) um show numa terça-feira de chuva, do outro lado da cidade. {character2} diz que devia ter sido consultado(a).",
+      "{character1} fechou sozinho(a) um show numa terça-feira de chuva, do outro lado da cidade, num bar que ninguém conhece. {character2} diz que devia ter sido consultado(a), nem que fosse para recusar.",
     minFanCount: 151,
     maxFanCount: 2000,
     requiredCharacters: 2,
     options: [
       {
         label: "Cumprir a data",
-        description: "Palavra dada é palavra cumprida.",
+        description:
+          "Palavra dada é palavra cumprida, mesmo quando foi uma péssima palavra.",
         consequence: [
           {
             resultLabel: "Valeu a pena",
             descriptionTemplate:
-              "A casa enche de gente que nunca tinha ouvido a banda.",
+              "A casa enche de gente que nunca tinha ouvido a banda e só entrou para fugir da chuva. Funciona.",
             fanCountChange: 5,
             relationshipChanges: [
               {
@@ -148,7 +152,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Noite perdida",
             descriptionTemplate:
-              "Chove, ninguém aparece, e {character2} não diz uma palavra na volta.",
+              "Chove, ninguém aparece, e {character2} passa a volta inteira em silêncio. Um silêncio bem alto.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -167,7 +171,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Desfeito",
           descriptionTemplate:
-            "O bar não gosta, e {character1} se sente desautorizado(a).",
+            "O bar não gosta, e {character1} descobre que o cargo de empresário da banda só existia na própria cabeça.",
           fanCountChange: -1,
           relationshipChanges: [
             {
@@ -186,7 +190,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Regra",
           descriptionTemplate:
-            "A regra acalma os ânimos, mesmo que a terça-feira continue ruim.",
+            "A regra acalma os ânimos. A terça-feira continua ruim, mas agora é uma terça-feira aprovada por todos.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -206,7 +210,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Melhor acordo",
             descriptionTemplate:
-              "O bar topa pagar o dobro e ainda divulga o show.",
+              "O bar topa pagar o dobro, que, convenhamos, ainda é pouco.",
             fanCountChange: 3,
             relationshipChanges: [
               {
@@ -221,7 +225,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Porta fechada",
             descriptionTemplate:
-              "O bar cancela o show e não chama a banda de novo.",
+              "O bar cancela o show e põe o nome da banda numa lista que ninguém quer integrar.",
             fanCountChange: -2,
             relationshipChanges: [
               {
@@ -242,7 +246,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     type: "conflito_membros",
     title: "A palhinha",
     descriptionTemplate:
-      "Todo show, {character1} chama um amigo para dar uma palhinha no palco. {character2} acha que ele toca mal e atrapalha.",
+      "Todo show, {character1} chama o mesmo amigo para dar uma palhinha no palco. {character2} garante que o amigo toca mal; a plateia não discorda.",
     minFanCount: 151,
     maxFanCount: 2000,
     requiredCharacters: 2,
@@ -253,7 +257,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Palco fechado",
           descriptionTemplate:
-            "O amigo some, e {character1} fica chateado(a) por semanas.",
+            "O amigo some, e {character1} fica chateado(a) por semanas. O som, por outro lado, nunca esteve tão bom.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -269,7 +273,8 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         description: "O amigo continua vindo, mas com hora marcada.",
         consequence: {
           resultLabel: "Meio-termo",
-          descriptionTemplate: "A palhinha vira um momento esperado do show.",
+          descriptionTemplate:
+            "A palhinha vira um momento esperado do show: é a hora em que o público vai ao banheiro.",
           fanCountChange: 2,
           relationshipChanges: [
             {
@@ -283,11 +288,12 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Deixar tudo como está",
-        description: "O público parece gostar.",
+        description: "O público parece gostar. Ou é educado.",
         consequence: [
           {
             resultLabel: "Festa",
-            descriptionTemplate: "O amigo traz a turma dele, e o bar lota.",
+            descriptionTemplate:
+              "O amigo traz a turma dele, e o bar lota de gente que aplaude uma música só.",
             fanCountChange: 4,
             relationshipChanges: [
               {
@@ -324,7 +330,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Reforço",
           descriptionTemplate:
-            "Depois de dois ensaios, o amigo até que toca direito.",
+            "Depois de dois ensaios, o amigo até que toca direito. {character2} fica sem assunto.",
           fanCountChange: 3,
           relationshipChanges: [
             {
@@ -343,7 +349,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     type: "oportunidade_externa",
     title: "Concurso de bandas",
     descriptionTemplate:
-      "{character1} inscreveu a banda num concurso da cidade sem avisar ninguém. A final é no sábado.",
+      "{character1} inscreveu a banda num concurso da cidade sem avisar ninguém. A final é no sábado, e a banda descobre isso na quinta.",
     minFanCount: 151,
     maxFanCount: 2000,
     requiredCharacters: 1,
@@ -356,7 +362,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Campeões",
             descriptionTemplate:
-              "A banda vence, e o troféu fica na estante do bar onde tudo começou.",
+              "A banda vence. O troféu, de plástico dourado, vai para a estante do bar, onde vai juntar poeira com orgulho.",
             fanCountChange: 10,
             happinessChangePercent: 10,
             chance: 35,
@@ -364,14 +370,15 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Finalistas",
             descriptionTemplate:
-              "A banda não vence, mas o júri elogia em público.",
+              "A banda não vence, mas o júri elogia em público, que é o prêmio de consolação favorito dos júris.",
             fanCountChange: 4,
             happinessChangePercent: 4,
             chance: 40,
           },
           {
             resultLabel: "Eliminados",
-            descriptionTemplate: "A banda cai na primeira rodada.",
+            descriptionTemplate:
+              "A banda cai na primeira rodada, atrás de um trio de sanfonas. Ninguém toca no assunto no ensaio.",
             happinessChangePercent: -6,
             chance: 25,
           },
@@ -383,7 +390,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Correto",
           descriptionTemplate:
-            "A apresentação agrada, mas ninguém lembra do nome da banda.",
+            "A apresentação agrada, e o júri anota com carinho o nome de quem compôs a música. Não é a banda.",
           fanCountChange: 3,
           happinessChangePercent: 0,
         },
@@ -395,7 +402,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Desistência",
           descriptionTemplate:
-            "A banda fica aliviada, e {character1} fica com a sensação de que perdeu uma chance.",
+            "A banda fica aliviada. {character1} passa o sábado imaginando o troféu que nunca teve.",
           happinessChangePercent: -4,
         },
       },
@@ -408,7 +415,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Cumpriu",
             descriptionTemplate:
-              "A banda entrega o que prometeu e a plateia vai à loucura.",
+              "A banda entrega o que prometeu, e o júri, intimidado, concorda.",
             fanCountChange: 12,
             happinessChangePercent: 10,
             chance: 40,
@@ -416,7 +423,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Vaiado(a)",
             descriptionTemplate:
-              "A banda tropeça logo no começo e a plateia cobra a promessa.",
+              "A banda tropeça logo na primeira música, e a plateia passa o resto da noite cobrando o troféu.",
             fanCountChange: -3,
             happinessChangePercent: -8,
             chance: 60,
@@ -430,7 +437,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     type: "oportunidade_externa",
     title: "Professor de música",
     descriptionTemplate:
-      "Uma escola de música oferece a {character1} uma vaga de professor(a) nas tardes de semana.",
+      "Uma escola de música oferece a {character1} uma vaga de professor(a) nas tardes de semana. Tem salário fixo, coisa que ninguém na banda vê há anos.",
     minFanCount: 151,
     maxFanCount: 2000,
     requiredCharacters: 1,
@@ -441,7 +448,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Estabilidade",
           descriptionTemplate:
-            "As contas ficam em dia, mas {character1} chega cansado(a) aos ensaios.",
+            "As contas ficam em dia, e {character1} passa a chegar aos ensaios com a energia de quem ensinou escala para crianças a tarde inteira.",
           happinessChangePercent: 2,
         },
       },
@@ -452,7 +459,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Fã-clube mirim",
           descriptionTemplate:
-            "Os alunos levam os pais, e os pais levam os amigos.",
+            "Os alunos levam os pais, os pais levam os amigos, e a banda ganha a plateia mais bem-comportada da cidade.",
           fanCountChange: 5,
           happinessChangePercent: 4,
         },
@@ -463,7 +470,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Foco",
           descriptionTemplate:
-            "{character1} recusa, e a banda nota a dedicação.",
+            "{character1} recusa. A banda nota a dedicação; o dono do aluguel, nem tanto.",
           happinessChangePercent: 2,
         },
       },
@@ -476,7 +483,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Sala de graça",
             descriptionTemplate:
-              "A escola aceita, e a banda ganha um lugar decente para ensaiar.",
+              "A escola aceita, e a banda ganha uma sala com isolamento acústico e um piano que ninguém sabe tocar.",
             fanCountChange: 2,
             happinessChangePercent: 8,
             chance: 60,
@@ -484,7 +491,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Demitido(a)",
             descriptionTemplate:
-              "As aulas são tão preguiçosas que a escola desfaz o acordo.",
+              "As aulas são tão preguiçosas que os alunos reclamam. Os alunos de oito anos.",
             happinessChangePercent: -6,
             chance: 40,
           },
@@ -497,7 +504,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     type: "oportunidade_externa",
     title: "A festa da faculdade",
     descriptionTemplate:
-      "Uma república de estudantes contrata a banda para a festa do semestre. {character1} e {character2} cuidam da negociação.",
+      "Uma república de estudantes contrata a banda para a festa do semestre, com um orçamento que cabe num cofrinho. {character1} e {character2} cuidam da negociação.",
     minFanCount: 151,
     maxFanCount: 2000,
     requiredCharacters: 2,
@@ -508,7 +515,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Maratona",
           descriptionTemplate:
-            "A festa vira lenda no campus, e a banda sai sem voz.",
+            "A festa vira lenda no campus. A banda sai sem voz, sem dinheiro e com três convites para formaturas.",
           fanCountChange: 6,
           happinessChangePercent: -6,
         },
@@ -519,7 +526,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Profissional",
           descriptionTemplate:
-            "A banda toca bem e vai embora antes da bagunça.",
+            "A banda toca bem e vai embora antes da bagunça, o que os estudantes consideram falta de caráter.",
           fanCountChange: 3,
           happinessChangePercent: 2,
         },
@@ -531,7 +538,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Som de show",
             descriptionTemplate:
-              "Os estudantes alugam as caixas e o show soa como nunca.",
+              "Os estudantes alugam as caixas com o dinheiro da conta de luz, e o show soa como nunca.",
             fanCountChange: 6,
             relationshipChanges: [
               {
@@ -546,7 +553,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Trocados",
             descriptionTemplate:
-              "A república chama outra banda, que topa tocar com o som da sala.",
+              "A república chama outra banda, que topa tocar com o rádio da cozinha. A festa é ótima mesmo assim.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -568,7 +575,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Banda do campus",
             descriptionTemplate:
-              "A banda vira a trilha oficial das festas da faculdade.",
+              "A banda vira a trilha oficial das festas da faculdade e ganha um apelido que ninguém vai explicar.",
             fanCountChange: 8,
             relationshipChanges: [
               {
@@ -583,7 +590,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Ressaca",
             descriptionTemplate:
-              "A banda perde o ensaio do dia seguinte inteiro.",
+              "A banda perde o ensaio do dia seguinte e boa parte do outro. A república manda lembranças.",
             happinessChangePercent: -8,
             chance: 40,
           },
@@ -596,7 +603,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     type: "decisao_criativa",
     title: "O cartaz",
     descriptionTemplate:
-      "{character1} desenhou o cartaz do próximo show. É, no mínimo, estranho.",
+      "{character1} desenhou o cartaz do próximo show. É, sendo generoso, estranho.",
     minFanCount: 151,
     maxFanCount: 2000,
     requiredCharacters: 1,
@@ -608,7 +615,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Colecionável",
             descriptionTemplate:
-              "As pessoas arrancam o cartaz dos postes para levar para casa.",
+              "As pessoas arrancam o cartaz dos postes para levar para casa. Ninguém sabe se é admiração ou serviço público.",
             fanCountChange: 5,
             happinessChangePercent: 8,
             chance: 50,
@@ -616,7 +623,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Ninguém entendeu",
             descriptionTemplate:
-              "Metade da cidade acha que é um anúncio de circo.",
+              "Metade da cidade acha que é um anúncio de circo. A outra metade vai ao show esperando palhaços e não sai totalmente decepcionada.",
             fanCountChange: -2,
             happinessChangePercent: 2,
             chance: 50,
@@ -629,18 +636,19 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Trabalho em grupo",
           descriptionTemplate:
-            "O cartaz novo fica bom, e {character1} finge que não ligou.",
+            "O cartaz novo fica bom. {character1} finge que não ligou, com o mesmo talento do desenho original.",
           fanCountChange: 2,
           happinessChangePercent: -2,
         },
       },
       {
         label: "Pedir para um amigo desenhar",
-        description: "Alguém da escola de artes deve topar.",
+        description:
+          "Alguém da escola de artes deve topar, em troca de ingresso e gratidão eterna.",
         consequence: {
           resultLabel: "Bonito",
           descriptionTemplate:
-            "O cartaz fica bonito, e {character1} fica com o dele na parede do quarto.",
+            "O cartaz fica bonito. {character1} pendura o próprio na parede do quarto, onde ninguém mais precisa ver.",
           fanCountChange: 3,
           happinessChangePercent: -4,
         },
@@ -654,7 +662,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Marca",
             descriptionTemplate:
-              "O desenho vira a cara da banda, e a cidade reconhece de longe.",
+              "O desenho vira a cara da banda, e a cidade reconhece de longe. Alguns atravessam a rua.",
             fanCountChange: 8,
             happinessChangePercent: 10,
             chance: 60,
@@ -662,7 +670,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Exagero",
             descriptionTemplate:
-              "Ninguém aguenta mais ver o mesmo desenho em tudo.",
+              "O desenho aparece no cartaz, na camiseta, no bumbo e na van. A cidade pede trégua.",
             fanCountChange: -2,
             happinessChangePercent: -2,
             chance: 40,
@@ -676,7 +684,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     type: "decisao_criativa",
     title: "Roupa de palco",
     descriptionTemplate:
-      "{character1} quer que a banda toque com roupas combinando. {character2} diz que prefere sair da banda a usar uniforme.",
+      "{character1} quer que a banda toque com roupas combinando. {character2} responde que preferia sair da banda, e parece estar falando sério.",
     minFanCount: 151,
     maxFanCount: 2000,
     requiredCharacters: 2,
@@ -688,7 +696,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Identidade",
             descriptionTemplate:
-              "O visual pega, e o público começa a ir aos shows vestido igual.",
+              "O visual pega, e o público começa a ir aos shows vestido igual. {character2} nunca se sentiu tão cercado(a).",
             fanCountChange: 5,
             relationshipChanges: [
               {
@@ -723,7 +731,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Liberdade",
           descriptionTemplate:
-            "Tudo segue como antes, e {character1} desiste da ideia.",
+            "Tudo segue como antes. {character1} guarda os desenhos dos figurinos numa pasta, para um dia mais receptivo.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -741,7 +749,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Assinatura",
           descriptionTemplate:
-            "O detalhe vira marca da banda sem ninguém se sentir fantasiado.",
+            "O detalhe vira marca da banda sem ninguém se sentir fantasiado. Quase ninguém.",
           fanCountChange: 2,
           relationshipChanges: [
             {
@@ -762,7 +770,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Impacto",
             descriptionTemplate:
-              "A banda entra no palco e o bar inteiro para para olhar.",
+              "A banda entra no palco e o bar inteiro para para olhar. Ninguém lembra das músicas, mas todo mundo lembra das lantejoulas.",
             fanCountChange: 7,
             relationshipChanges: [
               {
@@ -777,7 +785,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Exagerado",
             descriptionTemplate:
-              "O figurino pesa, esquenta e rasga na segunda música.",
+              "O figurino pesa, esquenta e rasga na segunda música, num lugar que a plateia não esquece.",
             fanCountChange: -3,
             relationshipChanges: [
               {

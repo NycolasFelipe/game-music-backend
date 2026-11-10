@@ -11,7 +11,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "conflito_membros",
     title: "Divisão do cachê",
     descriptionTemplate:
-      "Depois de uma casa lotada, {character1} diz no camarim que {character2} deveria receber menos, porque quase não toca nas músicas novas.",
+      "Depois de uma casa lotada, {character1} faz as contas no camarim e conclui que {character2} deveria receber menos, já que quase não toca nas músicas novas. É a primeira vez que alguém na banda faz conta.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 2,
@@ -19,11 +19,11 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Manter a divisão igual",
         description:
-          "Encerrar o assunto: todo mundo recebe a mesma parte, como sempre foi.",
+          "Encerrar o assunto: todo mundo recebe a mesma parte, como sempre foi e como ninguém questionava enquanto não havia dinheiro.",
         consequence: {
           resultLabel: "A contragosto",
           descriptionTemplate:
-            "{character1} aceita, mas passa a noite calado(a).",
+            "{character1} aceita, mas passa a noite calado(a), fazendo contas no guardanapo.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -37,12 +37,12 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Dividir por participação",
         description:
-          "Quem toca mais, recebe mais. {character2} vai ter que engolir.",
+          "Quem toca mais, recebe mais. {character2} vai ter que engolir, de preferência em silêncio.",
         consequence: [
           {
             resultLabel: "Aceito",
             descriptionTemplate:
-              "{character2} aceita a nova regra, mas o clima esfria.",
+              "{character2} aceita a nova regra e passa a tocar notas extras em todas as músicas. Por precaução.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -56,7 +56,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Ultimato",
             descriptionTemplate:
-              "{character2} diz que, se for assim, procura outra banda.",
+              "{character2} anuncia que, se for assim, procura outra banda. Uma onde não se cobre por nota.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -71,12 +71,13 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Conversa franca no ensaio",
-        description: "Colocar os dois frente a frente antes do próximo show.",
+        description:
+          "Colocar os dois frente a frente antes do próximo show. Com um juiz, se possível.",
         consequence: [
           {
             resultLabel: "Entendimento",
             descriptionTemplate:
-              "{character2} promete se envolver mais nos arranjos e {character1} recua.",
+              "{character2} promete se envolver mais nos arranjos e {character1} recua. Ninguém anota a promessa, por via das dúvidas.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -90,7 +91,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Bate-boca",
             descriptionTemplate:
-              "A conversa vira gritaria e o ensaio acaba mais cedo.",
+              "A conversa vira gritaria e o ensaio acaba mais cedo. É o ensaio mais curto e mais barulhento da história da banda.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -106,11 +107,12 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Propor um fundo comum",
         description:
-          "[{character1}] Separar uma parte do cachê para equipamento da banda, e o resto igual para todos.",
+          "[{character1}] Separar uma parte do cachê para equipamento e dividir o resto igual. Assim ninguém ganha mais, e a culpa passa a ser do amplificador.",
         visibleIfAnyInvolvedHas: ["conciliator"],
         consequence: {
           resultLabel: "Acordo",
-          descriptionTemplate: "A ideia agrada aos dois e o assunto morre ali.",
+          descriptionTemplate:
+            "A ideia agrada aos dois e o assunto morre ali. O fundo comum dura até a primeira pizza.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -128,7 +130,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "conflito_membros",
     title: "Holofote dividido",
     descriptionTemplate:
-      "Uma rádio da região quer entrevistar só {character1}. {character2} sente que a banda virou figurante.",
+      "Uma rádio da região quer entrevistar só {character1}. {character2} sente que virou banda de apoio da própria banda.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 2,
@@ -136,11 +138,11 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Mandar só {character1}",
         description:
-          "Rádio é rádio. Melhor uma entrevista com uma pessoa do que nenhuma.",
+          "Rádio é rádio. Uma entrevista com uma pessoa ainda é mais do que a banda tinha ontem.",
         consequence: {
           resultLabel: "No ar",
           descriptionTemplate:
-            "A entrevista vai bem, mas {character2} nem liga o rádio para ouvir.",
+            "A entrevista vai bem. {character2} não liga o rádio para ouvir, mas sabe de cor tudo o que foi dito.",
           fanCountChange: 3,
           relationshipChanges: [
             {
@@ -154,12 +156,13 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Exigir a banda toda",
-        description: "Ou vai todo mundo, ou ninguém vai.",
+        description:
+          "Ou vai todo mundo, ou ninguém vai. A rádio adora ultimatos.",
         consequence: [
           {
             resultLabel: "A rádio cede",
             descriptionTemplate:
-              "O programa abre espaço para a banda inteira e a conversa rende.",
+              "O programa abre espaço para a banda inteira, e a conversa rende. Rende tanto que o locutor precisa cortar para os comerciais.",
             fanCountChange: 2,
             relationshipChanges: [
               {
@@ -173,7 +176,8 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           },
           {
             resultLabel: "A rádio desiste",
-            descriptionTemplate: "A produção agradece e chama outra banda.",
+            descriptionTemplate:
+              "A produção agradece com educação e chama outra banda, com menos integrantes e menos exigências.",
             happinessChangePercent: -4,
             chance: 50,
           },
@@ -181,11 +185,12 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "{character1} recusa em solidariedade",
-        description: "Abrir mão da entrevista para não rachar a banda.",
+        description:
+          "Abrir mão da entrevista para não rachar a banda. Gesto nobre, audiência zero.",
         consequence: {
           resultLabel: "Gesto",
           descriptionTemplate:
-            "{character2} fica sabendo e agradece em público no show seguinte.",
+            "{character2} fica sabendo e agradece em público no show seguinte, com um discurso mais longo do que a entrevista teria sido.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -199,12 +204,12 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Falar só de si",
         description:
-          "[{character1}] Aproveitar o microfone para contar a própria história, sem citar a banda.",
+          "[{character1}] Aproveitar o microfone para contar a própria história. A banda aparece, se der tempo.",
         visibleIfCharacterHas: [["validation_seeker"], []],
         consequence: {
           resultLabel: "Estrela",
           descriptionTemplate:
-            "A entrevista faz sucesso, mas a banda ouve calada no carro.",
+            "A entrevista faz sucesso. A banda ouve no carro, calada, e descobre que {character1} fundou o grupo sozinho(a).",
           fanCountChange: 4,
           relationshipChanges: [
             {
@@ -223,17 +228,19 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "conflito_membros",
     title: "Ensaio às oito",
     descriptionTemplate:
-      "{character1} chega atrasado(a) ao ensaio pela terceira vez na semana, e {character2} perde a paciência na frente da equipe técnica.",
+      "{character1} chega atrasado(a) ao ensaio pela terceira vez na semana, sempre com uma desculpa nova e criativa. {character2} perde a paciência na frente da equipe técnica, que adora.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 2,
     options: [
       {
         label: "Dar uma advertência",
-        description: "Deixar claro que o próximo atraso vai ter consequência.",
+        description:
+          "Deixar claro que o próximo atraso vai ter consequência, seja ela qual for.",
         consequence: {
           resultLabel: "Recado dado",
-          descriptionTemplate: "{character1} se desculpa, meio sem graça.",
+          descriptionTemplate:
+            "{character1} se desculpa, meio sem graça, e chega no horário por quase uma semana inteira.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -246,18 +253,20 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Deixar passar",
-        description: "Todo mundo tem semanas ruins.",
+        description:
+          "Todo mundo tem semanas ruins. {character1} tem anos ruins.",
         consequence: [
           {
             resultLabel: "Esfriou",
-            descriptionTemplate: "O assunto morre e o ensaio segue.",
+            descriptionTemplate:
+              "O assunto morre e o ensaio segue. O atraso, também.",
             happinessChangePercent: 0,
             chance: 60,
           },
           {
             resultLabel: "Explosão",
             descriptionTemplate:
-              "{character2} larga o instrumento no meio da música e vai embora.",
+              "{character2} larga o instrumento no meio da música e vai embora. Pontualmente.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -272,11 +281,12 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Mudar o horário do ensaio",
-        description: "Talvez o problema seja o horário, não a pessoa.",
+        description:
+          "Talvez o problema seja o horário, não a pessoa. Não custa testar.",
         consequence: {
           resultLabel: "Ajuste",
           descriptionTemplate:
-            "O ensaio passa para a tarde e {character1} começa a chegar antes de todo mundo.",
+            "O ensaio passa para a tarde e {character1} começa a chegar antes de todo mundo. Ninguém sabe o que fazer com essa informação.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -290,12 +300,12 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Assumir a agenda da banda",
         description:
-          "[{character2}] Organizar horários, transporte e lembretes para todo mundo.",
+          "[{character2}] Organizar horários, transporte e lembretes para todo mundo, com planilha e cara de poucos amigos.",
         visibleIfCharacterHas: [[], ["professional"]],
         consequence: {
           resultLabel: "Organização",
           descriptionTemplate:
-            "Com tudo anotado, os atrasos param e o ensaio rende mais.",
+            "Com tudo anotado, os atrasos param e o ensaio rende mais. A banda descobre que tinha um gerente e não sabia.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -313,19 +323,20 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "conflito_membros",
     title: "Quem escreveu?",
     descriptionTemplate:
-      "Num jornal da região, {character1} diz que compôs sozinho(a) o maior sucesso da banda. {character2} lembra muito bem de ter escrito metade.",
+      "Num jornal da região, {character1} diz que compôs sozinho(a) o maior sucesso da banda. {character2} lembra muito bem de ter escrito metade, inclusive a metade boa.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 2,
     options: [
       {
         label: "Pedir correção ao jornal",
-        description: "Mandar uma nota com os créditos certos.",
+        description:
+          "Mandar uma nota com os créditos certos. Jornal adora publicar correção na página que ninguém lê.",
         consequence: [
           {
             resultLabel: "Corrigido",
             descriptionTemplate:
-              "O jornal publica a correção e {character2} se sente reconhecido(a).",
+              "O jornal publica a correção ao lado do horóscopo, e {character2} se sente reconhecido(a) mesmo assim.",
             fanCountChange: -1,
             relationshipChanges: [
               {
@@ -340,7 +351,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Ignorado",
             descriptionTemplate:
-              "O jornal não publica nada, e {character1} fica com a fama.",
+              "O jornal não publica nada, e {character1} fica com a fama. E com metade de uma música que não escreveu.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -354,12 +365,13 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         ],
       },
       {
-        label: "Resolver entre vocês",
-        description: "Roupa suja se lava em casa.",
+        label: "Resolver entre os dois",
+        description:
+          "Roupa suja se lava em casa, de preferência longe da imprensa.",
         consequence: {
           resultLabel: "Mágoa",
           descriptionTemplate:
-            "{character1} pede desculpas, mas {character2} não esquece.",
+            "{character1} pede desculpas. {character2} aceita e anota a data, para usar depois.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -376,7 +388,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Aplausos",
           descriptionTemplate:
-            "O público aplaude os dois, e a paz volta ao camarim.",
+            "O público aplaude os dois, e a paz volta ao camarim, onde sempre foi provisória.",
           fanCountChange: 2,
           relationshipChanges: [
             {
@@ -391,13 +403,13 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Dar a própria versão a outro jornal",
         description:
-          "[{character2}] Contar a história verdadeira para a concorrência.",
+          "[{character2}] Contar a história verdadeira para o jornal concorrente, que agradece a exclusividade.",
         visibleIfCharacterHas: [[], ["envious", "jealous"]],
         consequence: [
           {
             resultLabel: "Escândalo",
             descriptionTemplate:
-              "A briga vira assunto na cidade e a banda nunca foi tão comentada.",
+              "A briga vira assunto na cidade, e a banda nunca foi tão comentada. Ninguém comenta a música.",
             fanCountChange: 4,
             relationshipChanges: [
               {
@@ -412,7 +424,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Feio para todos",
             descriptionTemplate:
-              "Os leitores acham a briga mesquinha e a banda perde simpatia.",
+              "Os leitores acham a briga mesquinha e escrevem cartas dizendo isso. Muitas cartas.",
             fanCountChange: -3,
             relationshipChanges: [
               {
@@ -433,7 +445,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "oportunidade_externa",
     title: "Abrir para os grandes",
     descriptionTemplate:
-      "Uma banda famosa passa pela região e convida vocês para abrir o show. O empresário deles, porém, só quer um set acústico com {character1} e {character2}.",
+      "Uma banda famosa passa pela região e convida a banda para abrir o show. O empresário deles, porém, só quer um set acústico com {character1} e {character2}, porque o palco já está cheio de ego.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 2,
@@ -445,7 +457,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Plateia nova",
           descriptionTemplate:
-            "O set curto agrada, e muita gente pergunta o nome da banda.",
+            "O set curto agrada, e muita gente pergunta o nome da banda. Metade anota errado.",
           fanCountChange: 5,
           relationshipChanges: [
             {
@@ -465,7 +477,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Topam",
             descriptionTemplate:
-              "O empresário cede, e a banda inteira sobe ao palco.",
+              "O empresário cede, e a banda inteira sobe ao palco. Ele passa o show olhando o relógio.",
             fanCountChange: 7,
             happinessChangePercent: 8,
             chance: 40,
@@ -473,7 +485,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Desistem",
             descriptionTemplate:
-              "O empresário acha que vocês deram trabalho demais e chama outra banda.",
+              "O empresário acha que a banda deu trabalho demais e chama outra, que aceita banquinho e violão sem discutir.",
             happinessChangePercent: -6,
             chance: 60,
           },
@@ -485,20 +497,20 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Orgulho",
           descriptionTemplate:
-            "A banda fica em casa, com a consciência tranquila e um pouco de arrependimento.",
+            "A banda fica em casa, com a consciência tranquila, e ouve pelo rádio quem aceitou o banquinho.",
           happinessChangePercent: -4,
         },
       },
       {
         label: "Pedir o palco inteiro",
         description:
-          "[{character1}] Convencer o empresário de que vocês seguram o show de abertura sozinhos.",
+          "[{character1}] Convencer o empresário de que a banda segura a abertura sozinha. Confiança não custa nada; o convite, talvez.",
         visibleIfAnyInvolvedHas: ["confident"],
         consequence: [
           {
             resultLabel: "Lenda local",
             descriptionTemplate:
-              "O empresário compra a ideia e a abertura vira o assunto da noite.",
+              "O empresário compra a ideia, e a abertura vira o assunto da noite. A atração principal finge que não ouviu.",
             fanCountChange: 9,
             happinessChangePercent: 10,
             chance: 50,
@@ -506,7 +518,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Convite cancelado",
             descriptionTemplate:
-              "O empresário acha arrogante e cancela o convite.",
+              "O empresário acha arrogante e cancela o convite. Arrogância, ele explica, é privilégio da atração principal.",
             fanCountChange: -2,
             happinessChangePercent: -6,
             chance: 50,
@@ -520,7 +532,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "oportunidade_externa",
     title: "Proposta solo",
     descriptionTemplate:
-      "Depois do show, um empresário da capital procura {character1} no camarim e oferece um contrato para carreira solo.",
+      "Depois do show, um empresário da capital procura {character1} no camarim e oferece um contrato para carreira solo. Ele tem cartão de visita dourado e nenhum interesse pelo resto da banda.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 1,
@@ -531,24 +543,26 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Fiel",
           descriptionTemplate:
-            "{character1} recusa, mas fica pensando no que poderia ter sido.",
+            "{character1} recusa e passa a semana imaginando a capa do disco solo que nunca vai existir.",
           happinessChangePercent: -4,
         },
       },
       {
         label: "Pedir um tempo para pensar",
-        description: "[{character1}] Guardar o cartão e não dar resposta.",
+        description:
+          "[{character1}] Guardar o cartão no bolso e não dar resposta. Mistério valoriza o passe.",
         consequence: [
           {
             resultLabel: "Esquecido",
-            descriptionTemplate: "O empresário não liga de volta.",
+            descriptionTemplate:
+              "O empresário não liga de volta. O cartão dourado vai parar na máquina de lavar.",
             happinessChangePercent: -4,
             chance: 50,
           },
           {
             resultLabel: "Insistência",
             descriptionTemplate:
-              "O empresário insiste, e {character1} se sente valorizado(a).",
+              "O empresário insiste, e {character1} passa a andar pelo camarim como quem tem opções.",
             happinessChangePercent: 8,
             chance: 50,
           },
@@ -556,7 +570,8 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Contar para a imprensa",
-        description: "Deixar vazar que até empresário da capital quer vocês.",
+        description:
+          "Deixar vazar que até empresário da capital anda rondando a banda.",
         consequence: {
           resultLabel: "Assunto",
           descriptionTemplate:
@@ -568,13 +583,13 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Levar o empresário para conhecer a banda",
         description:
-          "[{character1}] Recusar o solo e oferecer a banda inteira no lugar.",
+          "[{character1}] Recusar o solo e oferecer a banda inteira no lugar, como num pacote promocional.",
         visibleIfAnyInvolvedHas: ["loyal"],
         consequence: [
           {
             resultLabel: "Interesse",
             descriptionTemplate:
-              "O empresário assiste ao ensaio e promete indicar a banda para casas maiores.",
+              "O empresário assiste ao ensaio e promete indicar a banda para casas maiores. Promessa de empresário, mas desta vez ele cumpre.",
             fanCountChange: 6,
             happinessChangePercent: 8,
             chance: 40,
@@ -582,7 +597,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Educado, mas não",
             descriptionTemplate:
-              "O empresário agradece, mas só queria {character1}. A banda fica sabendo e adora o gesto.",
+              "O empresário agradece, mas só queria {character1}. A banda fica sabendo e adora o gesto, embora fique se perguntando o que tem de errado com ela.",
             fanCountChange: 1,
             happinessChangePercent: 10,
             chance: 60,
@@ -596,7 +611,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "oportunidade_externa",
     title: "O jingle",
     descriptionTemplate:
-      "Uma loja de departamentos da região quer {character1} cantando o jingle da campanha de fim de ano.",
+      "Uma loja de departamentos da região quer {character1} cantando o jingle da campanha de fim de ano, uma obra-prima de quatro versos sobre parcelamento sem juros.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 1,
@@ -604,11 +619,11 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Aceitar",
         description:
-          "[{character1}] Gravar o jingle. A voz vai tocar em todo intervalo comercial.",
+          "[{character1}] Gravar o jingle. A voz vai tocar em todo intervalo comercial, a cidade queira ou não.",
         consequence: {
           resultLabel: "Refrão grudento",
           descriptionTemplate:
-            "Todo mundo na cidade sabe cantar o jingle, e alguns descobrem a banda por causa dele.",
+            "A cidade inteira passa a cantar o jingle, e alguns descobrem a banda por causa dele. Ninguém consegue tirar a melodia da cabeça, nem {character1}.",
           fanCountChange: 3,
           happinessChangePercent: 2,
         },
@@ -621,14 +636,15 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Propaganda grátis",
             descriptionTemplate:
-              "A loja aceita, e o nome da banda passa a tocar todo dia.",
+              'A loja aceita, e o nome da banda passa a tocar todo dia, logo depois de "parcelamos em dez vezes".',
             fanCountChange: 5,
             happinessChangePercent: 4,
             chance: 50,
           },
           {
             resultLabel: "Sem acordo",
-            descriptionTemplate: "A loja prefere outro cantor.",
+            descriptionTemplate:
+              "A loja prefere outro cantor, que cobra menos e não exige nada. Ele está ótimo, obrigado.",
             happinessChangePercent: -4,
             chance: 50,
           },
@@ -640,7 +656,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Coerência",
           descriptionTemplate:
-            "{character1} recusa e segue em paz com a própria arte.",
+            "{character1} recusa e segue em paz com a própria arte e com o próprio sofá velho.",
           happinessChangePercent: 4,
         },
       },
@@ -653,14 +669,15 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Ovacionado(a)",
             descriptionTemplate:
-              "O público adora a história e grita o nome da banda.",
+              "O público adora a história e grita o nome da banda. O gerente da loja, na plateia, toma nota.",
             fanCountChange: 4,
             happinessChangePercent: 8,
             chance: 60,
           },
           {
             resultLabel: "Soou arrogante",
-            descriptionTemplate: "Parte da plateia acha o discurso pedante.",
+            descriptionTemplate:
+              "Parte da plateia acha o discurso pedante. A outra parte queria mesmo era ouvir o jingle.",
             fanCountChange: -2,
             happinessChangePercent: -4,
             chance: 40,
@@ -674,18 +691,19 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "oportunidade_externa",
     title: "Programa de auditório",
     descriptionTemplate:
-      "A TV regional chama a banda para um programa de auditório, mas só tem tempo para uma música, com playback. {character1} topa na hora; {character2} acha uma vergonha.",
+      "A TV regional chama a banda para um programa de auditório, entre o sorteio de um liquidificador e um concurso de dança. Só cabe uma música, com playback. {character1} topa na hora; {character2} acha uma vergonha.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 2,
     options: [
       {
         label: "Ir com playback",
-        description: "Sorrir, fingir que toca e aproveitar a audiência.",
+        description:
+          "Sorrir, fingir que toca e aproveitar a audiência. Ninguém em casa vai notar; os músicos da plateia, sim.",
         consequence: {
           resultLabel: "No ar",
           descriptionTemplate:
-            "A apresentação passa para a região inteira, e {character2} faz cara feia o tempo todo.",
+            "A apresentação passa para a região inteira, e {character2} dubla a própria música com a cara de quem assina uma confissão.",
           fanCountChange: 6,
           relationshipChanges: [
             {
@@ -704,14 +722,15 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Ao vivo",
             descriptionTemplate:
-              "A produção aceita, e a banda faz a melhor apresentação da história do programa.",
+              "A produção aceita, e a banda faz a melhor apresentação da história do programa. Considerando o liquidificador, não era difícil.",
             fanCountChange: 8,
             happinessChangePercent: 8,
             chance: 50,
           },
           {
             resultLabel: "Cortados",
-            descriptionTemplate: "A produção corta a banda do programa.",
+            descriptionTemplate:
+              "A produção corta a banda do programa e estica o concurso de dança por mais cinco minutos.",
             happinessChangePercent: -6,
             chance: 50,
           },
@@ -719,11 +738,11 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Recusar",
-        description: "Playback não é com vocês.",
+        description: "Playback não é com a banda.",
         consequence: {
           resultLabel: "Princípios",
           descriptionTemplate:
-            "{character2} agradece; {character1} fica remoendo a chance perdida.",
+            "{character2} agradece. {character1} assiste ao programa em casa e conta quantas vezes teria aparecido.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -743,7 +762,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Inesquecível",
             descriptionTemplate:
-              "A cena vira o momento mais comentado do programa.",
+              "A cena vira o momento mais comentado do programa, mais até que o liquidificador.",
             fanCountChange: 9,
             relationshipChanges: [
               {
@@ -758,7 +777,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Constrangimento",
             descriptionTemplate:
-              "O apresentador não acha graça e a banda sai vaiada.",
+              "O apresentador não acha graça, e a banda sai sob vaias de um auditório que aplaude até propaganda.",
             fanCountChange: -3,
             happinessChangePercent: -6,
             chance: 40,
@@ -772,19 +791,20 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "decisao_criativa",
     title: "Música nova no show",
     descriptionTemplate:
-      "{character1} quer estrear no sábado uma música que ainda não está pronta. {character2} acha arriscado diante da maior plateia que a banda já teve.",
+      "{character1} quer estrear no sábado uma música que ainda não tem final. {character2} acha arriscado diante da maior plateia que a banda já teve, e da mais exigente.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 2,
     options: [
       {
         label: "Estrear assim mesmo",
-        description: "Música boa se prova no palco.",
+        description:
+          "Música boa se prova no palco. Música ruim também, só que mais rápido.",
         consequence: [
           {
             resultLabel: "Arrepio",
             descriptionTemplate:
-              "A plateia canta o refrão na segunda vez. Nasceu um hino.",
+              "A plateia canta o refrão na segunda vez. Nasceu um hino, e ninguém sabe ainda como ele termina.",
             fanCountChange: 5,
             happinessChangePercent: 8,
             chance: 50,
@@ -792,7 +812,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Desencontro",
             descriptionTemplate:
-              "A banda se perde na ponte, e {character2} olha feio para {character1}.",
+              "A banda se perde na ponte da música e fica por lá um tempo. {character2} passa o resto do show olhando feio para {character1}.",
             fanCountChange: -3,
             relationshipChanges: [
               {
@@ -813,7 +833,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Prudência",
           descriptionTemplate:
-            "O show é seguro, e {character1} fica frustrado(a).",
+            "O show é seguro e previsível. {character1} toca a noite toda como quem espera um ônibus.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -830,7 +850,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Pronta",
           descriptionTemplate:
-            "A música sai redonda, mas a banda chega exausta ao sábado.",
+            "A música sai redonda, e a banda chega ao sábado com a disposição de quem fez cinco ensaios seguidos.",
           fanCountChange: 2,
           relationshipChanges: [
             {
@@ -851,7 +871,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Lapidada",
             descriptionTemplate:
-              "O arranjo novo funciona, e os dois saem do palco abraçados.",
+              "O arranjo novo funciona, e os dois saem do palco abraçados, o que deixa o resto da banda desconfiado.",
             fanCountChange: 6,
             relationshipChanges: [
               {
@@ -865,7 +885,8 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           },
           {
             resultLabel: "Esgotamento",
-            descriptionTemplate: "A noite em claro cobra o preço no palco.",
+            descriptionTemplate:
+              "A noite em claro cobra o preço no palco: {character2} toca o arranjo perfeito com dez segundos de atraso.",
             happinessChangePercent: -10,
             chance: 30,
           },
@@ -878,7 +899,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "decisao_criativa",
     title: "Visual novo",
     descriptionTemplate:
-      "Uma revista de música vai fotografar a banda, e {character1} quer aparecer com um visual completamente diferente.",
+      "Uma revista de música vai fotografar a banda, e {character1} quer aparecer com um visual completamente diferente, inspirado em algo que ninguém na banda consegue identificar.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 1,
@@ -890,14 +911,15 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Capa",
             descriptionTemplate:
-              "A foto chama atenção e vira a capa da edição.",
+              "A foto chama atenção e vira a capa da edição. O resto da banda aparece no canto, pequeno.",
             fanCountChange: 4,
             happinessChangePercent: 8,
             chance: 50,
           },
           {
             resultLabel: "Estranhamento",
-            descriptionTemplate: "Os leitores não reconhecem a banda na foto.",
+            descriptionTemplate:
+              "Os leitores não reconhecem a banda na foto, e alguns escrevem para perguntar quem é a pessoa no meio.",
             fanCountChange: -2,
             happinessChangePercent: 2,
             chance: 50,
@@ -906,21 +928,23 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Pedir algo mais discreto",
-        description: "A banda tem uma imagem, e ela está funcionando.",
+        description:
+          "A banda tem uma imagem, e ela está funcionando. Mais ou menos.",
         consequence: {
           resultLabel: "Contido",
           descriptionTemplate:
-            "{character1} obedece, mas sai emburrado(a) em todas as fotos.",
+            '{character1} obedece, mas sai emburrado(a) em todas as fotos. A revista chama de "ar misterioso".',
           happinessChangePercent: -6,
         },
       },
       {
         label: "Deixar a revista decidir",
-        description: "O fotógrafo entende do assunto.",
+        description:
+          "O fotógrafo entende do assunto, ou pelo menos tem a câmera.",
         consequence: {
           resultLabel: "Profissional",
           descriptionTemplate:
-            "O fotógrafo encontra um meio-termo e as fotos ficam boas.",
+            "O fotógrafo encontra um meio-termo, e as fotos ficam boas. Ninguém gosta muito, que é o sinal de um bom meio-termo.",
           fanCountChange: 2,
           happinessChangePercent: 0,
         },
@@ -933,14 +957,16 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: [
           {
             resultLabel: "Ícone",
-            descriptionTemplate: "O visual vira referência na cena da região.",
+            descriptionTemplate:
+              "O visual vira referência na cena da região, e três bandas aparecem vestidas igual no mês seguinte.",
             fanCountChange: 6,
             happinessChangePercent: 10,
             chance: 50,
           },
           {
             resultLabel: "Fantasia",
-            descriptionTemplate: "A roupa vira piada nas cartas dos leitores.",
+            descriptionTemplate:
+              "A roupa vira piada nas cartas dos leitores, e uma delas vem com desenho.",
             fanCountChange: -3,
             happinessChangePercent: -4,
             chance: 50,
@@ -954,7 +980,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "decisao_criativa",
     title: "Os sucessos ou as novas",
     descriptionTemplate:
-      "A casa de show pede um repertório só de sucessos. {character1} quer tocar o disco novo inteiro; {character2} concorda com a casa.",
+      "A casa de show pede um repertório só de sucessos, porque sucesso vende cerveja. {character1} quer tocar o disco novo inteiro; {character2} concorda com a casa.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 2,
@@ -965,7 +991,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Garantido",
           descriptionTemplate:
-            "A casa vibra do começo ao fim, e {character1} toca no automático.",
+            "A casa vibra do começo ao fim, e {character1} toca no automático, pensando no disco novo.",
           fanCountChange: 3,
           relationshipChanges: [
             {
@@ -979,19 +1005,21 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "O disco novo inteiro",
-        description: "Quem gosta da banda vai gostar do que ela faz agora.",
+        description:
+          "Quem gosta da banda vai gostar do que ela faz agora. Em teoria.",
         consequence: [
           {
             resultLabel: "Conquista",
             descriptionTemplate:
-              "O público estranha no começo e termina pedindo bis.",
+              "O público estranha no começo e termina pedindo bis. De uma música antiga, mas pedindo.",
             fanCountChange: 6,
             happinessChangePercent: 8,
             chance: 40,
           },
           {
             resultLabel: "Casa fria",
-            descriptionTemplate: "Metade da plateia vai embora antes do fim.",
+            descriptionTemplate:
+              "Metade da plateia vai embora antes do fim. A outra metade fica porque a casa é perto do ponto de ônibus.",
             fanCountChange: -3,
             relationshipChanges: [
               {
@@ -1007,10 +1035,12 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Metade de cada",
-        description: "Intercalar uma nova a cada dois sucessos.",
+        description:
+          "Intercalar uma nova a cada dois sucessos. O bar agradece os intervalos.",
         consequence: {
           resultLabel: "Equilíbrio",
-          descriptionTemplate: "O show flui e os dois saem satisfeitos.",
+          descriptionTemplate:
+            "O show flui e os dois saem satisfeitos. O dono da casa também: nas músicas novas, o bar encheu.",
           fanCountChange: 1,
           relationshipChanges: [
             {
@@ -1030,7 +1060,8 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: [
           {
             resultLabel: "Espetáculo",
-            descriptionTemplate: "A crítica local chama de o show do ano.",
+            descriptionTemplate:
+              "A crítica local chama de o show do ano. O público concorda, mesmo sem ter entendido a história.",
             fanCountChange: 8,
             happinessChangePercent: 10,
             chance: 50,
@@ -1038,7 +1069,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Pretensioso",
             descriptionTemplate:
-              "O público não entende a história e a casa não chama de novo.",
+              "O público não entende a história, e a casa não chama de novo. Nem para explicar.",
             fanCountChange: -4,
             relationshipChanges: [
               {
@@ -1059,7 +1090,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "decisao_criativa",
     title: "A cidade natal",
     descriptionTemplate:
-      "A prefeitura da cidade natal de {character1} convida a banda para um show gratuito na praça, no mesmo fim de semana de uma data paga em outra cidade.",
+      'A prefeitura da cidade natal de {character1} convida a banda para um show gratuito na praça, no mesmo fim de semana de uma data paga em outra cidade. O prefeito promete um palanque "quase novo".',
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 1,
@@ -1067,22 +1098,22 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Tocar na cidade natal",
         description:
-          "[{character1}] Voltar para casa e tocar para quem viu tudo começar.",
+          "[{character1}] Voltar para casa e tocar para quem viu tudo começar, e para quem duvidou.",
         consequence: {
           resultLabel: "Festa",
           descriptionTemplate:
-            "A praça lota e {character1} chora no último refrão.",
+            "A praça lota, o palanque aguenta, e {character1} chora no último refrão. O prefeito também, por motivos eleitorais.",
           fanCountChange: 3,
           happinessChangePercent: 10,
         },
       },
       {
         label: "Cumprir a data paga",
-        description: "Compromisso é compromisso.",
+        description: "Compromisso é compromisso, principalmente quando paga.",
         consequence: {
           resultLabel: "Saudade",
           descriptionTemplate:
-            "O show pago vai bem, mas {character1} passa a noite pensando na praça.",
+            "O show pago vai bem. {character1} passa a noite pensando na praça e na tia que vai cobrar isso no Natal.",
           fanCountChange: 1,
           happinessChangePercent: -6,
         },
@@ -1095,7 +1126,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Maratona",
             descriptionTemplate:
-              "As duas datas acontecem e a banda vira notícia pelo esforço.",
+              "As duas datas acontecem, e a banda vira notícia pelo esforço. Ninguém comenta a música, só as olheiras.",
             fanCountChange: 5,
             happinessChangePercent: -6,
             chance: 60,
@@ -1103,7 +1134,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Atraso",
             descriptionTemplate:
-              "A van chega tarde e o segundo show começa com uma hora de atraso.",
+              "A van chega tarde, e o segundo show começa com uma hora de atraso e uma banda dormindo em pé.",
             fanCountChange: -2,
             happinessChangePercent: -12,
             chance: 40,
@@ -1113,12 +1144,12 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Planejar as duas datas nos mínimos detalhes",
         description:
-          "[{character1}] Montar a logística da viagem, hora a hora.",
+          "[{character1}] Montar a logística da viagem hora a hora, com mapa, horários e tolerância zero.",
         visibleIfAnyInvolvedHas: ["workaholic"],
         consequence: {
           resultLabel: "Precisão",
           descriptionTemplate:
-            "Tudo sai no horário, e a banda faz os dois shows descansada.",
+            "Tudo sai no horário, e a banda faz os dois shows descansada. Ninguém entende como, e {character1} não explica.",
           fanCountChange: 5,
           happinessChangePercent: 4,
         },
