@@ -3,6 +3,7 @@ import {
   GLASSES,
   HAIR_STYLES,
   SHIRTS,
+  SHIRT_DRAW,
   SHIRT_TONES,
 } from "@/modules/band-members/domain/constants/appearance.constant";
 import { generateAppearance } from "@/modules/band-members/domain/generation/appearance.generator";
@@ -77,6 +78,16 @@ describe("generateAppearance", () => {
     expect(glassesFor(0.05)).toBe("sun");
     expect(glassesFor(0.2)).toBe("round");
     expect(glassesFor(0.5)).toBe("none");
+  });
+
+  it("draws every shirt cut, the crew neck twice as often", () => {
+    const counts = new Map<string, number>();
+    for (const shirt of SHIRT_DRAW) {
+      counts.set(shirt, (counts.get(shirt) ?? 0) + 1);
+    }
+    for (const shirt of SHIRTS) {
+      expect(counts.get(shirt)).toBe(shirt === "crew" ? 2 : 1);
+    }
   });
 
   it("always returns values from the catalogs", () => {

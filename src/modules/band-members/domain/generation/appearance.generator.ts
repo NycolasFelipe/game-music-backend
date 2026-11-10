@@ -5,6 +5,7 @@ import {
   BEARD_MIN_AGE,
   EARRING_CHANCE,
   ROUND_GLASSES_CHANCE,
+  SHIRT_DRAW,
   SHIRT_TONES,
   SUNGLASSES_CHANCE,
   type Beard,
@@ -95,7 +96,7 @@ export function generateAppearance(
         : "none";
 
   const earring = random() < EARRING_CHANCE[source.gender];
-  const shirt: Shirt = pick(["crew", "v", "jacket", "crew"] as const, random);
+  const shirt: Shirt = pick(SHIRT_DRAW, random);
   const shirtTone = pick(SHIRT_TONES, random);
 
   return { hairStyle: hair, beard, glasses, earring, shirt, shirtTone };

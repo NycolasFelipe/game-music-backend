@@ -27,9 +27,29 @@ export type Beard = (typeof BEARDS)[number];
 export const GLASSES = ["none", "round", "sun"] as const;
 export type Glasses = (typeof GLASSES)[number];
 
-/** Shirt cut. */
-export const SHIRTS = ["crew", "v", "jacket"] as const;
+/**
+ * Shirt cut: crew neck, V-neck, open jacket, hoodie, striped tee, turtleneck,
+ * button-up collar, tank top, leather jacket and printed tee.
+ */
+export const SHIRTS = [
+  "crew",
+  "v",
+  "jacket",
+  "hoodie",
+  "stripes",
+  "turtleneck",
+  "collar",
+  "tank",
+  "leather",
+  "print",
+] as const;
 export type Shirt = (typeof SHIRTS)[number];
+
+/**
+ * The draw behind a new look: one entry per chance, so the plain crew neck
+ * comes up twice as often as each of the others.
+ */
+export const SHIRT_DRAW: readonly Shirt[] = ["crew", ...SHIRTS];
 
 /** Shirt darkness on the halftone scale (4 = light grey … 10 = solid ink). */
 export const SHIRT_TONES = [4, 6, 8, 10] as const;
