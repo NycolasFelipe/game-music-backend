@@ -13,11 +13,14 @@ import { CurrentUser } from "@/common/decorators/current-user.decorator";
 import { AuthenticatedUserEntity } from "@/common/entities/authenticated-user.entity";
 import { JwtAuthGuard } from "@/common/guards/jwt-auth.guard";
 import { AdvanceTurnView } from "@/modules/turns/application/dto/advance-turn.view";
+import { TurnPanelView } from "@/modules/turns/application/dto/turn-panel.view";
 import { TurnView } from "@/modules/turns/application/dto/turn.view";
 import { AdvanceTurnUseCase } from "@/modules/turns/application/use-cases/advance-turn.use-case";
+import { GetTurnPanelUseCase } from "@/modules/turns/application/use-cases/get-turn-panel.use-case";
 import { ListTurnsUseCase } from "@/modules/turns/application/use-cases/list-turns.use-case";
 import {
   ApiAdvanceTurn,
+  ApiGetTurnPanel,
   ApiListTurns,
 } from "@/modules/turns/decorators/api-turns.decorator";
 
@@ -32,6 +35,7 @@ export class TurnsController {
   constructor(
     private readonly advanceTurnUseCase: AdvanceTurnUseCase,
     private readonly listTurnsUseCase: ListTurnsUseCase,
+    private readonly getTurnPanelUseCase: GetTurnPanelUseCase,
   ) {}
 
   /**
@@ -65,5 +69,22 @@ export class TurnsController {
     @Param("bandId", ParseUUIDPipe) bandId: string,
   ): Promise<TurnView[]> {
     return this.listTurnsUseCase.execute(actor, bandId);
+  }
+
+  /**
+   * Reads the turn panel: pending decisions, live-season previews, the
+   * get-together slot, the studio and the forecast of the next advance.
+   *
+   * @param actor - The authenticated owner.
+   * @param bandId - The band id.
+   * @returns The turn panel (ADR-0022).
+   */
+  @Get("panel")
+  @ApiGetTurnPanel()
+  panel(
+    @CurrentUser() actor: AuthenticatedUserEntity,
+    @Param("bandId", ParseUUIDPipe) bandId: string,
+  ): Promise<TurnPanelView> {
+    return this.getTurnPanelUseCase.execute(actor, bandId);
   }
 }

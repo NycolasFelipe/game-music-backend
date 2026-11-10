@@ -3,6 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { BandsModule } from "@/modules/bands/bands.module";
 import { ListGigsUseCase } from "@/modules/gigs/application/use-cases/list-gigs.use-case";
 import { PlayGigUseCase } from "@/modules/gigs/application/use-cases/play-gig.use-case";
+import { PreviewGigsUseCase } from "@/modules/gigs/application/use-cases/preview-gigs.use-case";
 import { GIGS_REPOSITORY } from "@/modules/gigs/domain/repositories/gigs.repository";
 import { gigsProviders } from "@/modules/gigs/infrastructure/persistence/providers/gigs.providers";
 import { GigOrmEntity } from "@/modules/gigs/infrastructure/persistence/typeorm/gig.orm-entity";
@@ -16,7 +17,13 @@ import { GigsController } from "@/modules/gigs/presentation/http/controllers/gig
 @Module({
   imports: [TypeOrmModule.forFeature([GigOrmEntity]), BandsModule],
   controllers: [GigsController, BandGigsController],
-  providers: [...gigsProviders, PlayGigUseCase, ListGigsUseCase],
-  exports: [GIGS_REPOSITORY],
+  providers: [
+    ...gigsProviders,
+    PlayGigUseCase,
+    ListGigsUseCase,
+    PreviewGigsUseCase,
+  ],
+  // The repository and the previews feed the turn panel (ADR-0022).
+  exports: [GIGS_REPOSITORY, PreviewGigsUseCase],
 })
 export class GigsModule {}

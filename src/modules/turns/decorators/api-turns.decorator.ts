@@ -53,3 +53,29 @@ export function ApiListTurns() {
     ApiNotFoundResponse({ description: "Band not found for this owner." }),
   );
 }
+
+/**
+ * Swagger docs for reading the turn panel.
+ *
+ * @returns The composed set of Swagger decorators.
+ */
+export function ApiGetTurnPanel() {
+  return applyDecorators(
+    ApiBearerAuth(),
+    ApiParam({ name: "bandId", format: "uuid" }),
+    ApiOperation({
+      summary: "Read the turn panel (pending items, previews and forecast)",
+      description:
+        "Everything the turn screen needs in one read (ADR-0022): the items " +
+        "waiting on the player (`active-event` and `studio-session` block the " +
+        "advance; `release-ready` does not), the season already played and " +
+        "one expected season per circuit (variance-neutral), whether a " +
+        "get-together was held this semester, the work in the studio with " +
+        "the market saturation of the next launch, and the forecast of the " +
+        "next advance (royalties, automatic raises, payroll, final cash, " +
+        "members left unpaid or leaving). Writes nothing.",
+    }),
+    ApiOkResponse({ description: "The turn panel." }),
+    ApiNotFoundResponse({ description: "Band not found for this owner." }),
+  );
+}
