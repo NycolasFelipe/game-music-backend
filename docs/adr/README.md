@@ -32,6 +32,7 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | [0016](0016-shows-ao-vivo.md) | Shows ao vivo (a renda de base) | Aceita |
 | [0017](0017-confraternizacoes.md) | Confraternizações (dinheiro para cuidar do elenco) | Aceita |
 | [0018](0018-preferencias-do-usuario.md) | Preferências do usuário (da conta, não do save) | Aceita |
+| [0019](0019-custos-nas-sessoes-de-estudio.md) | Custos nas sessões de estúdio e primeiro disco viável | Aceita |
 
 ## Veja também
 - [Trabalho futuro](../future-work.md) — backlog de ideias de gameplay ainda não
