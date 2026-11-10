@@ -148,4 +148,80 @@ describe("generateActiveEvent", () => {
       ).toBe("Exposta");
     });
   });
+
+  describe("cast selection (ADR-0028)", () => {
+    const ids = ["a", "b", "c", "d", "e"];
+    const characters = ids.map((id) => ({
+      id,
+      name: id.toUpperCase(),
+      characteristics: [],
+    }));
+    // Every pair at +5 except a feud between a and b.
+    const relationships = ids.flatMap((x, i) =>
+      ids.slice(i + 1).map((y) => ({
+        memberAId: x,
+        memberBId: y,
+        level: x === "a" && y === "b" ? -5 : 5,
+      })),
+    );
+    const pairTemplate = (
+      type: "conflito_membros" | "oportunidade_externa",
+    ) => ({
+      id: `t-${type}`,
+      type,
+      title: "T",
+      descriptionTemplate: "{character1} e {character2}.",
+      requiredCharacters: 2 as const,
+      options: [
+        {
+          label: "Ok",
+          description: "Ok",
+          consequence: { descriptionTemplate: "Fim." },
+        },
+      ],
+    });
+    const feudShare = (
+      type: "conflito_membros" | "oportunidade_externa",
+      lastInvolvedIds: string[] = [],
+    ) => {
+      const spy = jest
+        .spyOn(ACTIVE_EVENT_TEMPLATES, "filter")
+        .mockReturnValue([pairTemplate(type)]);
+      let feud = 0;
+      const runs = 3000;
+      for (let i = 0; i < runs; i++) {
+        const event = generateActiveEvent({
+          year: 1990,
+          characters,
+          relationships,
+          fanCount: 5000,
+          lastInvolvedIds,
+        });
+        const pair = [...(event?.involvedCharacterIds ?? [])].sort().join("");
+        if (pair === "ab") feud++;
+      }
+      spy.mockRestore();
+      return feud / runs;
+    };
+
+    it("leans member conflicts toward the feuding pair without giving it every fight", () => {
+      // Weight 6 for the feud against 1 for each of the other nine pairs: 6/15.
+      expect(feudShare("conflito_membros")).toBeGreaterThan(0.33);
+      expect(feudShare("conflito_membros")).toBeLessThan(0.47);
+    });
+
+    it("draws any pair evenly for other event types", () => {
+      expect(feudShare("oportunidade_externa")).toBeGreaterThan(0.06);
+      expect(feudShare("oportunidade_externa")).toBeLessThan(0.14);
+    });
+
+    it("gives the pair of the previous event less room", () => {
+      // The feud weighs 6 × 0.25 = 1.5; the six pairs with a or b weigh 0.5
+      // each (3) and the three others 1 each (3): 1.5 / 7.5 = 20%, half the
+      // 40% it gets without rotation.
+      const share = feudShare("conflito_membros", ["a", "b"]);
+      expect(share).toBeGreaterThan(0.14);
+      expect(share).toBeLessThan(0.26);
+    });
+  });
 });

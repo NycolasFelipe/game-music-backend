@@ -21,11 +21,19 @@ const member = (id: string, characteristics: string[]) => ({
 describe("GenerateActiveEventUseCase", () => {
   let useCase: GenerateActiveEventUseCase;
   let bandsRepository: { findByIdAndOwnerWithMembers: jest.Mock };
-  let eventsRepository: { recentTemplateIds: jest.Mock; create: jest.Mock };
+  let eventsRepository: {
+    recentTemplateIds: jest.Mock;
+    findByBandId: jest.Mock;
+    create: jest.Mock;
+  };
 
   beforeEach(async () => {
     bandsRepository = { findByIdAndOwnerWithMembers: jest.fn() };
-    eventsRepository = { recentTemplateIds: jest.fn(), create: jest.fn() };
+    eventsRepository = {
+      recentTemplateIds: jest.fn(),
+      findByBandId: jest.fn().mockResolvedValue([]),
+      create: jest.fn(),
+    };
     const moduleRef = await Test.createTestingModule({
       providers: [
         GenerateActiveEventUseCase,

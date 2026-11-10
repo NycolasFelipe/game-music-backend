@@ -26,7 +26,9 @@ export class GenerateActiveEventUseCase {
   ) {}
 
   /**
-   * Loads the band state, generates an eligible event and persists it.
+   * Loads the band state, generates an eligible event and persists it. The
+   * cast spreads across the band: whoever was in the previous event weighs
+   * less (ADR-0028).
    *
    * @param actor - The authenticated owner.
    * @param bandId - The band id.
@@ -53,6 +55,8 @@ export class GenerateActiveEventUseCase {
       year,
       RECENT_EVENT_WINDOW,
     );
+    // Most recent first: whoever was in the last event weighs less (ADR-0028).
+    const [lastEvent] = await this.activeEventsRepository.findByBandId(bandId);
 
     const generated = generateActiveEvent({
       year,
@@ -69,6 +73,7 @@ export class GenerateActiveEventUseCase {
       })),
       fanCount: band.band.fanCount,
       recentTemplateIds: new Set(recent),
+      lastInvolvedIds: lastEvent?.involvedCharacterIds ?? [],
     });
 
     if (!generated) {

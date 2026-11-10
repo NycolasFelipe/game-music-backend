@@ -1,3 +1,7 @@
+import {
+  HOSTILITY_WEIGHT_PER_LEVEL,
+  RECENT_INVOLVEMENT_FACTOR,
+} from "@/modules/events/domain/constants/cast-selection.constant";
 import { ACTIVE_EVENT_TEMPLATES } from "@/modules/events/domain/data/active-event-templates";
 import type { ActiveEventType } from "@/modules/events/domain/constants/active-event-type.constant";
 import type {
@@ -284,10 +288,59 @@ function relationshipWithinBounds(
   return true;
 }
 
+/**
+ * Draws one item by weight.
+ *
+ * @param items - The candidates with their weights (all positive).
+ * @returns The drawn item, or `null` when there is none.
+ */
+function pickWeighted<T>(items: { item: T; weight: number }[]): T | null {
+  const total = items.reduce((sum, entry) => sum + entry.weight, 0);
+  if (total <= 0) return null;
+  let roll = Math.random() * total;
+  for (const entry of items) {
+    roll -= entry.weight;
+    if (roll < 0) return entry.item;
+  }
+  return items[items.length - 1].item;
+}
+
+/**
+ * Weight multiplier that spreads events across the band: each member who was
+ * in the previous event halves the weight (ADR-0028).
+ *
+ * @param ids - The candidate's member ids.
+ * @param lastInvolved - Who was in the band's previous event.
+ * @returns The multiplier (1, 0.5 or 0.25).
+ */
+function rotationFactor(
+  ids: string[],
+  lastInvolved: ReadonlySet<string>,
+): number {
+  return ids.reduce(
+    (factor, id) =>
+      lastInvolved.has(id) ? factor * RECENT_INVOLVEMENT_FACTOR : factor,
+    1,
+  );
+}
+
+/**
+ * Picks the pair for a two-character template among every pair that meets its
+ * trait, position and relationship requirements. Member conflicts lean toward
+ * hostile pairs by weight; other types draw evenly; members of the previous
+ * event weigh less (ADR-0028).
+ *
+ * @param template - The template being cast.
+ * @param characters - The band's members.
+ * @param relationships - The band's relationships.
+ * @param lastInvolved - Who was in the band's previous event.
+ * @returns The ordered pair, or `null` when no pair fits.
+ */
 function selectPair(
   template: ActiveEventTemplate,
   characters: EventCharacter[],
   relationships: EventRelationship[],
+  lastInvolved: ReadonlySet<string>,
 ): [EventCharacter, EventCharacter] | null {
   if (characters.length < 2) return null;
 
@@ -296,10 +349,12 @@ function selectPair(
     ? (c: EventCharacter) => hasAny(c, involvedAny)
     : () => true;
   const requiredAll = template.requiredInvolvedCharacteristicsAll ?? [];
+  const leansHostile = template.type === "conflito_membros";
 
-  const problematic: [EventCharacter, EventCharacter][] = [];
-  const any: [EventCharacter, EventCharacter][] = [];
-
+  const candidates: {
+    item: [EventCharacter, EventCharacter];
+    weight: number;
+  }[] = [];
   for (let i = 0; i < characters.length; i++) {
     for (let j = i + 1; j < characters.length; j++) {
       const a = characters[i];
@@ -311,19 +366,22 @@ function selectPair(
       const level = relationshipLevelOf(relationships, a.id, b.id);
       // Enforce the template's relationship-level bounds (between the pair).
       if (!relationshipWithinBounds(template, level)) continue;
-      if (level !== null && level <= 0) problematic.push([a, b]);
-      else any.push([a, b]);
+      const hostility = leansHostile ? Math.max(0, -(level ?? 0)) : 0;
+      const weight =
+        (1 + hostility * HOSTILITY_WEIGHT_PER_LEVEL) *
+        rotationFactor([a.id, b.id], lastInvolved);
+      candidates.push({ item: [a, b], weight });
     }
   }
 
-  const pool = problematic.length > 0 ? problematic : any;
-  if (pool.length === 0) return null;
-  return orderPair(template, pickRandom(pool));
+  const pair = pickWeighted(candidates);
+  return pair ? orderPair(template, pair) : null;
 }
 
 function selectSolo(
   template: ActiveEventTemplate,
   characters: EventCharacter[],
+  lastInvolved: ReadonlySet<string>,
 ): EventCharacter[] {
   const involvedAll = template.requiredInvolvedCharacteristicsAll;
   const involvedAny = template.requiredInvolvedCharacteristics;
@@ -341,7 +399,13 @@ function selectSolo(
     pool = pool.filter((c) => hasAny(c, posAny) && hasAll(c, posAll));
   }
 
-  return pool.length === 0 ? [] : [pickRandom(pool)];
+  const picked = pickWeighted(
+    pool.map((c) => ({
+      item: c,
+      weight: rotationFactor([c.id], lastInvolved),
+    })),
+  );
+  return picked ? [picked] : [];
 }
 
 /**
@@ -398,9 +462,12 @@ export function generateActiveEvent(params: {
   relationships: EventRelationship[];
   fanCount: number;
   recentTemplateIds?: ReadonlySet<string>;
+  /** Who was in the band's previous event; they weigh less (ADR-0028). */
+  lastInvolvedIds?: readonly string[];
 }): GeneratedActiveEvent | null {
   const { year, characters, relationships, fanCount } = params;
   const recent = params.recentTemplateIds ?? new Set<string>();
+  const lastInvolved = new Set(params.lastInvolvedIds ?? []);
   if (characters.length === 0) return null;
 
   const MAX_ATTEMPTS = 15;
@@ -434,11 +501,16 @@ export function generateActiveEvent(params: {
 
     let involved: EventCharacter[] = [];
     if (template.requiredCharacters === 2) {
-      const pair = selectPair(template, characters, relationships);
+      const pair = selectPair(
+        template,
+        characters,
+        relationships,
+        lastInvolved,
+      );
       if (!pair) continue;
       involved = pair;
     } else if (template.requiredCharacters === 1) {
-      involved = selectSolo(template, characters);
+      involved = selectSolo(template, characters, lastInvolved);
       if (involved.length === 0) continue;
     }
 
