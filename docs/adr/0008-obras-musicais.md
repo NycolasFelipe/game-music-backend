@@ -56,6 +56,9 @@ carrega **autoria**:
   aceita 1+ membros e um membro pode ocupar vários. Os créditos são exibidos na
   ficha da obra e alimentam o cálculo (§5).
 
+> **Emenda (ADR-0030):** a obra não escolhe estilo. Ela grava o `theme` da
+> banda, e `POST /bands/:bandId/releases` não recebe mais `style`.
+
 ### 4. Formatos como dado de domínio (sem cadeado de permissão)
 Os formatos vivem em `domain/data/release-formats.ts` (SINGLE, EP, LP, ALBUM,
 ACOUSTIC, LIVE, …), cada um com faixa de nº de faixas, `custoBase`, `alcanceBase`

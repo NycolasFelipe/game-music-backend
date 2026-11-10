@@ -43,6 +43,7 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | [0027](0027-genero-dos-integrantes-e-flexao-dos-textos.md) | Gênero dos integrantes e flexão dos textos | Aceita |
 | [0028](0028-escolha-do-elenco-dos-eventos.md) | Escolha do elenco dos eventos ativos | Aceita |
 | [0029](0029-teto-do-convivio-nas-relacoes.md) | Teto do convívio nas relações | Aceita |
+| [0030](0030-estilo-da-banda-e-permanente.md) | O estilo da banda é permanente e vale para toda obra | Aceita |
 
 ## Veja também
 - [Trabalho futuro](../future-work.md) — backlog de ideias de gameplay ainda não
