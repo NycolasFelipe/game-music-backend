@@ -1,5 +1,7 @@
 import { ACTIVITY_FALLOUT_TEMPLATES } from "@/modules/events/domain/data/active-events/activity-fallout.templates";
+import { BARES_TEMPLATES } from "@/modules/events/domain/data/active-events/bares.templates";
 import { CASAS_TEMPLATES } from "@/modules/events/domain/data/active-events/casas.templates";
+import { GARAGEM_TEMPLATES } from "@/modules/events/domain/data/active-events/garagem.templates";
 import { NACIONAL_TEMPLATES } from "@/modules/events/domain/data/active-events/nacional.templates";
 import { PORTED_TEMPLATES } from "@/modules/events/domain/data/active-events/ported.templates";
 import type { ActiveEventTemplate } from "@/modules/events/domain/types/active-event-template";
@@ -11,6 +13,8 @@ import type { ActiveEventTemplate } from "@/modules/events/domain/types/active-e
  */
 export const ACTIVE_EVENT_TEMPLATES: ActiveEventTemplate[] = [
   ...PORTED_TEMPLATES,
+  ...GARAGEM_TEMPLATES,
+  ...BARES_TEMPLATES,
   ...CASAS_TEMPLATES,
   ...NACIONAL_TEMPLATES,
   ...ACTIVITY_FALLOUT_TEMPLATES,

@@ -47,8 +47,8 @@ interface CoveragePhase {
 
 /** Phases and targets from ADR-0025 §2. */
 const PHASES: CoveragePhase[] = [
-  { name: "Garagem", minFans: 0, maxFans: 150, target: 6, enforced: false },
-  { name: "Bares", minFans: 151, maxFans: 2000, target: 8, enforced: false },
+  { name: "Garagem", minFans: 0, maxFans: 150, target: 6, enforced: true },
+  { name: "Bares", minFans: 151, maxFans: 2000, target: 8, enforced: true },
   {
     name: "Casas",
     minFans: 2001,
