@@ -18,7 +18,8 @@ Abreviações: `B` = `game-music-backend/src/modules`, `F` =
   1. Bloqueia (409) se houver evento ativo sem resposta ou evento de estúdio
      pendente. Lançamento em produção não bloqueia.
   2. Avança o relógio; na virada de ano a idade sobe 1 (sem efeito mecânico).
-  3. Gera 1 evento passivo (só texto, não altera estado).
+  3. Gera 3 eventos passivos (`PASSIVE_EVENTS_PER_TURN`, só texto, não altera
+     estado), respeitando o `desde` de cada modelo (ADR-0024).
   4. Avança a produção dos lançamentos e abre 1 evento de criação se ainda
      restarem turnos.
   5. Credita royalties.
