@@ -177,8 +177,9 @@ libera tipos de show nos níveis 3, 7 e 12.
 Avançar turno; responder evento (bloqueia); iniciar, responder sessão de
 estúdio, finalizar e cancelar lançamento; 1 show; atividades; ajustar
 salário; ligar reajuste automático. Contratar e demitir existem só no backend:
-o frontend não chama esses endpoints. O resultado do avanço de turno não
-devolve os royalties creditados. `PUT relationships`
+o frontend não chama esses endpoints. Desde a ADR-0020, o resultado do avanço
+traz `report`: caixa antes e depois do tick, royalties por obra, folha paga e a
+variação de caixa e fãs desde o turno anterior. `PUT relationships`
 define qualquer nível de relação de graça e funciona como atalho de debug.
 A criação de banda aceita habilidades de 0 a 10 vindas do cliente.
 
