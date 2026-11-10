@@ -176,6 +176,9 @@ um arquivo por grupo (`ported`, `garagem`, `bares`, `casas`, `nacional`,
   3 anos, `generate-active-event.use-case.ts`. A janela
   (`Between(ano - 3, ano + 3)`) inclui as duas pontas, então na prática são 7
   turnos, não os 6 da ADR-0025.
+- **Elenco (ADR-0028):** todo par que cumpre o modelo entra no sorteio. Brigas
+  pesam `1 + hostilidade` (par em −5 pesa 6); os outros tipos sorteiam por igual.
+  Cada integrante do evento anterior multiplica o peso por 0,5.
 - **Gênero nos textos (ADR-0027):** o marcador
   `{characterN:masculino|feminino|neutro}` escolhe a forma pelo gênero do
   personagem (`male`, `female`, `neutral`). 10% dos candidatos sorteados saem
@@ -242,11 +245,11 @@ frontend "revista".
 
 ## Documentação de design
 
-- `game-music-backend/docs/adr/0001` a `0027`: uma ADR por sistema (turnos
+- `game-music-backend/docs/adr/0001` a `0028`: uma ADR por sistema (turnos
   0006, fama 0007, obras 0008, salários 0010, shows 0016, atividades 0017,
   relatório do turno 0020, humor do show 0021, painel do turno 0022,
   aparência 0023, notícias por época 0024, cobertura de eventos ativos 0025,
-  tom de voz dos textos 0026, gênero e flexão 0027).
+  tom de voz dos textos 0026, gênero e flexão 0027, elenco dos eventos 0028).
   Leia a ADR do sistema antes de julgar: ela registra a intenção.
 - `game-music-backend/docs/future-work.md`: backlog de ideias.
 - `game-music-frontend/docs/adr/0001-central-de-decisoes.md`.
