@@ -118,18 +118,20 @@ Módulo `B/releases`.
 
 `B/gigs`. Um show por turno, exige nível de fama mínimo e saldo ≥ custo.
 
-| Tipo | Fama mín. | Cachê | Custo | Fãs | Desgaste | Fãs próprios × |
-|---|---|---|---|---|---|---|
-| covers | 0 | 600 | 80 | 8 | .15 | .3 |
-| bar | 0 | 450 | 60 | 40 | .10 | 1 |
-| pub | 3 | 1200 | 250 | 180 | .20 | 1 |
-| casa-shows | 7 | 4000 | 900 | 900 | .30 | 1 |
-| festival | 12 | 15000 | 3500 | 6000 | .50 | 1 |
+| Tipo | Fama mín. | Cachê | Custo | Fãs | Desgaste | Desempenho esperado | Fãs próprios × |
+|---|---|---|---|---|---|---|---|
+| covers | 0 | 600 | 80 | 8 | .045 | .15 | .3 |
+| bar | 0 | 450 | 60 | 40 | .03 | .15 | 1 |
+| pub | 3 | 1200 | 250 | 180 | .06 | .18 | 1 |
+| casa-shows | 7 | 4000 | 900 | 900 | .09 | .25 | 1 |
+| festival | 12 | 15000 | 3500 | 6000 | .15 | .35 | 1 |
 
 `data/gig-types.ts`. `evaluateGig` (`domain/gig/gig.calculator.ts`):
 desempenho = habilidade de palco × humor × variação ±10%; cachê = `base ×
 (0,5 + desempenho) × atração`; atração = `1 + log10(1+fãs) × 0,2`; humor de
-todos muda `-desgaste + (desempenho - 0,5) × 0,6`.
+todos muda `-desgaste + (desempenho - esperado) × 3` (ADR-0021). O desempenho
+real fica entre 0,13 e 0,42 a partida inteira, porque `stageSkill` faz a média
+dos 5 instrumentos de cada integrante.
 
 ### Atividades (dinheiro → humor e relação)
 
