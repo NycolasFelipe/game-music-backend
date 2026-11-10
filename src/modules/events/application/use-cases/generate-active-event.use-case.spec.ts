@@ -75,7 +75,11 @@ describe("GenerateActiveEventUseCase", () => {
       ),
     );
 
-    const result = await useCase.execute(actor, BAND_ID, 2003);
+    // A low roll picks the member-conflict type, 0001's, on the first attempt.
+    jest.spyOn(Math, "random").mockReturnValue(0.1);
+    const result = await useCase
+      .execute(actor, BAND_ID, 2003)
+      .finally(() => jest.restoreAllMocks());
 
     expect(eventsRepository.create).toHaveBeenCalled();
     expect(result.templateId).toBe("0001-melodia-familiar");

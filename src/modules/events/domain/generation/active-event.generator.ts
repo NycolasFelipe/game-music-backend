@@ -483,7 +483,10 @@ export function generateActiveEvent(params: {
       selectedType = "decisao_criativa";
     }
 
+    // Recent templates leave the pool before the draw, so a recent pick never
+    // burns one of the attempts.
     const compatible = ACTIVE_EVENT_TEMPLATES.filter((t) => {
+      if (recent.has(t.id)) return false;
       if (t.type !== "" && t.type !== selectedType) return false;
       if (t.minYear !== undefined && year < t.minYear) return false;
       if (t.maxYear !== undefined && year > t.maxYear) return false;
@@ -497,7 +500,6 @@ export function generateActiveEvent(params: {
     if (compatible.length === 0) continue;
 
     const template = pickRandom(compatible);
-    if (recent.has(template.id)) continue;
 
     let involved: EventCharacter[] = [];
     if (template.requiredCharacters === 2) {

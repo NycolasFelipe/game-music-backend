@@ -62,6 +62,28 @@ describe("generateActiveEvent", () => {
     expect(events).toHaveLength(0);
   });
 
+  it("draws the one template left when every other one is recent", () => {
+    // A fixed roll picks the member-conflict type (0001's) and lands past the
+    // start of the pool every attempt, where 0001 sits: drawing first and
+    // discarding the recent pick after would never reach it.
+    jest.spyOn(Math, "random").mockReturnValue(0.35);
+    const recent = new Set(
+      ACTIVE_EVENT_TEMPLATES.map((t) => t.id).filter(
+        (id) => id !== "0001-melodia-familiar",
+      ),
+    );
+    const event = generateActiveEvent({
+      year: 2003,
+      characters,
+      relationships,
+      fanCount: 200,
+      recentTemplateIds: recent,
+    });
+    jest.restoreAllMocks();
+
+    expect(event?.templateId).toBe("0001-melodia-familiar");
+  });
+
   it("excludes a pair whose relationship level exceeds maxRelationshipLevel", () => {
     // Every template but 0001 is marked recent, so only 0001 can be drawn, and
     // it requires the pair's relationship level <= 3. A level of 4 must make it
