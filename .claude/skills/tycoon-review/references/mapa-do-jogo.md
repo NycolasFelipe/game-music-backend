@@ -99,6 +99,10 @@ Módulo `B/releases`.
 
 `data/budget-tiers.ts`.
 
+- **Estilo (ADR-0030):** a obra grava o `theme` da banda, escolhido na criação e
+  sem rota de troca. O perfil de peso por instrumento
+  (`data/release-genre-profiles.ts`, 8 arquétipos para 26 estilos) e a recepção
+  seguem esse estilo, então a formação precisa cobrir o que ele cobra.
 - `evaluateRelease` (`domain/quality/release.calculator.ts`):
   - qualidade = `clamp(habilidade × humor × orçamento × eventos × variação, 0, 1) × 100`.
   - variação uniforme ±8%.
