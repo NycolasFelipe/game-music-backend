@@ -230,6 +230,7 @@ export class HoldActivityUseCase {
             id: member.id,
             name: member.name,
             characteristics: member.characteristics,
+            gender: member.gender,
           }
         : null;
     };
@@ -238,9 +239,12 @@ export class HoldActivityUseCase {
     const second = characterOf(pair.memberBId);
     if (!first || !second) return null;
 
+    // Most recent first, so the generator can tell which trouble is oldest.
+    const pastEvents = await this.activeEventsRepository.findByBandId(bandId);
     const generated = generateFalloutEvent({
       year: composed.band.currentYear,
       pair: [first, second],
+      usedTemplateIds: pastEvents.map((event) => event.templateId),
     });
     if (!generated) return null;
 

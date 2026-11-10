@@ -32,7 +32,7 @@ describe("HoldActivityUseCase", () => {
     create: jest.Mock;
     countByBandAndYear: jest.Mock;
   };
-  let activeEventsRepository: { create: jest.Mock };
+  let activeEventsRepository: { create: jest.Mock; findByBandId: jest.Mock };
 
   beforeEach(async () => {
     // No trouble unless a test asks for it.
@@ -50,6 +50,7 @@ describe("HoldActivityUseCase", () => {
       })),
     };
     activeEventsRepository = {
+      findByBandId: jest.fn().mockResolvedValue([]),
       create: jest.fn((data) => ({
         id: "evt-1",
         resolved: false,
@@ -155,6 +156,23 @@ describe("HoldActivityUseCase", () => {
     );
     expect(result.troubleEvent?.id).toBe("evt-1");
     expect(result.activity.troubleEventId).toBe("evt-1");
+  });
+
+  it("raises a trouble the band has not seen yet before repeating one", async () => {
+    jest.spyOn(Math, "random").mockReturnValue(0);
+    activeEventsRepository.findByBandId.mockResolvedValue([
+      { templateId: "9001-copo-a-mais" },
+      { templateId: "9002-a-conta" },
+    ]);
+
+    await useCase.execute(actor, "band-1", {
+      activityId: "festa",
+      participantIds: ["m1", "m2", "m3"],
+    });
+
+    expect(activeEventsRepository.create).toHaveBeenCalledWith(
+      expect.objectContaining({ templateId: "9003-verdade-na-mesa" }),
+    );
   });
 
   it("keeps the good part even when the night goes wrong", async () => {
