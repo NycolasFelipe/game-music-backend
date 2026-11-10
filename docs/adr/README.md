@@ -41,6 +41,7 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | [0025](0025-cobertura-minima-de-eventos-ativos.md) | Cobertura mínima de eventos ativos por fase de fama | Aceita |
 | [0026](0026-tom-de-voz-dos-textos.md) | Tom de voz dos textos do jogo | Aceita |
 | [0027](0027-genero-dos-integrantes-e-flexao-dos-textos.md) | Gênero dos integrantes e flexão dos textos | Aceita |
+| [0028](0028-escolha-do-elenco-dos-eventos.md) | Escolha do elenco dos eventos ativos | Aceita |
 
 ## Veja também
 - [Trabalho futuro](../future-work.md) — backlog de ideias de gameplay ainda não

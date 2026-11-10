@@ -68,6 +68,10 @@ seleciona uma dupla cujo nível de relacionamento esteja dentro de
 do frontend (correção de um comportamento incompleto). Para eventos individuais
 (1 personagem) não há par, então a restrição não se aplica.
 
+> **Emenda (ADR-0028):** a preferência exclusiva por pares com relação ≤ 0 foi
+> trocada por um sorteio ponderado: brigas pesam pares hostis, os outros tipos
+> sorteiam por igual, e quem esteve no evento anterior pesa menos.
+
 ## Persistência (`active_events`)
 `id`, `band_id` (FK→bands, cascade), `template_id`, `year` (numeric),
 `type`, `title`, `description`, `involved_character_ids` (text[]),
