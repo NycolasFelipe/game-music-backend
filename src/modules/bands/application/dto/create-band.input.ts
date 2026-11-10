@@ -3,7 +3,7 @@ import type {
   FoundationYear,
   OriginCity,
 } from "@/modules/bands/domain/constants/band.constant";
-import type { CreateBandMemberSeed } from "@/modules/bands/domain/repositories/bands.repository";
+import type { CreateBandMemberInput } from "@/modules/bands/application/dto/create-band-member.input";
 
 /**
  * Application input for creating a band with its initial members. Plain class
@@ -15,5 +15,5 @@ export class CreateBandInput {
   theme: BandTheme;
   origin: OriginCity;
   foundationYear: FoundationYear;
-  members: CreateBandMemberSeed[];
+  members: CreateBandMemberInput[];
 }

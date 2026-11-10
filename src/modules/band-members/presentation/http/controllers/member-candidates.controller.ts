@@ -24,8 +24,11 @@ import {
   SKILL_DESCRIPTIONS,
   type SkillLevelDescription,
 } from "@/modules/band-members/domain/data/skill-descriptions";
+import { DEFAULT_APPEARANCE_AGE } from "@/modules/band-members/domain/constants/appearance.constant";
+import { generateAppearance } from "@/modules/band-members/domain/generation/appearance.generator";
 import { generateAvatar } from "@/modules/band-members/domain/generation/character.generator";
 import { GenerateAvatarDto } from "@/modules/band-members/presentation/http/dto/generate-avatar.dto";
+import { GeneratedAvatarView } from "@/modules/band-members/presentation/http/dto/generated-avatar.view";
 import { GenerateCandidatesDto } from "@/modules/band-members/presentation/http/dto/generate-candidates.dto";
 import { CharacteristicView } from "@/modules/band-members/presentation/http/dto/characteristic.view";
 import { HappinessLevelView } from "@/modules/band-members/presentation/http/dto/happiness-level.view";
@@ -56,16 +59,25 @@ export class MemberCandidatesController {
 
   /**
    * Generates a single avatar emoji for a gender (to regenerate one member's
-   * appearance without changing anything else).
+   * appearance without changing anything else), together with the stored look
+   * that matches it (ADR-0023).
    *
-   * @param dto - The gender to generate an avatar for.
-   * @returns The generated avatar emoji.
+   * @param dto - The gender (and optionally the age) to generate for.
+   * @returns The generated avatar emoji and appearance.
    */
   @Post("avatar")
   @HttpCode(HttpStatus.OK)
   @ApiGenerateAvatar()
-  avatar(@Body() dto: GenerateAvatarDto): { avatar: string } {
-    return { avatar: generateAvatar(dto.gender) };
+  avatar(@Body() dto: GenerateAvatarDto): GeneratedAvatarView {
+    const avatar = generateAvatar(dto.gender);
+    return {
+      avatar,
+      appearance: generateAppearance({
+        gender: dto.gender,
+        age: dto.age ?? DEFAULT_APPEARANCE_AGE,
+        avatar,
+      }),
+    };
   }
 
   /**

@@ -28,6 +28,14 @@ const buildMember = (id: string, name: string) =>
     3,
     new Date(),
     new Date(),
+    {
+      hairStyle: "short",
+      beard: "none",
+      glasses: "none",
+      earring: false,
+      shirt: "crew",
+      shirtTone: 8,
+    },
   );
 
 describe("ArchiveMemberDeparturesUseCase", () => {
@@ -97,6 +105,14 @@ describe("ArchiveMemberDeparturesUseCase", () => {
               2004,
               d.relationships as never,
               new Date(),
+              {
+                hairStyle: "short",
+                beard: "none",
+                glasses: "none",
+                earring: false,
+                shirt: "crew",
+                shirtTone: 8,
+              },
             ),
         ),
       ),
@@ -114,6 +130,7 @@ describe("ArchiveMemberDeparturesUseCase", () => {
         reason: "salario_atrasado",
         leftAtYear: 2004,
         relationships: [{ memberName: "Beto", level: 3 }],
+        appearance: expect.objectContaining({ hairStyle: "short" }) as unknown,
       }),
     ]);
     expect(result).toHaveLength(1);

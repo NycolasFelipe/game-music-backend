@@ -83,6 +83,14 @@ describe("AddBandMemberUseCase", () => {
       0,
       new Date(),
       new Date(),
+      {
+        hairStyle: "short",
+        beard: "none",
+        glasses: "none",
+        earring: false,
+        shirt: "crew",
+        shirtTone: 8,
+      },
     );
     membersRepository.create.mockResolvedValue(created);
     membersRepository.setSalary.mockResolvedValue(created);
@@ -95,7 +103,13 @@ describe("AddBandMemberUseCase", () => {
 
     expect(result).toMatchObject({ id: "m-1", bandId: BAND_ID, name: "João" });
     expect(membersRepository.create).toHaveBeenCalledWith(
-      expect.objectContaining({ bandId: BAND_ID, name: "João" }),
+      expect.objectContaining({
+        bandId: BAND_ID,
+        name: "João",
+        appearance: expect.objectContaining({
+          hairStyle: expect.any(String) as string,
+        }) as unknown,
+      }),
     );
     expect(membersRepository.setSalary).toHaveBeenCalledWith(
       "m-1",

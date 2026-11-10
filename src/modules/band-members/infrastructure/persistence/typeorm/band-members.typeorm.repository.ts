@@ -43,6 +43,7 @@ export class BandMembersTypeormRepository implements BandMembersRepository {
       age: data.age,
       gender: data.gender,
       avatar: data.avatar,
+      appearance: data.appearance,
       happiness: data.happiness,
       characteristics: data.characteristics,
       skills: data.skills,

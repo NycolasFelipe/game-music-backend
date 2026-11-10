@@ -1,3 +1,4 @@
+import type { PhotoScene } from "@/modules/bands/domain/constants/photo-scene.constant";
 import { FameView } from "@/modules/bands/application/dto/fame.view";
 import type {
   BandTheme,
@@ -24,6 +25,8 @@ export class BandView {
   balance: number;
   /** Whether salaries are raised automatically each turn (ADR-0013). */
   autoSalaryAdjust: boolean;
+  /** Backdrop of the cover photo: `ensaio`, `palco`, `muro` or `estudio` (ADR-0023). */
+  photoScene: PhotoScene;
   createdAt: Date;
   updatedAt: Date;
 }

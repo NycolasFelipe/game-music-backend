@@ -1,3 +1,4 @@
+import type { MemberAppearance } from "@/modules/band-members/domain/constants/appearance.constant";
 import type { Gender } from "@/modules/band-members/domain/constants/gender.constant";
 import type {
   Skills,
@@ -47,5 +48,7 @@ export class FormerMemberEntity {
     /** Snapshot of the member's relationships at departure. */
     public readonly relationships: FormerMemberRelationship[],
     public readonly createdAt: Date,
+    /** The member's look when they left (ADR-0023). */
+    public readonly appearance: MemberAppearance,
   ) {}
 }

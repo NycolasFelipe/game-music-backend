@@ -76,6 +76,7 @@ export class FormerMembersTypeormRepository implements FormerMembersRepository {
       orm.leftAtYear,
       orm.relationships,
       orm.createdAt,
+      orm.appearance,
     );
   }
 }

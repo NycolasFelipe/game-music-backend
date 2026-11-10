@@ -36,6 +36,7 @@ describe("GetBandUseCase", () => {
       false,
       new Date("2026-01-01T00:00:00Z"),
       new Date("2026-01-01T00:00:00Z"),
+      "ensaio",
     );
     bandsRepository.findByIdAndOwnerWithMembers.mockResolvedValue({
       band,

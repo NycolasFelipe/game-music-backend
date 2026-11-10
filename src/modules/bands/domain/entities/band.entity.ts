@@ -1,3 +1,4 @@
+import type { PhotoScene } from "@/modules/bands/domain/constants/photo-scene.constant";
 import type {
   BandTheme,
   FoundationYear,
@@ -37,5 +38,7 @@ export class BandEntity {
     public readonly autoSalaryAdjust: boolean,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
+    /** Backdrop of the cover photo (ADR-0023). */
+    public readonly photoScene: PhotoScene,
   ) {}
 }

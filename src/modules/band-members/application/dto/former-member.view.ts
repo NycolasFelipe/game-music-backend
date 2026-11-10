@@ -1,3 +1,4 @@
+import type { MemberAppearance } from "@/modules/band-members/domain/constants/appearance.constant";
 import type { Gender } from "@/modules/band-members/domain/constants/gender.constant";
 import type {
   Skills,
@@ -18,6 +19,8 @@ export class FormerMemberView {
   age: number;
   gender: Gender;
   avatar: string;
+  /** The member's look when they left (ADR-0023). */
+  appearance: MemberAppearance;
   /** Happiness at departure. */
   happiness: number;
   characteristics: string[];

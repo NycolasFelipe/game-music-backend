@@ -12,6 +12,23 @@ describe("GenerateMemberCandidatesUseCase", () => {
     }
   });
 
+  it("gives every candidate a stored look consistent with the avatar (ADR-0023)", () => {
+    for (const candidate of useCase.execute(10)) {
+      expect(candidate.appearance).toEqual(
+        expect.objectContaining({
+          hairStyle: expect.any(String) as string,
+          shirt: expect.any(String) as string,
+        }),
+      );
+      if (candidate.avatar.includes("\u{1F9B2}")) {
+        expect(candidate.appearance.hairStyle).toBe("bald");
+      }
+      if (candidate.gender === "female") {
+        expect(candidate.appearance.beard).toBe("none");
+      }
+    }
+  });
+
   it("clamps the requested count to the allowed range", () => {
     expect(useCase.execute(3)).toHaveLength(6);
     expect(useCase.execute(50)).toHaveLength(10);

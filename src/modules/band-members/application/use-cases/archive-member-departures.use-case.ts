@@ -77,6 +77,7 @@ export class ArchiveMemberDeparturesUseCase {
         age: member.age,
         gender: member.gender,
         avatar: member.avatar,
+        appearance: member.appearance,
         happiness: member.happiness,
         characteristics: member.characteristics,
         skills: member.skills,

@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { numericTransformer } from "@/common/persistence/numeric.transformer";
+import type { MemberAppearance } from "@/modules/band-members/domain/constants/appearance.constant";
 import type { Gender } from "@/modules/band-members/domain/constants/gender.constant";
 import type {
   Skills,
@@ -37,6 +38,10 @@ export class BandMemberOrmEntity {
 
   @Column({ type: "varchar", length: 32 })
   avatar: string;
+
+  /** Stored look for the portraits (ADR-0023). */
+  @Column({ type: "jsonb" })
+  appearance: MemberAppearance;
 
   @Column({
     type: "numeric",

@@ -1,3 +1,4 @@
+import type { PhotoScene } from "@/modules/bands/domain/constants/photo-scene.constant";
 import type { Skills } from "@/modules/band-members/domain/constants/skill.constant";
 import type { CreateBandMemberData } from "@/modules/band-members/domain/repositories/band-members.repository";
 import type {
@@ -21,6 +22,8 @@ export interface CreateBandData {
   fanCount?: number;
   /** Starting cash balance (defaults to `STARTING_CAPITAL`). */
   balance?: number;
+  /** Backdrop of the cover photo (ADR-0023). */
+  photoScene: PhotoScene;
 }
 
 /** A member to create alongside a band (band id assigned during the insert). */

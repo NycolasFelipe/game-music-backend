@@ -16,6 +16,7 @@ export function toFormerMemberView(
     age: former.age,
     gender: former.gender,
     avatar: former.avatar,
+    appearance: former.appearance,
     happiness: former.happiness,
     characteristics: former.characteristics,
     skills: former.skills,

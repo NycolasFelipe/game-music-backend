@@ -5,11 +5,12 @@ import { CreateBandInput } from "@/modules/bands/application/dto/create-band.inp
 import { CreateBandUseCase } from "@/modules/bands/application/use-cases/create-band.use-case";
 import { BandEntity } from "@/modules/bands/domain/entities/band.entity";
 import { BANDS_REPOSITORY } from "@/modules/bands/domain/repositories/bands.repository";
-import type { CreateBandMemberSeed } from "@/modules/bands/domain/repositories/bands.repository";
+import type { CreateBandMemberInput } from "@/modules/bands/application/dto/create-band-member.input";
+import { PHOTO_SCENES } from "@/modules/bands/domain/constants/photo-scene.constant";
 
 const actor = new AuthenticatedUserEntity("owner-1", "user");
 
-const member = (name: string): CreateBandMemberSeed => ({
+const member = (name: string): CreateBandMemberInput => ({
   name,
   age: 24,
   gender: "male",
@@ -59,6 +60,7 @@ describe("CreateBandUseCase", () => {
       false,
       new Date("2026-01-01T00:00:00Z"),
       new Date("2026-01-01T00:00:00Z"),
+      "ensaio",
     );
     bandsRepository.createWithMembers.mockResolvedValue({
       band,
@@ -91,5 +93,78 @@ describe("CreateBandUseCase", () => {
       BadRequestException,
     );
     expect(bandsRepository.createWithMembers).not.toHaveBeenCalled();
+  });
+
+  it("draws the cover-photo scene and keeps a member's appearance when sent", async () => {
+    const appearance = {
+      hairStyle: "bun",
+      beard: "none",
+      glasses: "round",
+      earring: true,
+      shirt: "v",
+      shirtTone: 6,
+    } as const;
+    bandsRepository.createWithMembers.mockResolvedValue({
+      band: new BandEntity(
+        "band-1",
+        actor.id,
+        "Os Rebeldes",
+        "grunge",
+        "seattle",
+        1990,
+        0,
+        1990,
+        5000,
+        false,
+        new Date(),
+        new Date(),
+        "palco",
+      ),
+      members: [],
+      relationships: [],
+    });
+    const data = input(3);
+    data.members[0] = { ...data.members[0], appearance };
+
+    await useCase.execute(actor, data);
+
+    const [bandData, seeds] = bandsRepository.createWithMembers.mock
+      .calls[0] as [{ photoScene: string }, Array<{ appearance: unknown }>];
+    expect(PHOTO_SCENES).toContain(bandData.photoScene);
+    expect(seeds[0].appearance).toEqual(appearance);
+  });
+
+  it("generates the appearance of members sent without one", async () => {
+    bandsRepository.createWithMembers.mockResolvedValue({
+      band: new BandEntity(
+        "band-1",
+        actor.id,
+        "Os Rebeldes",
+        "grunge",
+        "seattle",
+        1990,
+        0,
+        1990,
+        5000,
+        false,
+        new Date(),
+        new Date(),
+        "muro",
+      ),
+      members: [],
+      relationships: [],
+    });
+
+    await useCase.execute(actor, input(3));
+
+    const [, seeds] = bandsRepository.createWithMembers.mock.calls[0] as [
+      unknown,
+      Array<{ appearance: { hairStyle: string } }>,
+    ];
+    for (const seed of seeds) {
+      expect(["short", "quiff", "long", "buzz"]).toContain(
+        seed.appearance.hairStyle,
+      );
+    }
   });
 });

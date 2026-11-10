@@ -1,3 +1,4 @@
+import type { MemberAppearance } from "@/modules/band-members/domain/constants/appearance.constant";
 import type { Gender } from "@/modules/band-members/domain/constants/gender.constant";
 import type { SalaryChangeReason } from "@/modules/band-members/domain/constants/salary.constant";
 import type {
@@ -17,6 +18,8 @@ export interface CreateBandMemberData {
   age: number;
   gender: Gender;
   avatar: string;
+  /** Stored look for the portraits (ADR-0023). */
+  appearance: MemberAppearance;
   happiness: number;
   characteristics: string[];
   skills: Skills;

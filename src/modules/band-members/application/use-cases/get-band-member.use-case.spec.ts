@@ -26,6 +26,14 @@ const member = new BandMemberEntity(
   0,
   new Date(),
   new Date(),
+  {
+    hairStyle: "short",
+    beard: "none",
+    glasses: "none",
+    earring: false,
+    shirt: "crew",
+    shirtTone: 8,
+  },
 );
 
 describe("GetBandMemberUseCase", () => {

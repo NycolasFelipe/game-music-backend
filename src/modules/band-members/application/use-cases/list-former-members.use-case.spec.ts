@@ -29,6 +29,14 @@ const former = new FormerMemberEntity(
   2004,
   [{ memberName: "Beto", level: 3 }],
   new Date(),
+  {
+    hairStyle: "short",
+    beard: "none",
+    glasses: "none",
+    earring: false,
+    shirt: "crew",
+    shirtTone: 8,
+  },
 );
 
 describe("ListFormerMembersUseCase", () => {

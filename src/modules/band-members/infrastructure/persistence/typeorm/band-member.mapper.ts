@@ -29,6 +29,7 @@ export function toBandMemberDomain(orm: BandMemberOrmEntity): BandMemberEntity {
     orm.salaryUnpaidTurns,
     orm.createdAt,
     orm.updatedAt,
+    orm.appearance,
   );
 }
 

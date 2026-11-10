@@ -1,3 +1,4 @@
+import type { MemberAppearance } from "@/modules/band-members/domain/constants/appearance.constant";
 import type { Gender } from "@/modules/band-members/domain/constants/gender.constant";
 import type {
   Skills,
@@ -35,5 +36,7 @@ export class BandMemberEntity {
     public readonly salaryUnpaidTurns: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
+    /** Stored look for the portraits (ADR-0023); skin and hair colour come from {@link avatar}. */
+    public readonly appearance: MemberAppearance,
   ) {}
 }

@@ -1,3 +1,4 @@
+import { generateAppearance } from "@/modules/band-members/domain/generation/appearance.generator";
 import type { Gender } from "@/modules/band-members/domain/constants/gender.constant";
 import {
   SKILL_TYPES,
@@ -328,12 +329,15 @@ export function generateBandMember(): GeneratedBandMember {
   const name = generateName(gender);
   const skills = generateSkills();
   const primarySkill = findPrimarySkill(skills);
+  const age = randomInt(16, 30);
+  const avatar = generateAvatar(gender);
 
   return {
     name,
-    age: randomInt(16, 30),
+    age,
     gender,
-    avatar: generateAvatar(gender),
+    avatar,
+    appearance: generateAppearance({ gender, age, avatar }),
     happiness: generateInitialHappiness(),
     characteristics: generateCharacteristics(),
     skills,

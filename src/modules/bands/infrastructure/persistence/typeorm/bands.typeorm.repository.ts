@@ -60,6 +60,7 @@ export class BandsTypeormRepository implements BandsRepository {
           fanCount: data.fanCount ?? 0,
           currentYear: data.foundationYear,
           balance: data.balance ?? STARTING_CAPITAL,
+          photoScene: data.photoScene,
         }),
       );
 
@@ -70,6 +71,7 @@ export class BandsTypeormRepository implements BandsRepository {
           age: member.age,
           gender: member.gender,
           avatar: member.avatar,
+          appearance: member.appearance,
           happiness: member.happiness,
           characteristics: member.characteristics,
           skills: member.skills,
@@ -364,6 +366,7 @@ export class BandsTypeormRepository implements BandsRepository {
       orm.autoSalaryAdjust,
       orm.createdAt,
       orm.updatedAt,
+      orm.photoScene,
     );
   }
 

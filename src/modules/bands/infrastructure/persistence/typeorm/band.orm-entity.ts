@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import type { PhotoScene } from "@/modules/bands/domain/constants/photo-scene.constant";
 import { numericTransformer } from "@/common/persistence/numeric.transformer";
 import { STARTING_CAPITAL } from "@/modules/bands/domain/constants/band.constant";
 import type {
@@ -63,6 +64,10 @@ export class BandOrmEntity {
 
   @Column({ name: "auto_salary_adjust", type: "boolean", default: true })
   autoSalaryAdjust: boolean;
+
+  /** Backdrop of the cover photo (ADR-0023). */
+  @Column({ name: "photo_scene", type: "varchar", length: 16 })
+  photoScene: PhotoScene;
 
   @CreateDateColumn({ name: "created_at", type: "timestamptz" })
   createdAt: Date;

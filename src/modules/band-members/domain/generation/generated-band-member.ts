@@ -1,3 +1,4 @@
+import type { MemberAppearance } from "@/modules/band-members/domain/constants/appearance.constant";
 import type { Gender } from "@/modules/band-members/domain/constants/gender.constant";
 import type {
   Skills,
@@ -14,6 +15,8 @@ export interface GeneratedBandMember {
   gender: Gender;
   /** Persisted person emoji (gender + skin tone + hair) identifying the member. */
   avatar: string;
+  /** Stored look for the portraits (ADR-0023). */
+  appearance: MemberAppearance;
   happiness: number;
   characteristics: string[];
   skills: Skills;

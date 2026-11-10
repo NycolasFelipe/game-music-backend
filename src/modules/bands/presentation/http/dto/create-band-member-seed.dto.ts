@@ -31,6 +31,7 @@ import {
   SKILL_TYPES,
   type SkillType,
 } from "@/modules/band-members/domain/constants/skill.constant";
+import { MemberAppearanceDto } from "@/modules/band-members/presentation/http/dto/member-appearance.dto";
 import { SkillsDto } from "@/modules/bands/presentation/http/dto/skills.dto";
 
 /**
@@ -100,4 +101,14 @@ export class CreateBandMemberSeedDto {
   @IsOptional()
   @IsInt()
   joinYear?: number;
+
+  @ApiPropertyOptional({
+    type: MemberAppearanceDto,
+    description:
+      "Look for the portraits (ADR-0023). Generated from gender, age and avatar when omitted.",
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => MemberAppearanceDto)
+  appearance?: MemberAppearanceDto;
 }

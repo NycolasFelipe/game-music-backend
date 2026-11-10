@@ -38,6 +38,7 @@ export function toBandView(band: BandEntity): BandView {
     currentYear: band.currentYear,
     balance: band.balance,
     autoSalaryAdjust: band.autoSalaryAdjust,
+    photoScene: band.photoScene,
     createdAt: band.createdAt,
     updatedAt: band.updatedAt,
   };
@@ -62,6 +63,7 @@ export function toBandMemberView(
     age: member.age,
     gender: member.gender,
     avatar: member.avatar,
+    appearance: member.appearance,
     happiness: member.happiness,
     characteristics: member.characteristics,
     skills: member.skills,

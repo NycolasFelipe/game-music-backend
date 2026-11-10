@@ -1,3 +1,4 @@
+import { generateAppearance } from "@/modules/band-members/domain/generation/appearance.generator";
 import {
   BadRequestException,
   ConflictException,
@@ -38,7 +39,8 @@ export class AddBandMemberUseCase {
 
   /**
    * Verifies band ownership, enforces the max band size and the characteristic
-   * catalog, then persists the new member.
+   * catalog, fills in the appearance when the client sent none (ADR-0023),
+   * then persists the new member.
    *
    * @param actor - The authenticated owner.
    * @param bandId - The target band id.
@@ -75,6 +77,7 @@ export class AddBandMemberUseCase {
     const member = await this.bandMembersRepository.create({
       bandId,
       ...input,
+      appearance: input.appearance ?? generateAppearance(input),
     });
 
     // Seed the member's initial salary at their target (ADR-0010 §3).

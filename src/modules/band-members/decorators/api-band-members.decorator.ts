@@ -61,9 +61,15 @@ export function ApiListCharacteristics() {
 export function ApiGenerateAvatar() {
   return applyDecorators(
     ApiBearerAuth(),
-    ApiOperation({ summary: "Generate a single avatar emoji for a gender" }),
+    ApiOperation({
+      summary: "Generate a single avatar emoji for a gender, with its look",
+      description:
+        "Regenerates a candidate's avatar together with the stored look " +
+        "(ADR-0023): the hair style depends on the emoji, so both change " +
+        "together. `age` (optional, default 24) decides whether a beard is possible.",
+    }),
     ApiBody({ type: GenerateAvatarDto }),
-    ApiOkResponse({ description: "The generated avatar emoji." }),
+    ApiOkResponse({ description: "`{ avatar, appearance }`." }),
   );
 }
 

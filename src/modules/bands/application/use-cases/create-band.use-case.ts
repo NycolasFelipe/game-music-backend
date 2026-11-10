@@ -1,3 +1,5 @@
+import { generateAppearance } from "@/modules/band-members/domain/generation/appearance.generator";
+import { pickPhotoScene } from "@/modules/bands/domain/generation/photo-scene.generator";
 import {
   BadRequestException,
   Inject,
@@ -28,7 +30,9 @@ export class CreateBandUseCase {
   ) {}
 
   /**
-   * Validates the membership size and persists the band with its members
+   * Validates the membership size, draws the cover-photo backdrop, fills in
+   * the appearance of members sent without one (ADR-0023), and persists the
+   * band with its members
    * atomically, scoped to the authenticated owner.
    *
    * @param actor - The authenticated user creating the band (its owner).
@@ -56,8 +60,12 @@ export class CreateBandUseCase {
         theme: input.theme,
         origin: input.origin,
         foundationYear: input.foundationYear,
+        photoScene: pickPhotoScene(),
       },
-      input.members,
+      input.members.map((member) => ({
+        ...member,
+        appearance: member.appearance ?? generateAppearance(member),
+      })),
     );
 
     this.logger.log(
