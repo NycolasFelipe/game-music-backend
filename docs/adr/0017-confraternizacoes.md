@@ -55,6 +55,10 @@ Nos relacionamentos a saturação usa **`floor`**, não arredondamento: `level` 
 `smallint`, e meio nível não existe. Na prática a segunda atividade do turno já
 não move relacionamento nenhum — só humor, e pela metade.
 
+> **Emenda (ADR-0029):** uma confraternização leva um par até +3, no máximo.
+> Os níveis +4 e +5 só vêm de eventos, e um par que já está acima de +3 fica
+> onde está.
+
 ### 3. A festa pode acabar mal, e vira decisão
 Toda atividade tem uma `troubleChance`. Ela **não é fixa**: sobe com a hostilidade
 de quem foi convidado.
