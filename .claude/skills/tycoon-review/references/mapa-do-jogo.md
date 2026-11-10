@@ -165,14 +165,21 @@ bloqueia o turno seguinte.
 um arquivo por grupo (`ported`, `garagem`, `bares`, `casas`, `nacional`,
 `activity-fallout`), juntados em `B/events/domain/data/active-event-templates.ts`.
 
-- **46 templates sorteáveis** e 3 de "confraternização" (gerados por
-  atividade). Cada fase de fama tem modelos universais próprios: garagem
+- **46 templates sorteáveis** e 12 de "confraternização" (gerados por
+  atividade; `fallout-event.generator.ts` só repete uma treta depois que a
+  banda viu todas, voltando a mais antiga). Cada fase de fama tem modelos universais próprios: garagem
   (`0101` a `0106`, até 150 fãs, efeito em fãs absoluto), bares (`0201` a
   `0208`, 151 a 2.000), casas (`0301` a `0312`, 2.001 a 100.000) e nacional
   (`0401` a `0415`, 100.001 a 2.000.000). Todos têm uma opção extra ligada a
   um traço, e os 32 traços aparecem em algum evento. Acima de 2 milhões de fãs
   só há o 0002, que ninguém alcança em 80 turnos. Um template não se repete em
-  3 anos (6 turnos), `generate-active-event.use-case.ts`.
+  3 anos, `generate-active-event.use-case.ts`. A janela
+  (`Between(ano - 3, ano + 3)`) inclui as duas pontas, então na prática são 7
+  turnos, não os 6 da ADR-0025.
+- **Gênero nos textos (ADR-0027):** o marcador
+  `{characterN:masculino|feminino|neutro}` escolhe a forma pelo gênero do
+  personagem (`male`, `female`, `neutral`). 10% dos candidatos sorteados saem
+  neutros; o gênero só é definido na criação da banda.
 - **Cobertura mínima (ADR-0025):** metas de modelos universais por fase de
   fama (garagem 6, bares 8, casas 12, nacional 15), com pelo menos 2 solo e 2
   por categoria sorteada. O teste
@@ -216,26 +223,30 @@ frontend "revista".
 
 ## Interface (fluidez)
 
-- `F/pages/BandTimelineTab.tsx`: botão de avançar; vira "Resolver N
-  decisões" quando há bloqueio. `handleAdvance` monta **um toast** com o
-  resumo do turno (folha, reajustes, produção, risco, saídas).
+- `F/pages/BandTurnTab.tsx`: botão "Fechar a edição"; vira "Resolver N
+  decisões" quando há bloqueio. O avanço não mostra mais resumo em toast; o
+  fechamento com a previsão fica na própria aba, e saídas abrem o
+  `DepartureModal`.
 - `F/features/decisions/components/DecisionsModal.tsx`: fila central de
-  decisões (ADR 0001 do frontend).
+  decisões (ADR 0001 do frontend). O resultado de um evento aparece no
+  próprio encarte (`EventOutcome`), com fãs, humor e relações que mudaram.
 - `F/features/releases/components/ReleaseRevealModal.tsx`: revelação
   animada das notas.
-- `F/features/gigs/components/GigsTab.tsx` e
-  `F/features/activities/components/ActivitiesPanel.tsx`: toasts de
-  resultado.
+- `F/features/gigs/components/GigsColumn.tsx` e
+  `F/features/activities/components/ActivitiesPanel.tsx`: colunas Palco e
+  Convívio com as últimas temporadas e saídas (clicáveis, com detalhe) e um
+  botão que abre o encarte de escolha; o resultado aparece no mesmo encarte.
+  O desempenho do show é mostrado em palavras (`gigs/format.ts`), não em 0..1.
 - `F/features/bands/components/BandTrends.tsx` e `BandStatistics.tsx`:
   gráficos por turno. `BandHeader.tsx`: fãs, caixa e barra de fama.
 
 ## Documentação de design
 
-- `game-music-backend/docs/adr/0001` a `0026`: uma ADR por sistema (turnos
+- `game-music-backend/docs/adr/0001` a `0027`: uma ADR por sistema (turnos
   0006, fama 0007, obras 0008, salários 0010, shows 0016, atividades 0017,
   relatório do turno 0020, humor do show 0021, painel do turno 0022,
   aparência 0023, notícias por época 0024, cobertura de eventos ativos 0025,
-  tom de voz dos textos 0026).
+  tom de voz dos textos 0026, gênero e flexão 0027).
   Leia a ADR do sistema antes de julgar: ela registra a intenção.
 - `game-music-backend/docs/future-work.md`: backlog de ideias.
 - `game-music-frontend/docs/adr/0001-central-de-decisoes.md`.
