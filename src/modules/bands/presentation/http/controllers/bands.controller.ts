@@ -50,6 +50,7 @@ import {
   THEME_LABELS,
 } from "@/modules/bands/presentation/http/constants/band-labels.constant";
 import { BandOptionsView } from "@/modules/bands/presentation/http/dto/band-options.view";
+import { THEME_DESCRIPTIONS } from "@/modules/bands/presentation/http/constants/theme-descriptions.constant";
 import { CreateBandDto } from "@/modules/bands/presentation/http/dto/create-band.dto";
 import { GenerateBandNameDto } from "@/modules/bands/presentation/http/dto/generate-band-name.dto";
 import { RelationshipLevelView } from "@/modules/bands/presentation/http/dto/relationship-level.view";
@@ -88,13 +89,18 @@ export class BandsController {
   /**
    * Lists the options available when creating a band (with display labels).
    *
-   * @returns The available themes, origins and foundation decades.
+   * @returns The available themes (with a one-line pitch each), origins and
+   *   foundation decades.
    */
   @Get("options")
   @ApiBandOptions()
   options(): BandOptionsView {
     return {
-      themes: BAND_THEMES.map((id) => ({ id, label: THEME_LABELS[id] })),
+      themes: BAND_THEMES.map((id) => ({
+        id,
+        label: THEME_LABELS[id],
+        description: THEME_DESCRIPTIONS[id],
+      })),
       origins: ORIGIN_CITIES.map((id) => ({ id, label: ORIGIN_LABELS[id] })),
       foundationYears: [...FOUNDATION_YEARS],
     };

@@ -41,7 +41,8 @@ export function ApiBandOptions() {
       summary: "List band creation options (themes, origins, decades)",
     }),
     ApiOkResponse({
-      description: "The available options with display labels.",
+      description:
+        "The available options with display labels; each theme also carries a one-line description.",
     }),
   );
 }
