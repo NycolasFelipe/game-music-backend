@@ -46,25 +46,22 @@ interface CoveragePhase {
   enforced: boolean;
 }
 
-/**
- * Phases from ADR-0025 §2. Each target moves to its ADR-0031 §1 value (garagem
- * 31, bares 71, casas 52, nacional 55) once that phase's batch is in.
- */
+/** Phases from ADR-0025 §2, with the targets of ADR-0031 §1. */
 const PHASES: CoveragePhase[] = [
   { name: "Garagem", minFans: 0, maxFans: 150, target: 31, enforced: true },
-  { name: "Bares", minFans: 151, maxFans: 2000, target: 8, enforced: true },
+  { name: "Bares", minFans: 151, maxFans: 2000, target: 71, enforced: true },
   {
     name: "Casas",
     minFans: 2001,
     maxFans: 100000,
-    target: 12,
+    target: 52,
     enforced: true,
   },
   {
     name: "Nacional",
     minFans: 100001,
     maxFans: 2000000,
-    target: 15,
+    target: 55,
     enforced: true,
   },
 ];
