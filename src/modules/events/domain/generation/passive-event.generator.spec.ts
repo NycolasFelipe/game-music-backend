@@ -1,5 +1,8 @@
 import { PASSIVE_EVENT_TEMPLATES } from "@/modules/events/domain/data/passive-event-templates";
-import { generatePassiveEvent } from "@/modules/events/domain/generation/passive-event.generator";
+import {
+  careerYears,
+  generatePassiveEvent,
+} from "@/modules/events/domain/generation/passive-event.generator";
 import type { RecentPassiveEvent } from "@/modules/events/domain/generation/generated-passive-event";
 
 const TEMPLATE_IDS = new Set(PASSIVE_EVENT_TEMPLATES.map((t) => t.id));
@@ -58,5 +61,35 @@ describe("generatePassiveEvent", () => {
         e.artists.every((a) => first!.artists.includes(a));
       expect(sameSet).toBe(false);
     }
+  });
+
+  it("writes whole career years in a second-semester retirement", () => {
+    // Retirements are 3% of the draws: 3000 draws make an empty sample
+    // practically impossible.
+    const retirements = Array.from({ length: 3000 }, () =>
+      generatePassiveEvent(2003.5),
+    ).filter((e) => e !== null && e.type === "aposentadoria");
+    expect(retirements.length).toBeGreaterThan(0);
+    for (const e of retirements) {
+      expect(e!.description).toMatch(/após \d+ anos? de carreira\.$/);
+    }
+  });
+
+  it("never retires an artist without a long career", () => {
+    // In 1961 nobody has 30 years on the road, so no retirement can be drawn.
+    const events = generateMany(1961.5).filter((e) => e !== null);
+    expect(events.length).toBeGreaterThan(0);
+    expect(events.some((e) => e.type === "aposentadoria")).toBe(false);
+  });
+});
+
+describe("careerYears", () => {
+  it("floors the half year of the second semester", () => {
+    expect(careerYears(1961.5, 1956)).toBe(5);
+    expect(careerYears(2003, 1973)).toBe(30);
+  });
+
+  it("counts at least one year", () => {
+    expect(careerYears(1956.5, 1956)).toBe(1);
   });
 });

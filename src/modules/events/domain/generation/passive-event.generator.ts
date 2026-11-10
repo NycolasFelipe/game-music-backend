@@ -25,6 +25,27 @@ import type {
 
 const MAX_ATTEMPTS = 10;
 
+/**
+ * Compatibility tags that must hold for the template to make sense, so the
+ * generator never falls back to any active artist for them: a retirement
+ * "after 5 years of career" reads as a bug. Without an eligible artist, the
+ * attempt is skipped and another type is drawn.
+ */
+const STRICT_COMPATIBILITY = new Set(["carreira_longa"]);
+
+/**
+ * Whole years of career for the `{anos}` placeholder. The game year carries
+ * `.5` in the second semester, so the difference is floored, with at least one
+ * year.
+ *
+ * @param year - The game year (may be fractional).
+ * @param startYear - The year the artist's career began.
+ * @returns The career length in whole years (≥ 1).
+ */
+export function careerYears(year: number, startYear: number): number {
+  return Math.max(1, Math.floor(year - startYear));
+}
+
 function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
@@ -126,7 +147,10 @@ function fillTemplate(
     text = text.replace("{artista}", artists[0].nome);
     text = text.replace("{banda}", artists[0].nome);
     if (text.includes("{anos}")) {
-      text = text.replace("{anos}", String(year - artists[0].ano_inicio));
+      const years = careerYears(year, artists[0].ano_inicio);
+      text = text
+        .replace("{anos} anos", `${years} ${years === 1 ? "ano" : "anos"}`)
+        .replace("{anos}", String(years));
     }
   } else if (template.requiredArtists === 2) {
     text = text.replace("{artista1}", artists[0].nome);
@@ -209,7 +233,10 @@ export function generatePassiveEvent(
       template.compatibilidade,
       year,
     );
-    if (eligible.length < template.requiredArtists) {
+    const strict = template.compatibilidade.some((tag) =>
+      STRICT_COMPATIBILITY.has(tag),
+    );
+    if (eligible.length < template.requiredArtists && !strict) {
       eligible = activeArtists;
     }
     if (eligible.length < template.requiredArtists) continue;
