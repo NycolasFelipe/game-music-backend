@@ -164,15 +164,19 @@ bloqueia o turno seguinte.
 `B/events/domain/data/active-event-templates.ts`, consequências em
 `consequence-resolver.ts`.
 
-- Só **5 templates sorteáveis** e 3 de "confraternização" (gerados por
-  atividade). Entre 151 e 10.000 fãs, só o template 0001 pode aparecer, e ele
-  exige um integrante com o traço `plagiarist`. Um template não se repete em 3
-  anos (6 turnos), `generate-active-event.use-case.ts`.
+- **17 templates sorteáveis** e 3 de "confraternização" (gerados por
+  atividade). Os 12 da fase de casas (`0301` a `0312`, 2.001 a 100.000 fãs) são
+  universais: 4 por categoria sorteada, 4 solo, cada um com uma opção extra
+  ligada a um traço. Fora dessa faixa continuam só os 5 antigos, que exigem
+  traço; entre 151 e 2.000 fãs, só o 0001 (`plagiarist`) pode aparecer. Um
+  template não se repete em 3 anos (6 turnos),
+  `generate-active-event.use-case.ts`.
 - **Cobertura mínima (ADR-0025):** metas de modelos universais por fase de
   fama (garagem 6, bares 8, casas 12, nacional 15), com pelo menos 2 solo e 2
   por categoria sorteada. O teste
   `B/events/domain/data/active-event-templates.spec.ts` confere as metas; cada
-  fase fica pulada (`enforced: false`) até ser preenchida. Na simulação de 80
+  fase fica pulada (`enforced: false`) até ser preenchida; a de casas já está
+  ligada. Na simulação de 80
   turnos, o jogador equilibrado passa ~34 turnos na fase de casas e ~42 na
   nacional, e ninguém passa de 2 milhões de fãs.
 - `moneyChange` **não altera o saldo**; só desloca o humor em ±6%.
