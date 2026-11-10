@@ -27,8 +27,17 @@ export interface FameLevelDescription {
   subtitle: string;
 }
 
+/**
+ * A fame level description. The base text fits any year; `modern` replaces it
+ * from `desde` on, when it names something dated (ADR-0024: no social media
+ * in 1987).
+ */
+export interface FameLevelEntry extends FameLevelDescription {
+  modern?: FameLevelDescription & { desde: number };
+}
+
 /** Human-readable title/subtitle per fame level (keyed by level as string). */
-export const FAME_LEVEL_DESCRIPTIONS: Record<string, FameLevelDescription> = {
+export const FAME_LEVEL_DESCRIPTIONS: Record<string, FameLevelEntry> = {
   "0": { title: "Anônimos", subtitle: "Tocam só pra amigos e familiares" },
   "1": {
     title: "Iniciantes",
@@ -43,14 +52,27 @@ export const FAME_LEVEL_DESCRIPTIONS: Record<string, FameLevelDescription> = {
   "5": { title: "Conhecidos", subtitle: "Nome reconhecido na cena local" },
   "6": {
     title: "Destaques",
-    subtitle: "Matérias em jornais e blogs regionais",
+    subtitle: "Matérias em jornais e fanzines regionais",
+    modern: {
+      desde: 2000,
+      title: "Destaques",
+      subtitle: "Matérias em jornais e blogs regionais",
+    },
   },
   "7": { title: "Fenômenos Locais", subtitle: "Lotam casas de show da região" },
   "8": {
     title: "Estrelas em Ascensão",
     subtitle: "Primeiras aparições em rádios locais",
   },
-  "9": { title: "Virais", subtitle: "Sucesso nas redes sociais" },
+  "9": {
+    title: "Comentados",
+    subtitle: "Sucesso no boca a boca",
+    modern: {
+      desde: 2008,
+      title: "Virais",
+      subtitle: "Sucesso nas redes sociais",
+    },
+  },
   "10": {
     title: "Profissionais",
     subtitle: "Vivem da música, turnês regionais",
@@ -64,7 +86,12 @@ export const FAME_LEVEL_DESCRIPTIONS: Record<string, FameLevelDescription> = {
   },
   "15": {
     title: "Sensações",
-    subtitle: "Trending topics e viralização global",
+    subtitle: "Febre nacional, do rádio à televisão",
+    modern: {
+      desde: 2010,
+      title: "Sensações",
+      subtitle: "Trending topics e viralização global",
+    },
   },
   "16": { title: "Estrelas", subtitle: "Colaborações com grandes nomes" },
   "17": { title: "Superastros", subtitle: "Lotam arenas e estádios" },

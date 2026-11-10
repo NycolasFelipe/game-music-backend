@@ -11,13 +11,15 @@ import type { BandEntity } from "@/modules/bands/domain/entities/band.entity";
 import { describeFame } from "@/modules/bands/domain/fame/fame.calculator";
 
 /**
- * Derives a band's fame view from its fan count.
+ * Derives a band's fame view from its fan count, with the level names of the
+ * band's year (ADR-0024).
  *
  * @param fanCount - The band's fan count.
+ * @param year - The band's current year.
  * @returns The fame view.
  */
-export function toFameView(fanCount: number): FameView {
-  return describeFame(fanCount);
+export function toFameView(fanCount: number, year: number): FameView {
+  return describeFame(fanCount, year);
 }
 
 /**
@@ -34,7 +36,7 @@ export function toBandView(band: BandEntity): BandView {
     origin: band.origin,
     foundationYear: band.foundationYear,
     fanCount: band.fanCount,
-    fame: toFameView(band.fanCount),
+    fame: toFameView(band.fanCount, band.currentYear),
     currentYear: band.currentYear,
     balance: band.balance,
     autoSalaryAdjust: band.autoSalaryAdjust,

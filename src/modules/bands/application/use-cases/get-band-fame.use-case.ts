@@ -32,6 +32,6 @@ export class GetBandFameUseCase {
       throw new NotFoundException("Band not found");
     }
 
-    return toFameView(band.fanCount);
+    return toFameView(band.fanCount, band.currentYear);
   }
 }

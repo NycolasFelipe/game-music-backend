@@ -95,6 +95,7 @@ export class ResolveActiveEventUseCase {
     const fameChange = computeFameProgress(
       band.band.fanCount,
       applied.fanCount,
+      band.band.currentYear,
     );
 
     const resolved = await this.activeEventsRepository.markResolved(

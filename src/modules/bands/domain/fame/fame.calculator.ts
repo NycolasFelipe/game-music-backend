@@ -66,18 +66,24 @@ export function getFameFanCountRange(fameLevel: number): FameFanCountRange {
 }
 
 /**
- * Returns the title/subtitle for a fame level, with a safe fallback.
+ * Returns the title/subtitle for a fame level in a given year, with a safe
+ * fallback. Levels that name something dated have an era-neutral text before
+ * `modern.desde` (ADR-0024).
  *
  * @param fameLevel - The fame level.
+ * @param year - The band's year; `null` reads as the present (modern text).
  * @returns The level's description.
  */
-export function getFameDescription(fameLevel: number): FameLevelDescription {
-  return (
-    FAME_LEVEL_DESCRIPTIONS[fameLevel.toString()] ?? {
-      title: "Desconhecido",
-      subtitle: "",
-    }
-  );
+export function getFameDescription(
+  fameLevel: number,
+  year: number | null = null,
+): FameLevelDescription {
+  const entry = FAME_LEVEL_DESCRIPTIONS[fameLevel.toString()];
+  if (!entry) return { title: "Desconhecido", subtitle: "" };
+  if (entry.modern && (year === null || year >= entry.modern.desde)) {
+    return { title: entry.modern.title, subtitle: entry.modern.subtitle };
+  }
+  return { title: entry.title, subtitle: entry.subtitle };
 }
 
 /** A fame level reached as a milestone (title/subtitle for that level). */
@@ -105,18 +111,20 @@ export interface FameProgress {
  *
  * @param previousFanCount - The fan count before the change.
  * @param newFanCount - The fan count after the change.
+ * @param year - The band's year, for era-bound level names (ADR-0024).
  * @returns The fame progression, with a milestone per level gained.
  */
 export function computeFameProgress(
   previousFanCount: number,
   newFanCount: number,
+  year: number | null = null,
 ): FameProgress {
   const previousLevel = calculateFameLevel(previousFanCount);
   const newLevel = calculateFameLevel(newFanCount);
   const milestones: FameMilestone[] = [];
 
   for (let level = previousLevel + 1; level <= newLevel; level += 1) {
-    const { title, subtitle } = getFameDescription(level);
+    const { title, subtitle } = getFameDescription(level, year);
     milestones.push({ level, title, subtitle });
   }
 
@@ -134,11 +142,15 @@ export function computeFameProgress(
  * progression bounds towards the next level.
  *
  * @param fanCount - The band's fan count.
+ * @param year - The band's year, for era-bound level names (ADR-0024).
  * @returns The described fame standing.
  */
-export function describeFame(fanCount: number): FameDescription {
+export function describeFame(
+  fanCount: number,
+  year: number | null = null,
+): FameDescription {
   const level = calculateFameLevel(fanCount);
-  const { title, subtitle } = getFameDescription(level);
+  const { title, subtitle } = getFameDescription(level, year);
   const range = getFameFanCountRange(level);
   const isMaxLevel = level >= MAX_FAME_LEVEL;
 

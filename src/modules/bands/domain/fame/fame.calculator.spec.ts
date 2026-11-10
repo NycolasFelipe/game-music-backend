@@ -2,6 +2,7 @@ import {
   calculateFameLevel,
   computeFameProgress,
   describeFame,
+  getFameDescription,
 } from "@/modules/bands/domain/fame/fame.calculator";
 
 describe("fame calculator", () => {
@@ -87,6 +88,34 @@ describe("fame calculator", () => {
       expect(progress.leveledUp).toBe(false);
       expect(progress.gainedLevels).toBe(0);
       expect(progress.milestones).toEqual([]);
+    });
+  });
+
+  describe("era-bound level names (ADR-0024)", () => {
+    it("keeps social media out of the 1980s", () => {
+      expect(getFameDescription(9, 1987)).toEqual({
+        title: "Comentados",
+        subtitle: "Sucesso no boca a boca",
+      });
+      expect(getFameDescription(9, 2008)).toEqual({
+        title: "Virais",
+        subtitle: "Sucesso nas redes sociais",
+      });
+    });
+
+    it("waits for blogs and trending topics", () => {
+      expect(getFameDescription(6, 1999).subtitle).not.toMatch(/blog/i);
+      expect(getFameDescription(6, 2000).subtitle).toMatch(/blogs/);
+      expect(getFameDescription(15, 2009).subtitle).not.toMatch(/Trending/);
+      expect(getFameDescription(15, 2010).subtitle).toMatch(/Trending/);
+    });
+
+    it("names the milestones of a level-up by the band's year", () => {
+      const progress = computeFameProgress(9000, 20000, 1987);
+      expect(progress.milestones).toEqual([
+        { level: 9, title: "Comentados", subtitle: "Sucesso no boca a boca" },
+      ]);
+      expect(describeFame(20000, 1987).title).toBe("Comentados");
     });
   });
 });
