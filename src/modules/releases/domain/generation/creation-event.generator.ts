@@ -222,13 +222,33 @@ function sideCost(
 }
 
 /**
- * Builds a "vision conflict" event between two members.
+ * Descriptions for siding with one member in a vision conflict, given the name
+ * of the member who loses. Each one says the same thing (the work gains
+ * direction, the loser sulks, the pair's relationship sours) in its own words,
+ * so the two side options never read as the same sentence with the names
+ * swapped.
+ */
+const SIDE_DESCRIPTIONS: readonly ((loser: string) => string)[] = [
+  (loser) =>
+    `O disco ganha rumo. ${loser} engole a derrota, toca o resto da sessão de cara fechada, e os dois param de se cumprimentar.`,
+  (loser) =>
+    `A gravação destrava na hora. ${loser} perde a queda de braço e vai citar esta sessão em toda briga daqui para a frente.`,
+  (loser) =>
+    `Alguém finalmente manda no disco. ${loser} aceita com um sorriso que não engana ninguém, e o clima entre os dois esfria mais um pouco.`,
+  (loser) =>
+    `A faixa anda, e o ego de ${loser} fica no chão do estúdio. A convivência dos dois, que já era frágil, perde mais uma camada.`,
+];
+
+/**
+ * Builds a "vision conflict" event between two members. The two side options
+ * draw distinct descriptions from {@link SIDE_DESCRIPTIONS}.
  *
  * @param a - The first member of the clashing pair.
  * @param b - The second member of the clashing pair.
  * @returns The event template.
  */
 function conflictEvent(a: EventSubject, b: EventSubject): EventTemplate {
+  const [describeSideA, describeSideB] = shuffle([...SIDE_DESCRIPTIONS]);
   return {
     kind: "conflito_visao",
     prompt: `${a.name} e ${b.name} brigam pela direção do disco. Os dois têm certeza, e só um pode ter razão.`,
@@ -236,14 +256,14 @@ function conflictEvent(a: EventSubject, b: EventSubject): EventTemplate {
       {
         id: "lado_a",
         label: `Ficar com a visão de ${a.name}`,
-        description: `Uma direção clara destrava a criação, mas ${b.name} perde a briga, e a relação dos dois piora. ${b.name} vai lembrar disso em todo ensaio.`,
+        description: describeSideA(b.name),
         effect: { type: "fixed", qualityModifier: 1.04 },
         cost: sideCost(b.id, a.id, b.id),
       },
       {
         id: "lado_b",
         label: `Ficar com a visão de ${b.name}`,
-        description: `Uma direção clara destrava a criação, mas ${a.name} perde a briga, e a relação dos dois piora. ${a.name} vai lembrar disso em todo ensaio.`,
+        description: describeSideB(a.name),
         effect: { type: "fixed", qualityModifier: 1.04 },
         cost: sideCost(a.id, a.id, b.id),
       },

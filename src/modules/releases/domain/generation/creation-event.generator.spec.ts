@@ -107,6 +107,25 @@ describe("creation-event.generator", () => {
     expect(middle?.cost).toBeUndefined();
   });
 
+  it("describes each side of a vision conflict in its own words, naming the loser once", () => {
+    for (let run = 0; run < 50; run += 1) {
+      const events = generateCreationEvents(
+        [member("m1", "Ana"), member("m2", "Bia")],
+        [{ memberAId: "m1", memberBId: "m2", level: -3 }],
+      );
+      const conflict = events.find((e) => e.kind === "conflito_visao");
+      const sideA = conflict?.options.find((o) => o.id === "lado_a");
+      const sideB = conflict?.options.find((o) => o.id === "lado_b");
+      const neutral = (text = "") => text.replace(/Ana|Bia/g, "X");
+
+      expect(neutral(sideA?.description)).not.toBe(neutral(sideB?.description));
+      expect(sideA?.description.match(/Bia/g)).toHaveLength(1);
+      expect(sideA?.description).not.toContain("Ana");
+      expect(sideB?.description.match(/Ana/g)).toHaveLength(1);
+      expect(sideB?.description).not.toContain("Bia");
+    }
+  });
+
   it("caps the number of events at the maximum", () => {
     const events = generateCreationEvents(
       [
