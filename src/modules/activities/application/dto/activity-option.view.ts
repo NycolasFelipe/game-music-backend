@@ -35,5 +35,10 @@ export class ActivityOptionsView {
   hostilityRisk: number;
   /** Ceiling the composed risk never crosses. */
   troubleChanceMax: number;
+  /**
+   * Highest relationship level an activity can lift a pair to (ADR-0029), so
+   * the client can say the gain stops there.
+   */
+  relationshipCap: number;
   activities: ActivityOptionView[];
 }

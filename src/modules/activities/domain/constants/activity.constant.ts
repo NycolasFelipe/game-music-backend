@@ -18,5 +18,12 @@ export const ACTIVITY_FAME_COST_STEP = 0.06;
  */
 export const ACTIVITY_HOSTILITY_RISK = 0.06;
 
+/**
+ * Highest relationship level an activity can lift a pair to (ADR-0029). The
+ * last two levels come only from events; a pair already above it keeps its
+ * level.
+ */
+export const ACTIVITY_RELATIONSHIP_CAP = 3;
+
 /** Upper bound for the chance of an activity going wrong. */
 export const ACTIVITY_TROUBLE_CHANCE_MAX = 0.8;

@@ -7,6 +7,7 @@ import {
 } from "@/modules/activities/domain/activity/activity.calculator";
 import {
   ACTIVITY_HOSTILITY_RISK,
+  ACTIVITY_RELATIONSHIP_CAP,
   ACTIVITY_TROUBLE_CHANCE_MAX,
 } from "@/modules/activities/domain/constants/activity.constant";
 import { ACTIVITIES } from "@/modules/activities/domain/data/activities";
@@ -62,6 +63,7 @@ export class ListActivityOptionsUseCase {
       nextSaturation: saturationFactor(heldThisTurn),
       hostilityRisk: ACTIVITY_HOSTILITY_RISK,
       troubleChanceMax: ACTIVITY_TROUBLE_CHANCE_MAX,
+      relationshipCap: ACTIVITY_RELATIONSHIP_CAP,
       activities: ACTIVITIES.map((activity) => {
         const costs: Array<{ participants: number; cost: number }> = [];
         for (

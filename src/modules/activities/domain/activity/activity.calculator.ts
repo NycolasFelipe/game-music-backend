@@ -1,6 +1,7 @@
 import {
   ACTIVITY_FAME_COST_STEP,
   ACTIVITY_HOSTILITY_RISK,
+  ACTIVITY_RELATIONSHIP_CAP,
   ACTIVITY_SATURATION_FACTORS,
   ACTIVITY_TROUBLE_CHANCE_MAX,
 } from "@/modules/activities/domain/constants/activity.constant";
@@ -72,6 +73,24 @@ export interface ActivityEvaluation {
 /** Clamps a value to `[min, max]`. */
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
+}
+
+/**
+ * Lifts a pair's relationship by an activity's gain, up to
+ * {@link ACTIVITY_RELATIONSHIP_CAP} (ADR-0029). A pair that events already
+ * took above the cap keeps its level: the night does not cool a friendship.
+ *
+ * @param level - The pair's current level.
+ * @param delta - The activity's (diluted) relationship gain.
+ * @returns The level after the activity.
+ */
+function liftedLevel(level: number, delta: number): number {
+  if (level >= ACTIVITY_RELATIONSHIP_CAP) return level;
+  return clamp(
+    Math.min(level + delta, ACTIVITY_RELATIONSHIP_CAP),
+    RELATIONSHIP_LEVEL_MIN,
+    RELATIONSHIP_LEVEL_MAX,
+  );
 }
 
 /** Rounds to two decimals (happiness precision). */
@@ -182,11 +201,7 @@ export function evaluateActivity(
     relationshipLevels: involved.map((relationship) => ({
       memberAId: relationship.memberAId,
       memberBId: relationship.memberBId,
-      level: clamp(
-        relationship.level + relationshipDelta,
-        RELATIONSHIP_LEVEL_MIN,
-        RELATIONSHIP_LEVEL_MAX,
-      ),
+      level: liftedLevel(relationship.level, relationshipDelta),
     })),
     weakestPair: weakestPair
       ? {

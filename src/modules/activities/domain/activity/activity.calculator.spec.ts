@@ -4,6 +4,7 @@ import {
   saturationFactor,
   troubleChance,
 } from "@/modules/activities/domain/activity/activity.calculator";
+import { ACTIVITY_RELATIONSHIP_CAP } from "@/modules/activities/domain/constants/activity.constant";
 import type { Activity } from "@/modules/activities/domain/data/activities";
 
 const activity: Activity = {
@@ -133,7 +134,7 @@ describe("evaluateActivity", () => {
     ]);
   });
 
-  it("clamps happiness and relationships at their bounds", () => {
+  it("clamps happiness at its bound and relationships at the activity cap (ADR-0029)", () => {
     const result = evaluateActivity({
       activity: { ...activity, happinessGain: 3, relationshipGain: 5 },
       participants: [guest("a", 4), guest("c", 0)],
@@ -143,6 +144,33 @@ describe("evaluateActivity", () => {
     });
 
     expect(result.memberHappiness[0].happiness).toBe(5);
+    expect(result.relationshipLevels).toEqual([
+      { memberAId: "a", memberBId: "c", level: ACTIVITY_RELATIONSHIP_CAP },
+    ]);
+  });
+
+  it("stops at the cap even when the gain would pass it", () => {
+    const result = evaluateActivity({
+      activity,
+      participants: [guest("a"), guest("c")],
+      relationships,
+      fameLevel: 0,
+      heldThisTurn: 0,
+    });
+    // 2 + 2 = 4, held at 3.
+    expect(result.relationshipLevels).toEqual([
+      { memberAId: "a", memberBId: "c", level: 3 },
+    ]);
+  });
+
+  it("keeps a pair that events took above the cap where it is", () => {
+    const result = evaluateActivity({
+      activity,
+      participants: [guest("a"), guest("c")],
+      relationships: [{ memberAId: "a", memberBId: "c", level: 5 }],
+      fameLevel: 0,
+      heldThisTurn: 0,
+    });
     expect(result.relationshipLevels).toEqual([
       { memberAId: "a", memberBId: "c", level: 5 },
     ]);
