@@ -25,18 +25,34 @@ describe("AccrueReleaseRoyaltiesUseCase", () => {
 
   it("returns 0 and writes nothing when no releases are earning", async () => {
     releasesRepository.findActiveRoyaltyReleases.mockResolvedValue([]);
-    expect(await useCase.execute("band-1")).toBe(0);
+    expect(await useCase.execute("band-1")).toEqual({ total: 0, payouts: [] });
     expect(releasesRepository.applyRoyaltyPayout).not.toHaveBeenCalled();
   });
 
   it("pays a decaying share and decrements the tail", async () => {
     releasesRepository.findActiveRoyaltyReleases.mockResolvedValue([
-      { id: "rel-1", royaltyRemaining: 1000, royaltyTurnsLeft: 4 },
+      {
+        id: "rel-1",
+        title: "Disco",
+        royaltyRemaining: 1000,
+        royaltyTurnsLeft: 4,
+      },
     ]);
 
     const credited = await useCase.execute("band-1");
 
-    expect(credited).toBe(500);
+    expect(credited).toEqual({
+      total: 500,
+      payouts: [
+        {
+          releaseId: "rel-1",
+          title: "Disco",
+          amount: 500,
+          turnsLeft: 3,
+          remaining: 500,
+        },
+      ],
+    });
     expect(releasesRepository.applyRoyaltyPayout).toHaveBeenCalledWith(
       "rel-1",
       {
@@ -53,7 +69,8 @@ describe("AccrueReleaseRoyaltiesUseCase", () => {
 
     const credited = await useCase.execute("band-1");
 
-    expect(credited).toBe(250);
+    expect(credited.total).toBe(250);
+    expect(credited.payouts[0]).toMatchObject({ turnsLeft: 0, remaining: 0 });
     expect(releasesRepository.applyRoyaltyPayout).toHaveBeenCalledWith(
       "rel-1",
       {
@@ -63,13 +80,24 @@ describe("AccrueReleaseRoyaltiesUseCase", () => {
     );
   });
 
+  it("leaves releases with nothing to pay out of the breakdown", async () => {
+    releasesRepository.findActiveRoyaltyReleases.mockResolvedValue([
+      { id: "rel-1", royaltyRemaining: 0, royaltyTurnsLeft: 2 },
+    ]);
+
+    expect(await useCase.execute("band-1")).toEqual({ total: 0, payouts: [] });
+    expect(releasesRepository.applyRoyaltyPayout).not.toHaveBeenCalled();
+  });
+
   it("sums payouts across multiple releases", async () => {
     releasesRepository.findActiveRoyaltyReleases.mockResolvedValue([
       { id: "rel-1", royaltyRemaining: 1000, royaltyTurnsLeft: 4 },
       { id: "rel-2", royaltyRemaining: 200, royaltyTurnsLeft: 1 },
     ]);
 
-    expect(await useCase.execute("band-1")).toBe(700);
+    const credited = await useCase.execute("band-1");
+    expect(credited.total).toBe(700);
+    expect(credited.payouts.map((p) => p.amount)).toEqual([500, 200]);
     expect(releasesRepository.applyRoyaltyPayout).toHaveBeenCalledTimes(2);
   });
 });

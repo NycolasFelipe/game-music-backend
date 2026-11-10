@@ -54,6 +54,20 @@ export class TurnsTypeormRepository implements TurnsRepository {
   }
 
   /**
+   * Finds a band's most recently recorded turn (ADR-0020).
+   *
+   * @param bandId - The band id.
+   * @returns The latest turn, or `null` when the band has no turns yet.
+   */
+  async findLatestByBandId(bandId: string): Promise<TurnEntity | null> {
+    const orm = await this.repository.findOne({
+      where: { bandId },
+      order: { createdAt: "DESC" },
+    });
+    return orm ? this.toDomain(orm) : null;
+  }
+
+  /**
    * Maps a raw ORM record to a clean domain entity.
    *
    * @param orm - The persistence model.

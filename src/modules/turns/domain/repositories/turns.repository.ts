@@ -34,4 +34,12 @@ export interface TurnsRepository {
    * @returns The band's recorded turns.
    */
   findByBandId(bandId: string): Promise<TurnEntity[]>;
+
+  /**
+   * Finds a band's most recently recorded turn (ADR-0020).
+   *
+   * @param bandId - The band id.
+   * @returns The latest turn, or `null` when the band has no turns yet.
+   */
+  findLatestByBandId(bandId: string): Promise<TurnEntity | null>;
 }

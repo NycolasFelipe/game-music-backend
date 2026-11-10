@@ -28,7 +28,7 @@ describe("AdvanceTurnUseCase", () => {
   };
   let activeEventsRepository: { countUnresolved: jest.Mock };
   let releasesRepository: { countPendingCreationEventsByBand: jest.Mock };
-  let turnsRepository: { create: jest.Mock };
+  let turnsRepository: { create: jest.Mock; findLatestByBandId: jest.Mock };
   let generatePassiveEvents: { execute: jest.Mock };
   let generateActiveEvent: { execute: jest.Mock };
   let accrueReleaseRoyalties: { execute: jest.Mock };
@@ -38,6 +38,8 @@ describe("AdvanceTurnUseCase", () => {
   let archiveMemberDepartures: { execute: jest.Mock };
   let recordMemberDepartures: { execute: jest.Mock };
   let randomSpy: jest.SpyInstance;
+
+  const noRoyalties = { total: 0, payouts: [] };
 
   const emptyPayroll = {
     totalDue: 0,
@@ -63,10 +65,13 @@ describe("AdvanceTurnUseCase", () => {
     };
     turnsRepository = {
       create: jest.fn().mockImplementation((data: unknown) => data),
+      findLatestByBandId: jest.fn().mockResolvedValue(null),
     };
     generatePassiveEvents = { execute: jest.fn().mockResolvedValue([]) };
     generateActiveEvent = { execute: jest.fn().mockResolvedValue(null) };
-    accrueReleaseRoyalties = { execute: jest.fn().mockResolvedValue(0) };
+    accrueReleaseRoyalties = {
+      execute: jest.fn().mockResolvedValue(noRoyalties),
+    };
     advanceReleaseProduction = { execute: jest.fn().mockResolvedValue(null) };
     autoAdjustSalaries = { execute: jest.fn().mockResolvedValue([]) };
     paySalaries = { execute: jest.fn().mockResolvedValue(emptyPayroll) };
@@ -227,7 +232,10 @@ describe("AdvanceTurnUseCase", () => {
       fanCount: 10,
       balance: 1000,
     });
-    accrueReleaseRoyalties.execute.mockResolvedValue(250.5);
+    accrueReleaseRoyalties.execute.mockResolvedValue({
+      total: 250.5,
+      payouts: [],
+    });
     randomSpy.mockReturnValue(0.9);
 
     await useCase.execute(actor, BAND_ID);
@@ -252,7 +260,7 @@ describe("AdvanceTurnUseCase", () => {
       fanCount: 10,
       balance: 1000,
     });
-    accrueReleaseRoyalties.execute.mockResolvedValue(0);
+    accrueReleaseRoyalties.execute.mockResolvedValue(noRoyalties);
     paySalaries.execute.mockResolvedValue({
       totalDue: 700,
       totalPaid: 0,
@@ -405,7 +413,10 @@ describe("AdvanceTurnUseCase", () => {
       balance: 1000,
       autoSalaryAdjust: true,
     });
-    accrueReleaseRoyalties.execute.mockResolvedValue(500);
+    accrueReleaseRoyalties.execute.mockResolvedValue({
+      total: 500,
+      payouts: [],
+    });
     autoAdjustSalaries.execute.mockResolvedValue([
       { memberId: "m-1", name: "Ana", from: 400, to: 460 },
     ]);
@@ -423,5 +434,83 @@ describe("AdvanceTurnUseCase", () => {
     expect(result.salaryRaises).toEqual([
       { memberId: "m-1", name: "Ana", from: 400, to: 460 },
     ]);
+  });
+
+  it("reports the turn's money: cash before/after, royalties per release and salaries", async () => {
+    bandsRepository.findByIdAndOwner.mockResolvedValue({
+      id: BAND_ID,
+      currentYear: 2003,
+      fanCount: 900,
+      balance: 1000,
+    });
+    const payout = {
+      releaseId: "rel-1",
+      title: "Disco",
+      amount: 600,
+      turnsLeft: 4,
+      remaining: 600,
+    };
+    accrueReleaseRoyalties.execute.mockResolvedValue({
+      total: 600,
+      payouts: [payout],
+    });
+    paySalaries.execute.mockResolvedValue({
+      ...emptyPayroll,
+      totalDue: 400,
+      totalPaid: 400,
+    });
+    randomSpy.mockReturnValue(0.9);
+
+    const result = await useCase.execute(actor, BAND_ID);
+
+    expect(result.report).toEqual({
+      balanceBefore: 1000,
+      royalties: 600,
+      royaltyPayouts: [payout],
+      salariesPaid: 400,
+      balanceAfter: 1200,
+      fanCount: 900,
+      sinceLastTurn: null,
+    });
+  });
+
+  it("reports the change since the previous turn closed", async () => {
+    bandsRepository.findByIdAndOwner.mockResolvedValue({
+      id: BAND_ID,
+      currentYear: 2003,
+      fanCount: 900,
+      balance: 1000,
+    });
+    turnsRepository.findLatestByBandId.mockResolvedValue({
+      balanceSnapshot: 700,
+      fanCountSnapshot: 400,
+    });
+    randomSpy.mockReturnValue(0.9);
+
+    const result = await useCase.execute(actor, BAND_ID);
+
+    expect(turnsRepository.findLatestByBandId).toHaveBeenCalledWith(BAND_ID);
+    expect(result.report.sinceLastTurn).toEqual({
+      balanceDelta: 300,
+      fanCountDelta: 500,
+    });
+  });
+
+  it("omits the change when the previous turn has no balance snapshot", async () => {
+    bandsRepository.findByIdAndOwner.mockResolvedValue({
+      id: BAND_ID,
+      currentYear: 2003,
+      fanCount: 900,
+      balance: 1000,
+    });
+    turnsRepository.findLatestByBandId.mockResolvedValue({
+      balanceSnapshot: null,
+      fanCountSnapshot: 400,
+    });
+    randomSpy.mockReturnValue(0.9);
+
+    const result = await useCase.execute(actor, BAND_ID);
+
+    expect(result.report.sinceLastTurn).toBeNull();
   });
 });

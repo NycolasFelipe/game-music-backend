@@ -22,9 +22,16 @@ export function ApiAdvanceTurn() {
       description:
         "Runs the turn tick: generates a passive event, ages members on a " +
         "calendar-year rollover, may roll a blocking active event, and records " +
-        "the turn. Refused while the band has unresolved active events.",
+        "the turn. Refused while the band has unresolved active events. " +
+        "The `report` field explains the turn's money (ADR-0020): cash " +
+        "before and after the tick, royalties per release, salaries paid " +
+        "and the change in cash and fans since the previous turn.",
     }),
-    ApiOkResponse({ description: "The new clock and any events produced." }),
+    ApiOkResponse({
+      description:
+        "The new clock, any events produced and the turn report " +
+        "(`balanceAfter = balanceBefore + royalties - salariesPaid`).",
+    }),
     ApiNotFoundResponse({ description: "Band not found for this owner." }),
     ApiConflictResponse({
       description: "The band has unresolved active events.",

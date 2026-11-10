@@ -22,11 +22,13 @@ import { AdvanceReleaseProductionUseCase } from "@/modules/releases/application/
 import { RELEASES_REPOSITORY } from "@/modules/releases/domain/repositories/releases.repository";
 import type { ReleasesRepository } from "@/modules/releases/domain/repositories/releases.repository";
 import { AdvanceTurnView } from "@/modules/turns/application/dto/advance-turn.view";
+import type { TurnDeltaView } from "@/modules/turns/application/dto/turn-delta.view";
 import { formatPeriod } from "@/modules/turns/application/mappers/turn.mapper";
 import {
   ACTIVE_EVENT_CHANCE,
   TURN_STEP,
 } from "@/modules/turns/domain/constants/turn.constant";
+import type { TurnEntity } from "@/modules/turns/domain/entities/turn.entity";
 import { TURNS_REPOSITORY } from "@/modules/turns/domain/repositories/turns.repository";
 import type { TurnsRepository } from "@/modules/turns/domain/repositories/turns.repository";
 
@@ -64,6 +66,11 @@ export class AdvanceTurnUseCase {
   /**
    * Runs a single turn advance for a band owned by the actor.
    *
+   * Besides the tick itself, the result carries a turn report (ADR-0020): the
+   * cash before and after the tick, the royalties per release, the salaries
+   * paid, and the change in cash and fans since the previous turn closed (taken
+   * from that turn's snapshot, so it includes the player's actions).
+   *
    * @param actor - The authenticated owner.
    * @param bandId - The band id.
    * @returns The new clock and any events produced this turn.
@@ -98,6 +105,7 @@ export class AdvanceTurnUseCase {
       );
     }
 
+    const previousTurn = await this.turnsRepository.findLatestByBandId(bandId);
     const previousYear = band.currentYear;
     const newYear = previousYear + TURN_STEP;
     const agedMembers = Math.floor(newYear) !== Math.floor(previousYear);
@@ -129,7 +137,8 @@ export class AdvanceTurnUseCase {
     // member departures over unpaid salary are the band-state the tick moves
     // (ADR-0008 + ADR-0010 emendas to ADR-0006 §6); fans and relationships still
     // only change via event resolution.
-    const royalties = await this.accrueReleaseRoyalties.execute(bandId);
+    const accrual = await this.accrueReleaseRoyalties.execute(bandId);
+    const royalties = accrual.total;
     const cashBeforePayroll =
       Math.round((band.balance + royalties) * 100) / 100;
 
@@ -244,6 +253,43 @@ export class AdvanceTurnUseCase {
       production,
       departures,
       atRiskMemberIds,
+      report: {
+        balanceBefore: band.balance,
+        royalties,
+        royaltyPayouts: accrual.payouts,
+        salariesPaid: payroll.totalPaid,
+        balanceAfter,
+        fanCount: band.fanCount,
+        sinceLastTurn: this.sinceLastTurn(
+          previousTurn,
+          balanceAfter,
+          band.fanCount,
+        ),
+      },
+    };
+  }
+
+  /**
+   * Computes the change since the previous turn closed (ADR-0020).
+   *
+   * @param previousTurn - The band's latest turn before this one, if any.
+   * @param balanceAfter - The cash after this tick.
+   * @param fanCount - The fans after this tick.
+   * @returns The deltas, or `null` on the first turn or when the previous turn
+   *   has no balance snapshot.
+   */
+  private sinceLastTurn(
+    previousTurn: TurnEntity | null,
+    balanceAfter: number,
+    fanCount: number,
+  ): TurnDeltaView | null {
+    if (!previousTurn || previousTurn.balanceSnapshot === null) {
+      return null;
+    }
+    return {
+      balanceDelta:
+        Math.round((balanceAfter - previousTurn.balanceSnapshot) * 100) / 100,
+      fanCountDelta: fanCount - previousTurn.fanCountSnapshot,
     };
   }
 

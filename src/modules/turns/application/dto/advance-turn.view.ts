@@ -3,6 +3,7 @@ import type { ActiveEventView } from "@/modules/events/application/dto/active-ev
 import type { PassiveEventView } from "@/modules/events/application/dto/passive-event.view";
 import type { ReleaseProductionView } from "@/modules/releases/application/dto/release-production.view";
 import type { SalaryRaiseView } from "@/modules/turns/application/dto/salary-raise.view";
+import type { TurnReportView } from "@/modules/turns/application/dto/turn-report.view";
 
 /**
  * Result of advancing a turn: the new clock plus anything the tick produced.
@@ -43,4 +44,10 @@ export class AdvanceTurnView {
    * without a turn count — the exact deadline is hidden from the player.
    */
   atRiskMemberIds: string[];
+  /**
+   * Money and fans of the turn, explained (ADR-0020): cash before and after the
+   * tick, royalties per release, salaries paid and the change since the
+   * previous turn.
+   */
+  report: TurnReportView;
 }
