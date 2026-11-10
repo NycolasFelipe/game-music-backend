@@ -36,6 +36,7 @@ crie uma nova ADR que a substitua (`Supersedes`/`Superseded by`).
 | [0020](0020-relatorio-do-turno.md) | Relatório do turno (dinheiro e fãs explicados) | Aceita |
 | [0021](0021-humor-do-show-relativo-a-casa.md) | Humor do show relativo ao que a casa espera | Aceita |
 | [0022](0022-painel-do-turno.md) | Painel do turno (pendências, prévias e previsão) | Aceita |
+| [0023](0023-aparencia-dos-integrantes-e-cenario-da-banda.md) | Aparência dos integrantes e cenário da foto da banda | Aceita |
 
 ## Veja também
 - [Trabalho futuro](../future-work.md) — backlog de ideias de gameplay ainda não
