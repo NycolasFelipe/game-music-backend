@@ -32,6 +32,7 @@ const maxed = (id: string, happiness = 0): GigMemberInput =>
 
 const bar = findGigType("bar")!;
 const covers = findGigType("covers")!;
+const casa = findGigType("casa-shows")!;
 
 describe("stageSkill", () => {
   it("scores a band maxed on every stage skill at 1", () => {
@@ -128,6 +129,45 @@ describe("evaluateGig", () => {
     });
 
     expect(result.memberHappiness[0].happiness).toBeGreaterThanOrEqual(-5);
+  });
+
+  describe("mood against the circuit's expectation (ADR-0021)", () => {
+    // vocal 5 → stage skill 0.15, exactly what a bar expects.
+    const mediocre = member("m1", { vocal: 5 });
+
+    it("leaves a mediocre season close to neutral (only the light wear)", () => {
+      const result = evaluateGig({
+        gigType: bar,
+        members: [mediocre],
+        currentFans: 0,
+      });
+
+      expect(result.performance).toBeCloseTo(bar.expectedPerformance, 5);
+      expect(result.happinessDelta).toBeCloseTo(-bar.wear, 5);
+      expect(Math.abs(result.happinessDelta)).toBeLessThan(0.05);
+    });
+
+    it("wears the band down on a circuit above its level", () => {
+      const result = evaluateGig({
+        gigType: casa,
+        members: [mediocre],
+        currentFans: 0,
+      });
+
+      // -0.09 wear + (0.15 - 0.25) × 3
+      expect(result.happinessDelta).toBeCloseTo(-0.39, 2);
+    });
+
+    it("lifts the band when it outplays the circuit", () => {
+      const result = evaluateGig({
+        gigType: bar,
+        members: [member("m1", { vocal: 10, guitar: 4 })],
+        currentFans: 0,
+      });
+
+      // performance 0.4: -0.03 wear + (0.4 - 0.15) × 3
+      expect(result.happinessDelta).toBeCloseTo(0.72, 2);
+    });
   });
 
   it("applies the caller's variance instead of rolling its own", () => {

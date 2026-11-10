@@ -21,7 +21,8 @@ export function ApiListGigTypes() {
   return applyDecorators(
     ApiBearerAuth(),
     ApiOperation({
-      summary: "List the live circuits (fame gate, fee, cost, fans)",
+      summary:
+        "List the live circuits (fame gate, fee, cost, fans, wear, expected performance)",
     }),
     ApiOkResponse({ description: "The live-circuit catalog." }),
   );

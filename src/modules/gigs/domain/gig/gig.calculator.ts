@@ -141,9 +141,11 @@ export function evaluateGig(input: GigEvaluationInput): GigEvaluation {
       draw,
   );
 
-  // A dull season wears the band down; a great one pays the wear back.
+  // Judged against what the circuit expects (ADR-0021): a mediocre season is
+  // close to neutral, a weak one wears the band down, a strong one lifts it.
   const happinessDelta = round2(
-    -input.gigType.wear + (performance - 0.5) * GIG_TRIUMPH_SWING,
+    -input.gigType.wear +
+      (performance - input.gigType.expectedPerformance) * GIG_TRIUMPH_SWING,
   );
 
   return {

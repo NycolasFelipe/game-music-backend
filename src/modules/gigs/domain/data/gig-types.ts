@@ -29,8 +29,14 @@ export interface GigType {
   cost: number;
   /** Base new fans for the season, before performance and draw. */
   baseFans: number;
-  /** Happiness the season's grind takes from every member. */
+  /** Happiness the season's grind takes from every member (ADR-0021). */
   wear: number;
+  /**
+   * Performance this circuit expects (0..1). A season at this level is
+   * "mediocre" and leaves the mood as the wear alone sets it; above it the band
+   * comes out lifted, below it worn down (ADR-0021).
+   */
+  expectedPerformance: number;
   /**
    * How much of the audience becomes the band's **own** fans. Covers nights pay
    * well but build almost nothing: it is someone else's music.
@@ -49,7 +55,8 @@ export const GIG_TYPES: GigType[] = [
     baseFee: 600,
     cost: 80,
     baseFans: 8,
-    wear: 0.15,
+    wear: 0.045,
+    expectedPerformance: 0.15,
     ownFansMultiplier: 0.3,
   },
   {
@@ -61,7 +68,8 @@ export const GIG_TYPES: GigType[] = [
     baseFee: 450,
     cost: 60,
     baseFans: 40,
-    wear: 0.1,
+    wear: 0.03,
+    expectedPerformance: 0.15,
     ownFansMultiplier: 1,
   },
   {
@@ -73,7 +81,8 @@ export const GIG_TYPES: GigType[] = [
     baseFee: 1200,
     cost: 250,
     baseFans: 180,
-    wear: 0.2,
+    wear: 0.06,
+    expectedPerformance: 0.18,
     ownFansMultiplier: 1,
   },
   {
@@ -85,7 +94,8 @@ export const GIG_TYPES: GigType[] = [
     baseFee: 4000,
     cost: 900,
     baseFans: 900,
-    wear: 0.3,
+    wear: 0.09,
+    expectedPerformance: 0.25,
     ownFansMultiplier: 1,
   },
   {
@@ -97,7 +107,8 @@ export const GIG_TYPES: GigType[] = [
     baseFee: 15000,
     cost: 3500,
     baseFans: 6000,
-    wear: 0.5,
+    wear: 0.15,
+    expectedPerformance: 0.35,
     ownFansMultiplier: 1,
   },
 ];

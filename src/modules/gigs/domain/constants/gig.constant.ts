@@ -36,10 +36,11 @@ export const GIG_FAME_WEIGHT = 0.2;
 export const GIG_VARIANCE = 0.1;
 
 /**
- * How far a great (or dull) season swings the band's mood on top of the
- * circuit's wear: at a perfect performance it adds half of this.
+ * How far a season above (or below) the circuit's expected performance swings
+ * the band's mood on top of the wear: each 0.1 of performance over the
+ * expectation adds 0.3 happiness (ADR-0021).
  */
-export const GIG_TRIUMPH_SWING = 0.6;
+export const GIG_TRIUMPH_SWING = 3;
 
 /**
  * Learning weight of a live season, fed into the release growth curve
