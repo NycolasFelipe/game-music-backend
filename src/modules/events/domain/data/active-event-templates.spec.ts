@@ -61,7 +61,7 @@ const PHASES: CoveragePhase[] = [
     minFans: 100001,
     maxFans: 2000000,
     target: 15,
-    enforced: false,
+    enforced: true,
   },
 ];
 
