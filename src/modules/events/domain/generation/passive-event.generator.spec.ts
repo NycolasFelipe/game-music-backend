@@ -72,7 +72,7 @@ describe("generatePassiveEvent", () => {
     ).filter((e) => e !== null && e.type === "aposentadoria");
     expect(retirements.length).toBeGreaterThan(0);
     for (const e of retirements) {
-      expect(e!.description).toMatch(/após \d+ anos? de carreira\.$/);
+      expect(e!.description).toMatch(/após \d+ anos? de carreira\./);
     }
   });
 

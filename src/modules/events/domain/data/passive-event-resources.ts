@@ -44,10 +44,10 @@ export const TOUR_NAMES = [
 
 export const CANCELLATION_REASONS = [
   "problemas de saúde",
-  "questões logísticas",
+  "questões logísticas, segundo um comunicado de duas linhas",
   "condições climáticas adversas",
-  "problemas técnicos",
-  "conflitos de agenda",
+  "problemas técnicos que ninguém soube explicar",
+  "um conflito de agenda descoberto na véspera",
   "recomendação médica",
 ];
 
@@ -63,19 +63,38 @@ export const PUBLIC_REVIEWS: Record<
   DatedPhrase[]
 > = {
   positivas: [
-    { text: "O público adorou a nova música!" },
-    { text: "A música rapidamente se tornou um hit nas rádios." },
-    { text: "Críticos elogiaram a colaboração inovadora." },
-    { text: "A música viralizou nas redes sociais.", desde: 2010 },
+    {
+      text: "O público adora, e as rádios tocam a música até ninguém aguentar mais.",
+    },
+    {
+      text: "Em uma semana, a música está em todas as rádios, inclusive nas que juravam não tocar esse tipo de coisa.",
+    },
+    {
+      text: 'A crítica elogia a parceria "inovadora", palavra que usa uma vez por mês.',
+    },
+    {
+      text: "A música viraliza nas redes sociais, quase sempre acompanhada de uma dancinha que os artistas fingem aprovar.",
+      desde: 2010,
+    },
   ],
   neutras: [
-    { text: "A recepção do público foi mista." },
-    { text: "A música não impressionou, mas também não desagradou." },
-    { text: "Alguns fãs gostaram, outros não viram graça." },
+    {
+      text: "A recepção é mista: metade do público gosta, a outra metade ainda está tentando entender.",
+    },
+    {
+      text: "A música não impressiona nem desagrada, o que no rádio é quase um elogio.",
+    },
+    { text: "Alguns fãs gostam; outros escrevem cartas." },
   ],
   negativas: [
-    { text: "Infelizmente não foi recebido com muito carinho pelo público." },
-    { text: "A música foi mal recebida pelos fãs mais antigos." },
-    { text: "Críticos consideraram a colaboração forçada." },
+    {
+      text: "O público recebe a música com a frieza reservada a jingles de banco.",
+    },
+    {
+      text: "Os fãs mais antigos detestam, e fazem questão de explicar por quê.",
+    },
+    {
+      text: "A crítica chama a parceria de forçada, e a parceria parece concordar.",
+    },
   ],
 };

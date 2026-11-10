@@ -12,7 +12,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 2,
     compatibilidade: ["ambos_ativos"],
     template:
-      "{artista1} surpreende e lança single com {artista2} - {nome_single}. {avaliacao}",
+      '{artista1} lança single com {artista2}, "{nome_single}". As gravadoras dos dois juram que a parceria foi ideia artística. {avaliacao}',
   },
   {
     id: "pe-02",
@@ -20,7 +20,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 2,
     compatibilidade: ["solo_ativos"],
     template:
-      "{artista1} foi visto em um restaurante com {artista2} - fãs especulam possível namoro.",
+      "{artista1} é visto(a) jantando com {artista2}, e as revistas de fofoca já marcaram o casamento. Os dois só dividiram a conta.",
   },
   {
     id: "pe-03",
@@ -28,7 +28,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 2,
     compatibilidade: ["ambos_ativos"],
     template:
-      "{artista1} e {artista2} anunciam turnê conjunta - '{nome_turne}'.",
+      '{artista1} e {artista2} anunciam a turnê conjunta "{nome_turne}". Os empresários dos dois já brigam pela ordem dos nomes no cartaz.',
   },
   {
     id: "pe-04",
@@ -36,7 +36,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
     template:
-      "{artista} cancela show no último minuto devido a {motivo}. Fãs ficam desapontados.",
+      '{artista} cancela show no último minuto devido a {motivo}. A produção promete devolver o dinheiro "em breve", e os fãs já sabem quanto dura um "em breve".',
   },
   {
     id: "pe-05",
@@ -44,7 +44,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["ativo_recente"],
     template:
-      "{artista} lança álbum surpresa - '{nome_album}' - e quebra recordes de streaming.",
+      '{artista} lança de surpresa o álbum "{nome_album}" e quebra recordes de streaming. A surpresa foi planejada por oito meses.',
     desde: 2010,
   },
   {
@@ -53,7 +53,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 2,
     compatibilidade: ["ambos_ativos"],
     template:
-      "Polêmica: {artista1} critica publicamente {artista2} durante entrevista.",
+      "Polêmica: {artista1} critica {artista2} numa entrevista, coincidentemente na semana de lançamento do próprio disco.",
   },
   {
     id: "pe-07",
@@ -61,14 +61,15 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["carreira_longa"],
     template:
-      "{artista} anuncia aposentadoria dos palcos após {anos} anos de carreira.",
+      "{artista} anuncia aposentadoria dos palcos após {anos} anos de carreira. A turnê de despedida tem, por enquanto, três anos de datas.",
   },
   {
     id: "pe-08",
     type: "retorno_hiato",
     requiredArtists: 1,
     compatibilidade: ["bandas"],
-    template: "{banda} anuncia retorno aos palcos após hiato.",
+    template:
+      "{banda} anuncia a volta aos palcos depois do hiato. Os integrantes garantem que não é pelo dinheiro, e os ingressos custam o dobro.",
   },
   {
     id: "pe-09",
@@ -76,7 +77,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 2,
     compatibilidade: ["ambos_ativos"],
     template:
-      "{artista1} e {artista2} são flagrados discutindo nos bastidores de festival de música.",
+      '{artista1} e {artista2} são flagrados discutindo nos bastidores de um festival. As assessorias falam em "troca de ideias".',
   },
   {
     id: "pe-10",
@@ -93,7 +94,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 2,
     compatibilidade: ["ambos_ativos"],
     template:
-      "{artista1} lança remix de {artista2} e música viraliza nas plataformas digitais.",
+      "{artista1} lança um remix de {artista2}, e a música viraliza nas plataformas digitais. A versão original ganha uma segunda vida e um primeiro cheque.",
     desde: 2008,
   },
   {
@@ -101,7 +102,8 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     type: "lancamento_album",
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
-    template: "{artista} bate recorde de público em show gratuito na praia.",
+    template:
+      "{artista} bate recorde de público em show gratuito na praia, segundo os organizadores. A polícia conta outro número, bem menor.",
   },
   {
     id: "pe-13",
@@ -109,7 +111,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 2,
     compatibilidade: ["ambos_ativos"],
     template:
-      "Fãs organizam abaixo-assinado pedindo colaboração entre {artista1} e {artista2}.",
+      "Fãs organizam um abaixo-assinado pedindo uma parceria entre {artista1} e {artista2}. As gravadoras respondem que vão estudar o assunto, o que no meio quer dizer não.",
   },
   {
     id: "pe-14",
@@ -117,7 +119,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
     template:
-      "{artista} confirma participação em grande festival internacional.",
+      "{artista} confirma presença num grande festival internacional, no horário das quatro da tarde, debaixo de sol.",
     desde: 1967,
   },
   {
@@ -126,14 +128,15 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 2,
     compatibilidade: ["ambos_ativos"],
     template:
-      "{artista1} declara em entrevista que {artista2} é sua maior inspiração musical.",
+      "{artista1} declara em entrevista que {artista2} é sua maior inspiração musical. A imprensa transforma a frase em manchete por um mês inteiro.",
   },
   {
     id: "pe-16",
     type: "cancelamento_show",
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
-    template: "{artista} sofre acidente durante show mas se recupera bem.",
+    template:
+      "{artista} sofre um acidente durante o show, mas se recupera bem. O seguro do palco, nem tanto.",
   },
   {
     id: "pe-17",
@@ -141,7 +144,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["carreira_longa"],
     template:
-      "Documentário sobre a vida de {artista} estreia e recebe elogios da crítica.",
+      "Documentário sobre a vida de {artista} estreia e recebe elogios da crítica. São duas horas e meia, e a crítica reclama que foi pouco.",
     desde: 1965,
   },
   {
@@ -150,7 +153,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 2,
     compatibilidade: ["ambos_ativos"],
     template:
-      "{artista1} e {artista2} são vistos gravando juntos em estúdio secreto.",
+      "{artista1} e {artista2} são vistos gravando juntos num estúdio secreto, cujo endereço já saiu em três jornais.",
   },
   {
     id: "pe-19",
@@ -158,7 +161,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["solo_ativos"],
     template:
-      "{artista} surpreende fãs com performance acústica em estação de metrô.",
+      "{artista} faz show acústico surpresa numa estação de metrô. Os passageiros, que só queriam chegar ao trabalho, ganham uma história e um atraso.",
   },
   {
     id: "pe-20",
@@ -166,7 +169,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["bandas"],
     template:
-      "{banda} anuncia mudança de formação após saída de membro fundador.",
+      '{banda} anuncia mudança de formação após a saída de um membro fundador. O comunicado fala em "diferenças criativas" e não menciona dinheiro.',
   },
   {
     id: "pe-21",
@@ -174,7 +177,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
     template:
-      "{artista} lança linha de produtos e fãs esgotam estoque em horas.",
+      "{artista} lança uma linha de produtos, e os fãs esgotam o estoque em horas. Ninguém sabe ao certo para que serve metade dos itens.",
     desde: 1964,
   },
   {
@@ -183,7 +186,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
     template:
-      "Show de {artista} é interrompido por falha técnica e apresentação é remarcada.",
+      "Show de {artista} é interrompido por falha técnica e remarcado. O técnico responsável tira férias por tempo indeterminado.",
   },
   {
     id: "pe-23",
@@ -191,14 +194,15 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 2,
     compatibilidade: ["ambos_ativos"],
     template:
-      "{artista1} convida {artista2} para participação especial em turnê.",
+      "{artista1} convida {artista2} para uma participação especial na turnê. A participação dura uma música e ocupa metade do cartaz.",
   },
   {
     id: "pe-24",
     type: "lancamento_album",
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
-    template: "{artista} anuncia álbum triplo com mais de 40 faixas inéditas.",
+    template:
+      "{artista} anuncia álbum triplo com mais de 40 faixas inéditas, prova de que ninguém na gravadora teve coragem de dizer não.",
     desde: 1970,
   },
   {
@@ -207,7 +211,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
     template:
-      "Música antiga de {artista} volta às paradas após viralizar em rede social.",
+      "Música antiga de {artista} volta às paradas depois de viralizar numa rede social. Uma geração inteira descobre a música achando que é nova.",
     desde: 2010,
   },
   {
@@ -215,7 +219,8 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     type: "polemica",
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
-    template: "{artista} é processado por quebra de contrato com gravadora.",
+    template:
+      "{artista} é processado(a) pela gravadora por quebra de contrato. A gravadora diz que é questão de princípio; o valor da causa diz outra coisa.",
   },
   {
     id: "pe-27",
@@ -223,7 +228,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 2,
     compatibilidade: ["ambos_ativos"],
     template:
-      "{artista1} e {artista2} anunciam festival beneficente com toda renda revertida.",
+      "{artista1} e {artista2} anunciam um festival beneficente com toda a renda revertida. Os organizadores garantem que o camarote foi pago do próprio bolso.",
     desde: 1971,
   },
   {
@@ -232,7 +237,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["carreira_longa"],
     template:
-      "{artista} revela bastidores polêmicos da indústria musical em autobiografia.",
+      "{artista} revela bastidores polêmicos da indústria musical numa autobiografia. Três executivos cancelam as férias para ler o livro com seus advogados.",
   },
   {
     id: "pe-29",
@@ -240,7 +245,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["ativo_recente"],
     template:
-      "Clipe de {artista} bate 1 bilhão de visualizações em tempo recorde.",
+      "Clipe de {artista} bate 1 bilhão de visualizações em tempo recorde. O diretor do clipe ainda espera o pagamento.",
     desde: 2012,
   },
   {
@@ -249,6 +254,6 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
     template:
-      "{artista} anuncia primeira turnê mundial após anos focado apenas no mercado nacional.",
+      "{artista} anuncia a primeira turnê mundial depois de anos focado(a) no mercado nacional. O mundo, por enquanto, são quatro países e um navio de cruzeiro.",
   },
 ];
