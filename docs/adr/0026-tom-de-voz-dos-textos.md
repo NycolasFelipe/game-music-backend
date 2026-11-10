@@ -56,6 +56,12 @@ já viu muita banda dar errado.
 8. **Gênero neutro** quando o integrante pode ser de qualquer gênero:
    "chateado(a)" ou uma construção sem flexão.
 9. **Sem palavrão.**
+10. **Artistas reais.** As notícias da cena citam artistas reais do catálogo
+    (`artists.ts`). Nelas a ironia mira a indústria, a imprensa, as
+    gravadoras e o público, nunca o talento, o caráter ou a vida pessoal do
+    artista. Saúde e acidentes ficam sem piada sobre a pessoa.
+11. **Marcadores das notícias aparecem uma vez só.** O gerador troca só a
+    primeira ocorrência de `{artista}`, `{artista1}`, `{nome_album}` etc.
 
 ### 4. Exemplos aprovados na calibração
 
