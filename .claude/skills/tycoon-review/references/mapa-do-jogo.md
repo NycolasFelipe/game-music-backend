@@ -149,7 +149,8 @@ dos 5 instrumentos de cada integrante.
 
 ### Atividades (dinheiro → humor e relação)
 
-`B/activities`. Sem limite por turno, com saturação `[1, .5, .25, .1]`.
+`B/activities`. No código, sem limite por turno, com saturação `[1, .5, .25, .1]`.
+A ADR-0031 (aceita) limita a 1 convívio por turno, ainda não implementado.
 Custo = `(base + porPessoa × n) × (1 + 0,06 × nívelDeFama)`. Chance de
 confusão cresce com o pior par e, quando acontece, gera um evento ativo que
 bloqueia o turno seguinte. O ganho de relação vale para todos os pares de
@@ -171,12 +172,12 @@ eventos, e um par acima de +3 não muda.
 um arquivo por grupo (`ported`, `garagem`, `bares`, `casas`, `nacional`,
 `activity-fallout`), juntados em `B/events/domain/data/active-event-templates.ts`.
 
-- **46 templates sorteáveis** e 12 de "confraternização" (gerados por
+- **214 templates sorteáveis** e 12 de "confraternização" (gerados por
   atividade; `fallout-event.generator.ts` só repete uma treta depois que a
   banda viu todas, voltando a mais antiga). Cada fase de fama tem modelos universais próprios: garagem
-  (`0101` a `0106`, até 150 fãs, efeito em fãs absoluto), bares (`0201` a
-  `0208`, 151 a 2.000), casas (`0301` a `0312`, 2.001 a 100.000) e nacional
-  (`0401` a `0415`, 100.001 a 2.000.000). Todos têm uma opção extra ligada a
+  (`0101` a `0131`, até 150 fãs, efeito em fãs absoluto), bares (`0201` a
+  `0271`, 151 a 2.000), casas (`0301` a `0352`, 2.001 a 100.000) e nacional
+  (`0401` a `0455`, 100.001 a 2.000.000). Todos têm uma opção extra ligada a
   um traço, e os 32 traços aparecem em algum evento. Acima de 2 milhões de fãs
   só há o 0002, que ninguém alcança em 80 turnos. Um template não se repete em
   3 anos, `generate-active-event.use-case.ts`. A janela
@@ -195,14 +196,27 @@ um arquivo por grupo (`ported`, `garagem`, `bares`, `casas`, `nacional`,
   `{characterN:masculino|feminino|neutro}` escolhe a forma pelo gênero do
   personagem (`male`, `female`, `neutral`). 10% dos candidatos sorteados saem
   neutros; o gênero só é definido na criação da banda.
-- **Cobertura mínima (ADR-0025):** metas de modelos universais por fase de
-  fama (garagem 6, bares 8, casas 12, nacional 15), com pelo menos 2 solo e 2
+- **Cobertura mínima (ADR-0025, metas da ADR-0031):** metas de modelos universais por fase de
+  fama (garagem 31, bares 71, casas 52, nacional 55), com pelo menos 2 solo e 2
   por categoria sorteada. O teste
   `B/events/domain/data/active-event-templates.spec.ts` confere as metas, e as
   quatro fases estão ligadas (`enforced: true`). Na simulação de 80 turnos, o
   jogador equilibrado passa ~34 turnos na fase de casas e ~42 na nacional, e
   ninguém passa de 2 milhões de fãs.
 - `moneyChange` **não altera o saldo**; só desloca o humor em ±6%.
+- **Humor dos eventos:** `happinessChangePercent` vira pontos com `× 5/100`
+  (`consequence-resolver.ts`), então "−8%" vale −0,4 e só para os envolvidos.
+  A ADR-0032 (proposta) sobe para `× 15/100` e dobra as relações.
+
+### Clima (humor e relação)
+
+- Fontes de humor: salário pago +0,15 por turno (`salary.constant.ts`),
+  convívio, show (`-desgaste + (desempenho - esperado) × 3`), sessões de
+  estúdio, orgulho do lançamento e eventos. Nenhuma regra puxa humor ou relação
+  de volta ao neutro, e ninguém sai por humor (só por salário atrasado).
+- Medição de 2026-11-10 (semente 20261111): de T13 a T80, 66% a 87% dos
+  integrantes ficam com humor ≥ 4,5; a diferença entre escolher bem e mal nos
+  eventos é de 0,1 a 0,3 de humor no T26. Detalhes e proposta na ADR-0032.
 
 ## Aleatoriedade
 
