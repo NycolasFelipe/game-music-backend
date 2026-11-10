@@ -42,7 +42,9 @@ export const QUALITY_TIERS: QualityTier[] = [
     id: "mediocre",
     label: "Medíocre",
     emoji: "😐",
-    minQuality: 35,
+    // 25 (was 35): a founding band (skills 0–3, quality ≈ 27) can land a
+    // first release above a flop with good choices (ADR-0019).
+    minQuality: 25,
     fansMultiplier: 0.7,
     revenueMultiplier: 0.7,
   },

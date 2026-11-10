@@ -115,6 +115,22 @@ export const SATURATION_FACTORS = [1, 0.6, 0.35, 0.2];
 /** Creation events a single production turn brings up (ADR-0015 §3). */
 export const CREATION_EVENTS_PER_SESSION = 1;
 
+/** Production turns the perfectionist's extra takes add to a work (ADR-0019). */
+export const STUDIO_EXTRA_TAKES_TURNS = 1;
+
+/** Happiness a member loses when the studio overrules them (ADR-0019). */
+export const OVERRULED_HAPPINESS_PENALTY = 1;
+
+/**
+ * Happiness the lazy member loses when the studio insists on another take
+ * (ADR-0019). Higher than {@link OVERRULED_HAPPINESS_PENALTY}: with −1 the
+ * insist option still won 91% of paired simulations.
+ */
+export const LAZY_INSIST_HAPPINESS_PENALTY = 2;
+
+/** Relationship levels a vision conflict costs when a side wins (ADR-0019). */
+export const VISION_CONFLICT_RELATIONSHIP_PENALTY = 1;
+
 /** Maximum number of turns a release keeps paying royalties. */
 export const ROYALTY_WINDOW_TURNS = 6;
 

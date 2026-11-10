@@ -1,5 +1,12 @@
 import {
+  LAZY_INSIST_HAPPINESS_PENALTY,
+  OVERRULED_HAPPINESS_PENALTY,
+  STUDIO_EXTRA_TAKES_TURNS,
+  VISION_CONFLICT_RELATIONSHIP_PENALTY,
+} from "@/modules/releases/domain/constants/release.constant";
+import {
   MAX_CREATION_EVENTS,
+  type CreationEventCost,
   type GeneratedCreationEvent,
 } from "@/modules/releases/domain/types/creation-event";
 
@@ -43,9 +50,23 @@ function shuffle<T>(array: T[]): T[] {
   return copy;
 }
 
-/** Builds a "wild idea" gamble event for a member. */
+/** The member an event is about: id for its costs, name for its text. */
+interface EventSubject {
+  id: string;
+  name: string;
+}
+
+/**
+ * Builds a "wild idea" gamble event. The odds are tuned so the gamble's expected
+ * modifier sits near 1 (ADR-0019): taking it is a bet on variance, not a trap.
+ *
+ * @param prompt - The event text, already naming the member.
+ * @param successChance - Probability that the idea works (0..1).
+ * @param successModifier - Quality modifier when it works.
+ * @param failureModifier - Quality modifier when it flops.
+ * @returns The event template.
+ */
 function wildIdea(
-  name: string,
   prompt: string,
   successChance: number,
   successModifier: number,
@@ -77,67 +98,83 @@ function wildIdea(
   };
 }
 
+/**
+ * Cost of overruling one member: their happiness drops (ADR-0019).
+ *
+ * @param memberId - The overruled member.
+ * @param penalty - Happiness the member loses (positive number).
+ * @returns The option cost.
+ */
+function overruled(
+  memberId: string,
+  penalty = OVERRULED_HAPPINESS_PENALTY,
+): CreationEventCost {
+  return {
+    happiness: [{ memberId, delta: -penalty }],
+  };
+}
+
 /** Trait → creation-event builders. Only these traits spawn a character event. */
-const TRAIT_EVENT_BUILDERS: Record<string, (name: string) => EventTemplate> = {
-  creative: (name) =>
+const TRAIT_EVENT_BUILDERS: Record<
+  string,
+  (member: EventSubject) => EventTemplate
+> = {
+  creative: ({ name }) =>
     wildIdea(
-      name,
       `${name} sugere gravar uma faixa inteira com sons de liquidificador. "Confia."`,
-      0.3,
+      0.45,
       1.18,
       0.85,
     ),
-  experimental: (name) =>
+  experimental: ({ name }) =>
     wildIdea(
-      name,
       `${name} quer incorporar cantos de pássaros da Amazônia no álbum.`,
-      0.25,
+      0.42,
       1.22,
       0.84,
     ),
-  visionary: (name) =>
+  visionary: ({ name }) =>
     wildIdea(
-      name,
       `${name} teve um lampejo de genialidade — e ninguém entendeu, mas insiste.`,
-      0.35,
+      0.41,
       1.2,
       0.86,
     ),
-  genius: (name) =>
+  genius: ({ name }) =>
     wildIdea(
-      name,
       `${name} propõe uma virada ousada de arranjo que só um gênio tentaria.`,
       0.5,
       1.2,
       0.9,
     ),
-  erratic: (name) =>
+  erratic: ({ name }) =>
     wildIdea(
-      name,
       `${name} está imprevisível e quer virar o conceito do disco de cabeça pra baixo.`,
-      0.3,
+      0.55,
       1.15,
       0.82,
     ),
-  perfectionist: (name) => ({
+  perfectionist: ({ id, name }) => ({
     kind: "perfeccionismo",
     prompt: `${name} exige mais 47 takes até tudo ficar perfeito.`,
     options: [
       {
         id: "caprichar",
         label: "Deixar caprichar",
-        description: "Mais tempo no estúdio, mas o acabamento agradece.",
-        effect: { type: "fixed", qualityModifier: 1.08 },
+        description: "Mais um turno no estúdio, mas o acabamento agradece.",
+        effect: { type: "fixed", qualityModifier: 1.25 },
+        cost: { extraProductionTurns: STUDIO_EXTRA_TAKES_TURNS },
       },
       {
         id: "chega",
         label: '"Tá bom assim"',
         description: "Cortar a sessão frustra o perfeccionista.",
         effect: { type: "fixed", qualityModifier: 0.99 },
+        cost: overruled(id),
       },
     ],
   }),
-  lazy: (name) => ({
+  lazy: ({ id, name }) => ({
     kind: "preguica",
     prompt: `${name} quer cortar caminho e gravar tudo num take só.`,
     options: [
@@ -145,35 +182,66 @@ const TRAIT_EVENT_BUILDERS: Record<string, (name: string) => EventTemplate> = {
         id: "cortar",
         label: "Cortar caminho",
         description: "Rápido e sem esforço — e ouve-se isso no resultado.",
-        effect: { type: "fixed", qualityModifier: 0.93 },
+        effect: { type: "fixed", qualityModifier: 0.98 },
       },
       {
         id: "insistir",
         label: "Insistir no capricho",
-        description: "Contrariar a preguiça custa, mas vale.",
+        description: `Contrariar a preguiça custa: ${name} fica de mau humor, mas vale.`,
         effect: { type: "fixed", qualityModifier: 1.02 },
+        cost: overruled(id, LAZY_INSIST_HAPPINESS_PENALTY),
       },
     ],
   }),
 };
 
-/** Builds a "vision conflict" event between two members. */
-function conflictEvent(nameA: string, nameB: string): EventTemplate {
+/**
+ * Cost of siding with one member in a vision conflict: the other is overruled
+ * and the pair's relationship sours (ADR-0019).
+ *
+ * @param loserId - The member whose vision lost.
+ * @param memberAId - First member of the pair.
+ * @param memberBId - Second member of the pair.
+ * @returns The option cost.
+ */
+function sideCost(
+  loserId: string,
+  memberAId: string,
+  memberBId: string,
+): CreationEventCost {
+  return {
+    ...overruled(loserId),
+    relationships: [
+      { memberAId, memberBId, delta: -VISION_CONFLICT_RELATIONSHIP_PENALTY },
+    ],
+  };
+}
+
+/**
+ * Builds a "vision conflict" event between two members.
+ *
+ * @param a - The first member of the clashing pair.
+ * @param b - The second member of the clashing pair.
+ * @returns The event template.
+ */
+function conflictEvent(a: EventSubject, b: EventSubject): EventTemplate {
   return {
     kind: "conflito_visao",
-    prompt: `${nameA} e ${nameB} brigam pela direção do disco. Com quem você fica?`,
+    prompt: `${a.name} e ${b.name} brigam pela direção do disco. Com quem você fica?`,
     options: [
       {
         id: "lado_a",
-        label: `Ficar com a visão de ${nameA}`,
-        description: "Uma direção clara destrava a criação.",
+        label: `Ficar com a visão de ${a.name}`,
+        description: `Uma direção clara destrava a criação, mas ${b.name} perde a briga e a relação dos dois piora.`,
         effect: { type: "fixed", qualityModifier: 1.04 },
+        cost: sideCost(b.id, a.id, b.id),
       },
       {
         id: "lado_b",
-        label: `Ficar com a visão de ${nameB}`,
-        description: "Uma direção clara destrava a criação.",
+        label: `Ficar com a visão de ${b.name}`,
+        description: `Uma direção clara destrava a criação, mas ${a.name} perde a briga e a relação dos dois piora.`,
         effect: { type: "fixed", qualityModifier: 1.04 },
+        cost: sideCost(a.id, a.id, b.id),
       },
       {
         id: "meio_termo",
@@ -228,8 +296,8 @@ export function generateCreationEvents(
     const r = pick(conflicts);
     templates.push(
       conflictEvent(
-        nameById.get(r.memberAId) ?? "Um membro",
-        nameById.get(r.memberBId) ?? "Outro membro",
+        { id: r.memberAId, name: nameById.get(r.memberAId) ?? "Um membro" },
+        { id: r.memberBId, name: nameById.get(r.memberBId) ?? "Outro membro" },
       ),
     );
   }
@@ -239,7 +307,9 @@ export function generateCreationEvents(
     for (const trait of member.characteristics ?? []) {
       const builder = TRAIT_EVENT_BUILDERS[trait];
       if (builder) {
-        characterEvents.push(builder(member.name || "O músico"));
+        characterEvents.push(
+          builder({ id: member.id, name: member.name || "O músico" }),
+        );
         break; // at most one event per member
       }
     }

@@ -36,12 +36,41 @@ export interface CreationEventProbabilisticEffect {
 export type CreationEventEffect =
   CreationEventFixedEffect | CreationEventProbabilisticEffect;
 
+/** A happiness change for one member (relative, applied on resolution). */
+export interface CreationEventHappinessCost {
+  memberId: string;
+  delta: number;
+}
+
+/** A relationship change for one member pair (relative, applied on resolution). */
+export interface CreationEventRelationshipCost {
+  memberAId: string;
+  memberBId: string;
+  delta: number;
+}
+
+/**
+ * What an option costs beyond its quality effect (ADR-0019): the price its text
+ * promises — more studio time, a member who was overruled, a rift between the
+ * two who fought over the record. Absent means the option is free.
+ */
+export interface CreationEventCost {
+  /** Production turns added to the work. */
+  extraProductionTurns?: number;
+  /** Happiness changes per member. */
+  happiness?: CreationEventHappinessCost[];
+  /** Relationship changes per member pair. */
+  relationships?: CreationEventRelationshipCost[];
+}
+
 /** A single choice within a creation event. */
 export interface CreationEventOption {
   id: string;
   label: string;
   description: string;
   effect: CreationEventEffect;
+  /** Side cost of choosing this option (ADR-0019). */
+  cost?: CreationEventCost;
 }
 
 /** A generated creation event (before it is assigned an id / persisted). */
