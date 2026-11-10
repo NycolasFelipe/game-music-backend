@@ -25,7 +25,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Neutro",
             descriptionTemplate:
-              "{character2} aceita a coautoria, ressentido(a) por ter sido pego(a), não por ter copiado.",
+              "{character2} aceita a coautoria, {character2:ressentido por ter sido pego|ressentida por ter sido pega|com rancor do flagrante}, não por ter copiado.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -38,7 +38,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Confronto",
             descriptionTemplate:
-              "{character2} nega tudo e jura que teve a mesma ideia sozinho(a), nota por nota. Coincidências acontecem, diz.",
+              "{character2} nega tudo e jura que teve a mesma ideia {character2:sozinho|sozinha|sem ajuda}, nota por nota. Coincidências acontecem, diz.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -64,9 +64,9 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
             chance: 60,
           },
           {
-            resultLabel: "Exposto(a)",
+            resultLabel: "{character1:Exposto|Exposta|Exposição}",
             descriptionTemplate:
-              "A banda percebe a sabotagem, e {character1} consegue a proeza de sair como culpado(a) de um plágio que sofreu.",
+              "A banda percebe a sabotagem, e {character1} consegue a proeza de {character1:sair como culpado|sair como culpada|levar a culpa} de um plágio que sofreu.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -101,7 +101,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Paranoia",
             descriptionTemplate:
-              "{character2} se sente vigiado(a) e rasga a partitura por medo de ser descoberto(a). Ninguém vai saber como era o refrão, nem de quem.",
+              "{character2} {character2:se sente vigiado|se sente vigiada|sente que a banda está de olho} e rasga a partitura {character2:por medo de ser descoberto|por medo de ser descoberta|antes que alguém compare}. Ninguém vai saber como era o refrão, nem de quem.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -211,14 +211,14 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Humildade",
             descriptionTemplate:
-              "{character1} passa a ser visto(a) como a pessoa mais humilde do mundo, título que ninguém na banda contesta em público.",
+              "{character1} {character1:passa a ser visto|passa a ser vista|ganha fama} como a pessoa mais humilde do mundo, título que ninguém na banda contesta em público.",
             fanCountChange: 6,
             chance: 65,
           },
           {
             resultLabel: "Pânico",
             descriptionTemplate:
-              "A multidão se descontrola, e {character1} sai levemente ferido(a) e sem um dos sapatos. Os fãs ficam decepcionados, menos o que levou o sapato.",
+              "A multidão se descontrola, e {character1} sai {character1:levemente ferido|levemente ferida|com arranhões} e sem um dos sapatos. Os fãs ficam decepcionados, menos o que levou o sapato.",
             fanCountChange: -3,
             chance: 35,
           },

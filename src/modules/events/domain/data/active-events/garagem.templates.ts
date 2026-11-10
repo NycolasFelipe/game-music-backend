@@ -382,7 +382,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
         visibleIfAnyInvolvedHas: ["shy", "insecure"],
         consequence: [
           {
-            resultLabel: "Misterioso(a)",
+            resultLabel: "{character1:Misterioso|Misteriosa|Mistério}",
             descriptionTemplate:
               "O jornal publica a entrevista mais curta da história do bairro. O mistério vende melhor que qualquer resposta.",
             fanCountChangeAbsolute: 6,

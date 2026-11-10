@@ -124,7 +124,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     type: "conflito_membros",
     title: "A data ruim",
     descriptionTemplate:
-      "{character1} fechou sozinho(a) um show numa terça-feira de chuva, do outro lado da cidade, num bar que ninguém conhece. {character2} diz que devia ter sido consultado(a), nem que fosse para recusar.",
+      "{character1} fechou {character1:sozinho|sozinha|por conta própria} um show numa terça-feira de chuva, do outro lado da cidade, num bar que ninguém conhece. {character2} diz que {character2:devia ter sido consultado|devia ter sido consultada|alguém devia ter consultado a banda}, nem que fosse para recusar.",
     minFanCount: 151,
     maxFanCount: 2000,
     requiredCharacters: 2,
@@ -257,7 +257,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Palco fechado",
           descriptionTemplate:
-            "O amigo some, e {character1} fica chateado(a) por semanas. O som, por outro lado, nunca esteve tão bom.",
+            "O amigo some, e {character1} {character1:fica chateado por semanas|fica chateada por semanas|passa semanas de cara amarrada}. O som, por outro lado, nunca esteve tão bom.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -421,7 +421,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
             chance: 40,
           },
           {
-            resultLabel: "Vaiado(a)",
+            resultLabel: "Vaia",
             descriptionTemplate:
               "A banda tropeça logo na primeira música, e a plateia passa o resto da noite cobrando o troféu.",
             fanCountChange: -3,
@@ -437,7 +437,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     type: "oportunidade_externa",
     title: "Professor de música",
     descriptionTemplate:
-      "Uma escola de música oferece a {character1} uma vaga de professor(a) nas tardes de semana. Tem salário fixo, coisa que ninguém na banda vê há anos.",
+      "Uma escola de música oferece a {character1} {character1:uma vaga de professor|uma vaga de professora|uma vaga para dar aulas} nas tardes de semana. Tem salário fixo, coisa que ninguém na banda vê há anos.",
     minFanCount: 151,
     maxFanCount: 2000,
     requiredCharacters: 1,
@@ -489,7 +489,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
             chance: 60,
           },
           {
-            resultLabel: "Demitido(a)",
+            resultLabel: "{character1:Demitido|Demitida|Demissão}",
             descriptionTemplate:
               "As aulas são tão preguiçosas que os alunos reclamam. Os alunos de oito anos.",
             happinessChangePercent: -6,
@@ -696,7 +696,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Identidade",
             descriptionTemplate:
-              "O visual pega, e o público começa a ir aos shows vestido igual. {character2} nunca se sentiu tão cercado(a).",
+              "O visual pega, e o público começa a ir aos shows vestido igual. {character2} {character2:nunca se sentiu tão cercado|nunca se sentiu tão cercada|nunca teve tanta gente em volta}.",
             fanCountChange: 5,
             relationshipChanges: [
               {

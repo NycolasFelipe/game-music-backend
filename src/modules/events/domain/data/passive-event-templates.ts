@@ -20,7 +20,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 2,
     compatibilidade: ["solo_ativos"],
     template:
-      "{artista1} é visto(a) jantando com {artista2}, e as revistas de fofoca já marcaram o casamento. Os dois só dividiram a conta.",
+      "{artista1} aparece jantando com {artista2}, e as revistas de fofoca já marcaram o casamento. Os dois só dividiram a conta.",
   },
   {
     id: "pe-03",
@@ -220,7 +220,7 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
     template:
-      "{artista} é processado(a) pela gravadora por quebra de contrato. A gravadora diz que é questão de princípio; o valor da causa diz outra coisa.",
+      "A gravadora processa {artista} por quebra de contrato e diz que é questão de princípio; o valor da causa diz outra coisa.",
   },
   {
     id: "pe-27",
@@ -254,6 +254,6 @@ export const PASSIVE_EVENT_TEMPLATES: PassiveEventTemplate[] = [
     requiredArtists: 1,
     compatibilidade: ["qualquer_um"],
     template:
-      "{artista} anuncia a primeira turnê mundial depois de anos focado(a) no mercado nacional. O mundo, por enquanto, são quatro países e um navio de cruzeiro.",
+      "{artista} anuncia a primeira turnê mundial depois de anos de foco no mercado nacional. O mundo, por enquanto, são quatro países e um navio de cruzeiro.",
   },
 ];

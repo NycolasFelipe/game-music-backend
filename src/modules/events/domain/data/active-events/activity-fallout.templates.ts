@@ -17,7 +17,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Cobrar um pedido de desculpas",
         description:
-          "Exigir que {character1} procure {character2} no dia seguinte e desfaça o estrago, de preferência sóbrio(a).",
+          "Exigir que {character1} procure {character2} no dia seguinte e desfaça o estrago, de preferência {character1:sóbrio|sóbria|sem ressaca}.",
         consequence: [
           {
             resultLabel: "Constrangido",
@@ -116,7 +116,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Resolvido no dinheiro",
           descriptionTemplate:
-            "A conta some; o constrangimento, não. {character2} passa a noite calado(a).",
+            "A conta some; o constrangimento, não. {character2} passa a noite {character2:calado|calada|sem dizer uma palavra}.",
           moneyChange: -150,
           relationshipChanges: [
             {

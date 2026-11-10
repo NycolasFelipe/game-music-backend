@@ -24,7 +24,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Convivência",
             descriptionTemplate:
-              "O disco solo sai sem atrapalhar a banda e vende o suficiente para {character1} voltar motivado(a), e pouco o bastante para voltar.",
+              "O disco solo sai sem atrapalhar a banda e vende o suficiente para {character1} voltar {character1:motivado|motivada|com ânimo}, e pouco o bastante para voltar.",
             fanCountChange: 2,
             relationshipChanges: [
               {
@@ -367,7 +367,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Descoberto",
             descriptionTemplate:
-              "O empresário aparece com as provas, e {character2} se sente traído(a) duas vezes, uma delas por escrito.",
+              "O empresário aparece com as provas, e {character2} {character2:se sente traído|se sente traída|se sente vítima de traição} duas vezes, uma delas por escrito.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -550,7 +550,8 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Atender {character2}",
-        description: "{character1} passa a tocar mais recuado(a).",
+        description:
+          "{character1} passa a tocar {character1:mais recuado|mais recuada|com mais discrição}.",
         consequence: [
           {
             resultLabel: "Paz",
@@ -590,7 +591,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
         visibleIfCharacterHas: [["insecure"], []],
         consequence: [
           {
-            resultLabel: "Acolhido(a)",
+            resultLabel: "{character1:Acolhido|Acolhida|Aceitação}",
             descriptionTemplate:
               "A banda vota para {character1} ficar na frente. {character2} aceita o resultado e pede recontagem só uma vez.",
             relationshipChanges: [
@@ -604,7 +605,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
             chance: 60,
           },
           {
-            resultLabel: "Exposto(a)",
+            resultLabel: "{character1:Exposto|Exposta|Exposição}",
             descriptionTemplate:
               "A votação racha a banda ao meio, e {character1} passa a noite se perguntando o que fez de errado. A lista é longa.",
             relationshipChanges: [
@@ -870,7 +871,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
     type: "oportunidade_externa",
     title: "Convenção do fã-clube",
     descriptionTemplate:
-      "O fã-clube nacional organiza uma convenção num salão de festas alugado e quer {character1} como convidado(a) de honra. Há um bolo com o rosto de {character1}.",
+      "O fã-clube nacional organiza uma convenção num salão de festas alugado e quer {character1} como {character1:convidado|convidada|atração} de honra. Há um bolo com o rosto de {character1}.",
     minFanCount: 100001,
     maxFanCount: 2000000,
     requiredCharacters: 1,
@@ -1332,7 +1333,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
     type: "decisao_criativa",
     title: "O documentário",
     descriptionTemplate:
-      "Uma equipe de cinema quer acompanhar a banda por um ano, inclusive nos ensaios, nas brigas e no café da manhã. {character1} fica encarregado(a) de decidir o quanto mostrar.",
+      "Uma equipe de cinema quer acompanhar a banda por um ano, inclusive nos ensaios, nas brigas e no café da manhã. {character1} {character1:fica encarregado|fica encarregada|fica com a tarefa} de decidir o quanto mostrar.",
     minFanCount: 100001,
     maxFanCount: 2000000,
     requiredCharacters: 1,
@@ -1377,7 +1378,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Privacidade",
           descriptionTemplate:
-            "A equipe vai filmar outra banda, que briga mais e rende mais. {character1} dorme tranquilo(a) mesmo assim.",
+            "A equipe vai filmar outra banda, que briga mais e rende mais. {character1} dorme {character1:tranquilo|tranquila|em paz} mesmo assim.",
           happinessChangePercent: 2,
         },
       },

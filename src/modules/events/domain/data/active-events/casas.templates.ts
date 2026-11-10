@@ -23,7 +23,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "A contragosto",
           descriptionTemplate:
-            "{character1} aceita, mas passa a noite calado(a), fazendo contas no guardanapo.",
+            "{character1} aceita, mas passa a noite {character1:calado|calada|em silêncio}, fazendo contas no guardanapo.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -209,7 +209,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Estrela",
           descriptionTemplate:
-            "A entrevista faz sucesso. A banda ouve no carro, calada, e descobre que {character1} fundou o grupo sozinho(a).",
+            "A entrevista faz sucesso. A banda ouve no carro, calada, e descobre que {character1} fundou o grupo {character1:sozinho|sozinha|sem ajuda de ninguém}.",
           fanCountChange: 4,
           relationshipChanges: [
             {
@@ -228,7 +228,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "conflito_membros",
     title: "Ensaio às oito",
     descriptionTemplate:
-      "{character1} chega atrasado(a) ao ensaio pela terceira vez na semana, sempre com uma desculpa nova e criativa. {character2} perde a paciência na frente da equipe técnica, que adora.",
+      "{character1} chega {character1:atrasado|atrasada|com atraso} ao ensaio pela terceira vez na semana, sempre com uma desculpa nova e criativa. {character2} perde a paciência na frente da equipe técnica, que adora.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 2,
@@ -323,7 +323,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "conflito_membros",
     title: "Quem escreveu?",
     descriptionTemplate:
-      "Num jornal da região, {character1} diz que compôs sozinho(a) o maior sucesso da banda. {character2} lembra muito bem de ter escrito metade, inclusive a metade boa.",
+      "Num jornal da região, {character1} diz que compôs {character1:sozinho|sozinha|sem ajuda} o maior sucesso da banda. {character2} lembra muito bem de ter escrito metade, inclusive a metade boa.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 2,
@@ -336,7 +336,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Corrigido",
             descriptionTemplate:
-              "O jornal publica a correção ao lado do horóscopo, e {character2} se sente reconhecido(a) mesmo assim.",
+              "O jornal publica a correção ao lado do horóscopo, e {character2} {character2:se sente reconhecido|se sente reconhecida|aceita o reconhecimento} mesmo assim.",
             fanCountChange: -1,
             relationshipChanges: [
               {
@@ -667,7 +667,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         visibleIfAnyInvolvedHas: ["purist"],
         consequence: [
           {
-            resultLabel: "Ovacionado(a)",
+            resultLabel: "Ovação",
             descriptionTemplate:
               "O público adora a história e grita o nome da banda. O gerente da loja, na plateia, toma nota.",
             fanCountChange: 4,
@@ -933,7 +933,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Contido",
           descriptionTemplate:
-            '{character1} obedece, mas sai emburrado(a) em todas as fotos. A revista chama de "ar misterioso".',
+            '{character1} obedece, mas sai {character1:emburrado|emburrada|de cara fechada} em todas as fotos. A revista chama de "ar misterioso".',
           happinessChangePercent: -6,
         },
       },

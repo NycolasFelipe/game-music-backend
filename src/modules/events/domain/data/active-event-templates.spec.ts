@@ -1,4 +1,5 @@
 import { ACTIVE_EVENT_TEMPLATES } from "@/modules/events/domain/data/active-event-templates";
+import { PASSIVE_EVENT_TEMPLATES } from "@/modules/events/domain/data/passive-event-templates";
 import type { ActiveEventType } from "@/modules/events/domain/constants/active-event-type.constant";
 import type { ActiveEventTemplate } from "@/modules/events/domain/types/active-event-template";
 import { CHARACTERISTIC_IDS } from "@/modules/band-members/domain/data/characteristics";
@@ -247,6 +248,25 @@ describe("ACTIVE_EVENT_TEMPLATES integrity", () => {
       }
     },
   );
+});
+
+describe("gendered text in the event catalogs (ADR-0027)", () => {
+  /** Slash-style inflection such as "calado(a)" or "professor(o)". */
+  const SLASH_INFLECTION = /\((a|o)\)/;
+
+  it.each(ACTIVE_EVENT_TEMPLATES.map((t) => [t.id, t] as const))(
+    "%s never inflects with (a) or (o)",
+    (_id, t) => {
+      expect(JSON.stringify(t)).not.toMatch(SLASH_INFLECTION);
+    },
+  );
+
+  it("never inflects the news with (a) or (o)", () => {
+    const offenders = PASSIVE_EVENT_TEMPLATES.filter((t) =>
+      SLASH_INFLECTION.test(JSON.stringify(t)),
+    );
+    expect(offenders).toEqual([]);
+  });
 });
 
 describe("ACTIVE_EVENT_TEMPLATES coverage (ADR-0025)", () => {

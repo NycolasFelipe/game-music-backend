@@ -353,7 +353,8 @@ function generateBiography(
     gender !== "neutral" || !hasGenderMarkers(text);
   const forSkill = BIOGRAPHIES.filter((b) => b.skill === skill && fits(b.text));
   // A skill with no neutral biography borrows one from another skill rather
-  // than inflecting a neutral member (the catalog test keeps this rare).
+  // than inflecting a neutral member. The catalog test keeps at least 3 per
+  // skill, so this only guards against a future catalog change.
   const templates =
     forSkill.length > 0 ? forSkill : BIOGRAPHIES.filter((b) => fits(b.text));
   return resolveBiography(pick(templates).text, name, gender);

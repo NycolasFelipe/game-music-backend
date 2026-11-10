@@ -78,6 +78,21 @@ describe("generateBandMember", () => {
     expect(neutralTexts).toContain(member.biography);
   });
 
+  it.each(SKILL_TYPES)(
+    "has at least 3 uninflected biographies for %s (ADR-0027)",
+    (skill) => {
+      const neutral = BIOGRAPHIES.filter(
+        (b) => b.skill === skill && !hasGenderMarkers(b.text),
+      );
+      expect(neutral.length).toBeGreaterThanOrEqual(3);
+    },
+  );
+
+  it("has unique biography ids", () => {
+    const ids = BIOGRAPHIES.map((b) => b.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
   it("tells inflected biography templates from neutral ones", () => {
     expect(hasGenderMarkers("Criad[o-a] em coral, [nome] canta.")).toBe(true);
     expect(

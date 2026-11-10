@@ -166,6 +166,21 @@ export const BIOGRAPHIES: BiographyTemplate[] = [
     skill: "drums",
     text: "Antig[o-a] jogador[a] profissional de jogos de ritmo, [nome] tem coordenação perfeita e dedos que parecem ter vida própria. Sua única fraqueza é achar que a vida real também tem combos e high scores.",
   },
+  {
+    id: 61,
+    skill: "drums",
+    text: "[nome] aprendeu bateria nas panelas da cozinha, até a vizinhança organizar um abaixo-assinado. Hoje toca com a mesma energia, só que em pratos que não vão para a pia. Na banda, segura o tempo firme e o volume acima do recomendado.",
+  },
+  {
+    id: 62,
+    skill: "drums",
+    text: "Por dez anos, [nome] trabalhou numa fábrica de molas, onde aprendeu que tudo tem ritmo, inclusive o barulho. Na bateria, transforma essa disciplina em levadas precisas e incansáveis. Só para quando a máquina quebra, e a máquina é a banda.",
+  },
+  {
+    id: 63,
+    skill: "drums",
+    text: "[nome] começou na fanfarra da escola, carregando um bumbo maior que a própria paciência. Da fanfarra trouxe o pulso firme, a postura impecável e o hábito de marchar durante as músicas lentas.",
+  },
 
   // Tecladistas/Pianistas
   {
@@ -218,6 +233,11 @@ export const BIOGRAPHIES: BiographyTemplate[] = [
     skill: "piano",
     text: "Ex-mestre de xadrez, [nome] enxerga o teclado como um tabuleiro de 88 casas. Cada movimento (nota) é calculado, cada melodia é uma abertura e cada erro é uma oportunidade para um checkmate musical dramático.",
   },
+  {
+    id: 64,
+    skill: "piano",
+    text: "[nome] cresceu numa casa com um piano que ninguém tocava e uma tia que exigia que alguém tocasse. Depois de anos de recitais em almoços de domingo, chega à banda com técnica impecável e pavor de aplauso educado.",
+  },
 
   // Compositores (Letras)
   {
@@ -269,6 +289,11 @@ export const BIOGRAPHIES: BiographyTemplate[] = [
     id: 50,
     skill: "lyrics",
     text: "Ex-monitor[a] de colônia de férias, [nome] sabe que toda história precisa de um conflito, uma lição e um lanche no final. Suas músicas seguem essa fórmula, garantindo que o público saia cantando e com vontade de suco de caixinha.",
+  },
+  {
+    id: 65,
+    skill: "lyrics",
+    text: "[nome] passou anos escrevendo cartas de reclamação para o síndico, cada uma mais poética que a anterior. Na banda, transforma pequenas indignações em refrões que o público canta sem saber que são sobre a garagem do prédio.",
   },
 
   // Baixistas
