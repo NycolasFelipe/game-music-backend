@@ -168,6 +168,13 @@ bloqueia o turno seguinte.
   atividade). Entre 151 e 10.000 fãs, só o template 0001 pode aparecer, e ele
   exige um integrante com o traço `plagiarist`. Um template não se repete em 3
   anos (6 turnos), `generate-active-event.use-case.ts`.
+- **Cobertura mínima (ADR-0025):** metas de modelos universais por fase de
+  fama (garagem 6, bares 8, casas 12, nacional 15), com pelo menos 2 solo e 2
+  por categoria sorteada. O teste
+  `B/events/domain/data/active-event-templates.spec.ts` confere as metas; cada
+  fase fica pulada (`enforced: false`) até ser preenchida. Na simulação de 80
+  turnos, o jogador equilibrado passa ~34 turnos na fase de casas e ~42 na
+  nacional, e ninguém passa de 2 milhões de fãs.
 - `moneyChange` **não altera o saldo**; só desloca o humor em ±6%.
 
 ## Aleatoriedade
@@ -219,10 +226,10 @@ frontend "revista".
 
 ## Documentação de design
 
-- `game-music-backend/docs/adr/0001` a `0023`: uma ADR por sistema (turnos
+- `game-music-backend/docs/adr/0001` a `0025`: uma ADR por sistema (turnos
   0006, fama 0007, obras 0008, salários 0010, shows 0016, atividades 0017,
   relatório do turno 0020, humor do show 0021, painel do turno 0022,
-  aparência 0023).
+  aparência 0023, notícias por época 0024, cobertura de eventos ativos 0025).
   Leia a ADR do sistema antes de julgar: ela registra a intenção.
 - `game-music-backend/docs/future-work.md`: backlog de ideias.
 - `game-music-frontend/docs/adr/0001-central-de-decisoes.md`.
