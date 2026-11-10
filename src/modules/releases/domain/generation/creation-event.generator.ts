@@ -80,7 +80,7 @@ function wildIdea(
         id: "topar",
         label: "Topar a ideia",
         description:
-          "Alto risco, alta recompensa — pode ser genial ou um desastre.",
+          "Alto risco, alta recompensa. Pode virar o melhor momento do disco ou a faixa que todo mundo pula.",
         effect: {
           type: "probabilistic",
           successChance,
@@ -91,7 +91,8 @@ function wildIdea(
       {
         id: "recusar",
         label: "Seguir no seguro",
-        description: "Nada de loucuras. O disco segue como planejado.",
+        description:
+          "Nada de loucuras. O disco segue como planejado, e ninguém vai lembrar desta conversa.",
         effect: { type: "fixed", qualityModifier: 1 },
       },
     ],
@@ -128,47 +129,49 @@ const TRAIT_EVENT_BUILDERS: Record<
     ),
   experimental: ({ name }) =>
     wildIdea(
-      `${name} quer incorporar cantos de pássaros da Amazônia no álbum.`,
+      `${name} quer incorporar cantos de pássaros da Amazônia no álbum. Os pássaros não foram consultados.`,
       0.42,
       1.22,
       0.84,
     ),
   visionary: ({ name }) =>
     wildIdea(
-      `${name} teve um lampejo de genialidade — e ninguém entendeu, mas insiste.`,
+      `${name} teve um lampejo de genialidade. Ninguém entendeu, o que, segundo ${name}, prova que é genial.`,
       0.41,
       1.2,
       0.86,
     ),
   genius: ({ name }) =>
     wildIdea(
-      `${name} propõe uma virada ousada de arranjo que só um gênio tentaria.`,
+      `${name} propõe uma virada de arranjo que só um gênio tentaria. Ou alguém que não dormiu.`,
       0.5,
       1.2,
       0.9,
     ),
   erratic: ({ name }) =>
     wildIdea(
-      `${name} está imprevisível e quer virar o conceito do disco de cabeça pra baixo.`,
+      `${name} acordou imprevisível e quer virar o conceito do disco de cabeça para baixo. Ontem, era outro conceito.`,
       0.55,
       1.15,
       0.82,
     ),
   perfectionist: ({ id, name }) => ({
     kind: "perfeccionismo",
-    prompt: `${name} exige mais 47 takes até tudo ficar perfeito.`,
+    prompt: `${name} exige mais 47 takes. O técnico de som começa a pensar seriamente em outra profissão.`,
     options: [
       {
         id: "caprichar",
         label: "Deixar caprichar",
-        description: "Mais um turno no estúdio, mas o acabamento agradece.",
+        description:
+          "Mais um turno no estúdio. O disco fica melhor, e o técnico, mais velho.",
         effect: { type: "fixed", qualityModifier: 1.25 },
         cost: { extraProductionTurns: STUDIO_EXTRA_TAKES_TURNS },
       },
       {
         id: "chega",
         label: '"Tá bom assim"',
-        description: "Cortar a sessão frustra o perfeccionista.",
+        description:
+          "Encerrar a sessão. O perfeccionista vai ouvir aquele erro pelo resto da vida e fazer questão de apontá-lo para todo mundo.",
         effect: { type: "fixed", qualityModifier: 0.99 },
         cost: overruled(id),
       },
@@ -176,18 +179,19 @@ const TRAIT_EVENT_BUILDERS: Record<
   }),
   lazy: ({ id, name }) => ({
     kind: "preguica",
-    prompt: `${name} quer cortar caminho e gravar tudo num take só.`,
+    prompt: `${name} quer gravar tudo num take só e ir para casa antes do almoço.`,
     options: [
       {
         id: "cortar",
         label: "Cortar caminho",
-        description: "Rápido e sem esforço — e ouve-se isso no resultado.",
+        description:
+          "Rápido e sem esforço, e dá para ouvir as duas coisas no resultado.",
         effect: { type: "fixed", qualityModifier: 0.98 },
       },
       {
         id: "insistir",
         label: "Insistir no capricho",
-        description: `Contrariar a preguiça custa: ${name} fica de mau humor, mas vale.`,
+        description: `Contrariar a preguiça custa: ${name} fica de mau humor e grava cada take como quem preenche formulário. Mas vale.`,
         effect: { type: "fixed", qualityModifier: 1.02 },
         cost: overruled(id, LAZY_INSIST_HAPPINESS_PENALTY),
       },
@@ -227,26 +231,27 @@ function sideCost(
 function conflictEvent(a: EventSubject, b: EventSubject): EventTemplate {
   return {
     kind: "conflito_visao",
-    prompt: `${a.name} e ${b.name} brigam pela direção do disco. Com quem você fica?`,
+    prompt: `${a.name} e ${b.name} brigam pela direção do disco. Os dois têm certeza, e só um pode ter razão.`,
     options: [
       {
         id: "lado_a",
         label: `Ficar com a visão de ${a.name}`,
-        description: `Uma direção clara destrava a criação, mas ${b.name} perde a briga e a relação dos dois piora.`,
+        description: `Uma direção clara destrava a criação, mas ${b.name} perde a briga, e a relação dos dois piora. ${b.name} vai lembrar disso em todo ensaio.`,
         effect: { type: "fixed", qualityModifier: 1.04 },
         cost: sideCost(b.id, a.id, b.id),
       },
       {
         id: "lado_b",
         label: `Ficar com a visão de ${b.name}`,
-        description: `Uma direção clara destrava a criação, mas ${a.name} perde a briga e a relação dos dois piora.`,
+        description: `Uma direção clara destrava a criação, mas ${a.name} perde a briga, e a relação dos dois piora. ${a.name} vai lembrar disso em todo ensaio.`,
         effect: { type: "fixed", qualityModifier: 1.04 },
         cost: sideCost(a.id, a.id, b.id),
       },
       {
         id: "meio_termo",
         label: "Impor um meio-termo",
-        description: "Ninguém fica feliz e a obra fica morna.",
+        description:
+          "Ninguém fica feliz, e a obra fica morna. Democracia em estúdio é assim.",
         effect: { type: "fixed", qualityModifier: 0.97 },
       },
     ],
