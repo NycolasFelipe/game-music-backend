@@ -102,7 +102,6 @@ export class BandReleasesController {
     return this.startReleaseUseCase.execute(actor, bandId, {
       title: dto.title,
       concept: dto.concept ?? "",
-      style: dto.style,
       format: dto.format,
       budgetTier: dto.budgetTier,
       credits: dto.credits,

@@ -140,7 +140,8 @@ export function ApiStartRelease() {
     ApiBearerAuth(),
     ApiParam({ name: "bandId", format: "uuid" }),
     ApiOperation({
-      summary: "Start a release draft (title/style/format/credits)",
+      summary:
+        "Start a release draft (title/format/credits); the style is the band's theme",
     }),
     ApiBody({ type: StartReleaseDto }),
     ApiCreatedResponse({ description: "The created draft." }),

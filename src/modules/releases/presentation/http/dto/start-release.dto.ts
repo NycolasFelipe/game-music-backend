@@ -11,10 +11,6 @@ import {
   ValidateNested,
 } from "class-validator";
 import {
-  BAND_THEMES,
-  type BandTheme,
-} from "@/modules/bands/domain/constants/band.constant";
-import {
   BUDGET_TIER_IDS,
   type BudgetTierId,
 } from "@/modules/releases/domain/data/budget-tiers";
@@ -63,7 +59,8 @@ export class ReleaseCreditsDto {
 }
 
 /**
- * HTTP request body for `POST /bands/:bandId/releases` (start a draft).
+ * HTTP request body for `POST /bands/:bandId/releases` (start a draft). The
+ * style is not part of it: every work takes the band's theme (ADR-0030).
  */
 export class StartReleaseDto {
   @ApiProperty({ maxLength: 255 })
@@ -76,10 +73,6 @@ export class StartReleaseDto {
   @IsString()
   @MaxLength(2000)
   concept?: string;
-
-  @ApiProperty({ enum: BAND_THEMES })
-  @IsIn([...BAND_THEMES])
-  style: BandTheme;
 
   @ApiProperty({ enum: RELEASE_FORMAT_IDS })
   @IsIn([...RELEASE_FORMAT_IDS])

@@ -18,6 +18,7 @@ const composed = (balance = 5000) => ({
     balance,
     fanCount: 0,
     currentYear: 1990,
+    theme: "metal",
   },
   members: [{ id: "m1" }, { id: "m2" }, { id: "m3" }],
   relationships: [],
@@ -26,7 +27,6 @@ const composed = (balance = 5000) => ({
 const input = {
   title: "Cinzas",
   concept: "",
-  style: "grunge",
   format: "lp",
   budgetTier: "estudio",
   credits: { vocal: ["m1"] },
@@ -77,6 +77,16 @@ describe("StartReleaseUseCase", () => {
       }),
     );
     expect(result.status).toBe("em_criacao");
+  });
+
+  it("records the band's theme as the work's style (ADR-0030)", async () => {
+    bandsRepository.findByIdAndOwnerWithMembers.mockResolvedValue(composed());
+
+    await useCase.execute(actor, "band-1", input);
+
+    expect(releasesRepository.create).toHaveBeenCalledWith(
+      expect.objectContaining({ style: "metal" }),
+    );
   });
 
   it("throws NotFound when the band is not the owner's", async () => {

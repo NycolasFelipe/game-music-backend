@@ -4,7 +4,6 @@ import type { ReleaseCredits } from "@/modules/releases/domain/constants/release
 export interface StartReleaseInput {
   title: string;
   concept: string;
-  style: string;
   format: string;
   budgetTier: string;
   credits: ReleaseCredits;

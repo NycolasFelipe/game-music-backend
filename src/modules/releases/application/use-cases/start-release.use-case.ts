@@ -47,7 +47,8 @@ export class StartReleaseUseCase {
    *
    * @param actor - The authenticated band owner.
    * @param bandId - The band the release belongs to.
-   * @param input - The draft's authorship (title/concept/style/format/budget/credits).
+   * @param input - The draft's authorship (title/concept/format/budget/credits).
+   *   The style is always the band's theme (ADR-0030).
    * @returns The created draft view.
    */
   async execute(
@@ -104,7 +105,8 @@ export class StartReleaseUseCase {
       title: input.title,
       concept: input.concept,
       format: input.format,
-      style: input.style,
+      // The work takes the band's style, chosen once at creation (ADR-0030).
+      style: composed.band.theme,
       budgetTier: input.budgetTier,
       credits: input.credits,
       productionTurnsLeft: format.productionTurns,
