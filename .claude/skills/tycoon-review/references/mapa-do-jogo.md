@@ -26,9 +26,11 @@ Abreviações: `B` = `game-music-backend/src/modules`, `F` =
   6. Reajuste automático de salários, se `autoSalaryAdjust` estiver ligado.
   7. Folha de pagamento; integrantes sem pagamento acumulam atraso e saem
      quando `atraso >= paciência`.
-  8. Sorteia evento ativo (35%).
+  8. Sorteia evento ativo (100%, ADR-0031): nenhum modelo se repete no save, e o
+     semestre fica sem evento quando o catálogo da fase acaba.
   9. Grava snapshot (fãs, saldo, humor médio, relação média).
-- **Fãs não mudam no tick.** Só mudam por lançamento, show e evento.
+- **Fãs só mudam no tick quando alguém sai** (−10% por saída, ADR-0032). No
+  resto, mudam por lançamento, show e evento.
 - **Painel do turno (ADR-0022):** `GET /bands/:bandId/turns/panel`
   (`get-turn-panel.use-case.ts`) lê sem gravar: pendências (evento ativo e
   sessão de estúdio bloqueiam; obra pronta não), show já tocado no semestre e
@@ -149,13 +151,14 @@ dos 5 instrumentos de cada integrante.
 
 ### Atividades (dinheiro → humor e relação)
 
-`B/activities`. No código, sem limite por turno, com saturação `[1, .5, .25, .1]`.
-A ADR-0031 (aceita) limita a 1 convívio por turno, ainda não implementado.
+`B/activities`. **Um convívio por turno** (`ACTIVITY_LIMIT_PER_TURN`, ADR-0031 §3);
+o segundo devolve 409. A saturação `[1, .5, .25, .1]` continua no cálculo, mas só
+o primeiro fator age.
 Custo = `(base + porPessoa × n) × (1 + 0,06 × nívelDeFama)`. Chance de
 confusão cresce com o pior par e, quando acontece, gera um evento ativo que
 bloqueia o turno seguinte. O ganho de relação vale para todos os pares de
-convidados e para em +3 (`ACTIVITY_RELATIONSHIP_CAP`, ADR-0029): +4 e +5 só vêm de
-eventos, e um par acima de +3 não muda.
+convidados e para em +2 (`ACTIVITY_RELATIONSHIP_CAP`, ADR-0029 e ADR-0032 §4): de +3 a +5
+só vêm de eventos, e um par acima de +2 não muda.
 
 | Atividade | Base | Por pessoa | Humor | Relação | Confusão |
 |---|---|---|---|---|---|
@@ -179,14 +182,13 @@ um arquivo por grupo (`ported`, `garagem`, `bares`, `casas`, `nacional`,
   `0271`, 151 a 2.000), casas (`0301` a `0352`, 2.001 a 100.000) e nacional
   (`0401` a `0455`, 100.001 a 2.000.000). Todos têm uma opção extra ligada a
   um traço, e os 32 traços aparecem em algum evento. Acima de 2 milhões de fãs
-  só há o 0002, que ninguém alcança em 80 turnos. Um template não se repete em
-  3 anos, `generate-active-event.use-case.ts`. A janela
-  (`Between(ano - 3, ano + 3)`) cobre 7 anos-meio, mas o do ano atual ainda não
-  tem evento na hora do sorteio, então bloqueia os modelos dos 6 avanços
-  anteriores, como diz a ADR-0025. O gerador tira os recentes antes de sortear.
-- **Ritmo medido (2026-11-10, semente 20261110, 800 partidas de 80 turnos):** 28
-  eventos do avanço por partida (p10 22, p90 34), 35% em todas as fases, e o
-  sorteio sempre acha modelo. Quem faz convívio em 1 de cada 3 turnos soma ~5
+  só há o 0002, que ninguém alcança em 80 turnos. Um template **não se repete
+  no save** (ADR-0031 §1): `generate-active-event.use-case.ts` passa ao gerador
+  todos os modelos que a banda já viu (`usedTemplateIds`), e o gerador os tira
+  antes de sortear. Sem modelo livre, o semestre fica sem evento (§4).
+- **Ritmo medido antes da ADR-0031 (2026-11-10, semente 20261110, 800 partidas
+  de 80 turnos):** 28 eventos do avanço por partida (p10 22, p90 34), com o
+  sorteio de 35%. Quem faz convívio em 1 de cada 3 turnos soma ~5
   tretas. Antes do teto da ADR-0029, esse perfil tinha 96% dos pares em +4/+5 no
   T40; com o teto, 30%.
 - **Elenco (ADR-0028):** todo par que cumpre o modelo entra no sorteio. Brigas
@@ -204,19 +206,29 @@ um arquivo por grupo (`ported`, `garagem`, `bares`, `casas`, `nacional`,
   jogador equilibrado passa ~34 turnos na fase de casas e ~42 na nacional, e
   ninguém passa de 2 milhões de fãs.
 - `moneyChange` **não altera o saldo**; só desloca o humor em ±6%.
-- **Humor dos eventos:** `happinessChangePercent` vira pontos com `× 5/100`
-  (`consequence-resolver.ts`), então "−8%" vale −0,4 e só para os envolvidos.
-  A ADR-0032 (proposta) sobe para `× 15/100` e dobra as relações.
+- **Peso dos eventos (ADR-0032 §1):** `happinessChangePercent` vira pontos com
+  `× 15/100` e toda mudança de relação vale o dobro
+  (`events/domain/constants/consequence-weight.constant.ts`). "−8%" vale −1,2,
+  só para os envolvidos.
 
 ### Clima (humor e relação)
 
-- Fontes de humor: salário pago +0,15 por turno (`salary.constant.ts`),
+- Fontes de humor: salário pago +0,05 por turno (`salary.constant.ts`),
   convívio, show (`-desgaste + (desempenho - esperado) × 3`), sessões de
-  estúdio, orgulho do lançamento e eventos. Nenhuma regra puxa humor ou relação
-  de volta ao neutro, e ninguém sai por humor (só por salário atrasado).
-- Medição de 2026-11-10 (semente 20261111): de T13 a T80, 66% a 87% dos
-  integrantes ficam com humor ≥ 4,5; a diferença entre escolher bem e mal nos
-  eventos é de 0,1 a 0,3 de humor no T26. Detalhes e proposta na ADR-0032.
+  estúdio, orgulho do lançamento e eventos.
+- **Volta ao neutro (ADR-0032 §2):** no tick, depois da folha, o humor perde 5%
+  da distância até 0 (`MOOD_DRIFT_RATE`, `band-members/domain/mood/mood.calculator.ts`).
+  A relação não volta sozinha.
+- **Saída por humor (ADR-0032 §5):** humor ≤ −4 no fim de 2 avanços seguidos
+  (`low_mood_turns`) tira o integrante, com motivo `humor` no Arquivo. **Toda
+  saída** (humor ou salário) custa 10% dos fãs, composto (`fansAfterDepartures`).
+  A previsão do turno usa as mesmas funções e mostra quem sai, quem está em
+  risco e os fãs perdidos. Os fãs agora mudam no tick quando alguém sai.
+- Medição antes da ADR-0032 (semente 20261111): de T13 a T80, 66% a 87% dos
+  integrantes ficavam com humor ≥ 4,5, e escolher bem ou mal nos eventos mudava
+  0,1 a 0,3 de humor no T26. Com as regras novas (simuladas), quem escolhe bem
+  fica entre 2,5 e 4,5 e o jogador atento perde alguém por humor em 5% a 33% das
+  partidas, conforme escolhe.
 
 ## Aleatoriedade
 
