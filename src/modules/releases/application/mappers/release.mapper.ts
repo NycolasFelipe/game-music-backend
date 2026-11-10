@@ -19,6 +19,7 @@ export function toReleaseView(release: ReleaseEntity): ReleaseView {
           criticScore: release.criticScore,
           publicScore: release.publicScore,
           format: release.format,
+          year: release.releasedAtYear,
         })
       : null;
 

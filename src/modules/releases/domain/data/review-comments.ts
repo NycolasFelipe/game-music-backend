@@ -3,7 +3,9 @@
  * and public scores of a finished work. Three critic comments + three public
  * comments per release, plus a format-specific note — selected deterministically
  * per release (seeded by its id) so they are stable across reads, without
- * persisting them. Tone: lightly humorous, tycoon-game flavor.
+ * persisting them. Tone: lightly humorous, tycoon-game flavor. Blurbs,
+ * outlets and platforms that name something dated carry `desde` (ADR-0024),
+ * so a 1983 review is not signed "no Threads".
  */
 
 /** Critic comment band (five bands, from worst to masterpiece). */
@@ -14,33 +16,104 @@ export type CriticBand =
 export type PublicBand =
   "muito_negativa" | "negativa" | "mista" | "positiva" | "muito_positiva";
 
+/**
+ * A blurb that does not fit every format: `multiTrack` ones talk about several
+ * tracks (a single has one or two), `onlyFormats` ones name the format itself.
+ * Plain strings fit any format. `{obra}` becomes the format's noun
+ * ({@link WORK_NOUNS}), so a single is never called an album.
+ */
+export interface ReviewCommentEntry {
+  text: string;
+  multiTrack?: boolean;
+  onlyFormats?: string[];
+  /** First year the text makes sense (ADR-0024); absent means any year. */
+  desde?: number;
+}
+
+/**
+ * A signature that only exists in some years (ADR-0024): an outlet or a place
+ * where the public speaks. `ate` is the last year it exists under that name.
+ */
+export interface DatedName {
+  name: string;
+  desde?: number;
+  ate?: number;
+}
+
+/**
+ * Whether a dated text or name fits the release year.
+ *
+ * @param item - Something with optional `desde`/`ate` years.
+ * @param year - The release year; `null` means no era filter.
+ * @returns `true` when it fits.
+ */
+export function fitsYear(
+  item: { desde?: number; ate?: number },
+  year: number | null,
+): boolean {
+  if (year === null) return true;
+  return (item.desde ?? -Infinity) <= year && year <= (item.ate ?? Infinity);
+}
+
+/** A pool of blurbs, plain or restricted by format. */
+export type ReviewCommentPool = Array<string | ReviewCommentEntry>;
+
+/** What `{obra}` reads as, per format. */
+export const WORK_NOUNS: Record<string, string> = {
+  single: "single",
+  ep: "EP",
+  lp: "LP",
+  album: "álbum",
+  acoustic: "acústico",
+  live: "disco ao vivo",
+};
+
+/** Formats with a single track or two: no blurb about "the tracks". */
+const SINGLE_TRACK_FORMATS = new Set(["single"]);
+
 /** Specialized-critic blurbs per band. */
-export const CRITIC_COMMENTS: Record<CriticBand, string[]> = {
+export const CRITIC_COMMENTS: Record<CriticBand, ReviewCommentPool> = {
   negativa: [
-    "A banda parece confortável demais em repetir fórmulas conhecidas — tão confortável que dá para ouvir o bocejo entre as faixas.",
+    {
+      text: "A banda parece confortável demais em repetir fórmulas conhecidas — tão confortável que dá para ouvir o bocejo entre as faixas.",
+      multiTrack: true,
+    },
     "Apesar da boa produção, as composições têm a personalidade de uma sala de espera de dentista.",
     "Os refrões escapam da memória mais rápido que promessa de campanha.",
     "A tentativa de experimentar novos estilos compromete a coesão do disco — é colocar abacaxi em tudo só para provar que pode.",
-    "Um álbum corajoso: corajoso o bastante para testar a paciência de quem aperta o play.",
+    "Um {obra} corajoso: corajoso o bastante para testar a paciência de quem aperta o play.",
     "Há ambição aqui, mas ela ficou presa no elevador entre o estúdio e a masterização.",
     "Se o objetivo era soar genérico, parabéns: missão cumprida com louvor.",
     "O disco tem começo, meio e fim — pena que os três soem exatamente iguais.",
-    "A banda claramente investiu no equipamento. No repertório, nem tanto.",
+    {
+      text: "A banda claramente investiu no equipamento. No repertório, nem tanto.",
+      multiTrack: true,
+    },
     "Uma coletânea de ideias que pediram demissão antes de bater o ponto.",
-    "Ouvir na íntegra é um exercício de resiliência que merecia crédito acadêmico.",
+    {
+      text: "Ouvir na íntegra é um exercício de resiliência que merecia crédito acadêmico.",
+      multiTrack: true,
+    },
   ],
   mista: [
-    "Há boas ideias espalhadas pelo álbum, mas a execução às vezes chega atrasada e pedindo desculpas.",
+    "Há boas ideias espalhadas pelo {obra}, mas a execução às vezes chega atrasada e pedindo desculpas.",
     "O início é promissor; a segunda metade parece ter sido gravada numa segunda-feira.",
     "As letras evoluíram, mas a produção ficou tão polida que escorregou e levou a personalidade junto.",
     "Um lançamento competente — o tipo de disco que você elogia e esquece no mesmo dia.",
     "Metade genial, metade enrolação: um sanduíche de recheio ótimo e pão dormido.",
     "A banda acerta o alvo com frequência, só que às vezes mira no alvo do vizinho.",
-    "Tem música para a playlist e música para treinar o dedo no botão de pular.",
+    {
+      text: "Tem música para a playlist e música para treinar o dedo no botão de pular.",
+      desde: 2000,
+      multiTrack: true,
+    },
     "Ambicioso na intenção, econômico na entrega — faltou um cafezinho a mais no estúdio.",
     "Você sai satisfeito, mas com a leve sensação de que pediu tamanho família e veio individual.",
     "Um passo à frente e meio passo de lado: dança interessante, coreografia confusa.",
-    "Momentos brilhantes convivem com faixas que claramente entraram de penetra.",
+    {
+      text: "Momentos brilhantes convivem com faixas que claramente entraram de penetra.",
+      multiTrack: true,
+    },
   ],
   boa: [
     "Não reinventa o gênero, mas cumpre o combinado com um sorriso profissional no rosto.",
@@ -56,11 +129,14 @@ export const CRITIC_COMMENTS: Record<CriticBand, string[]> = {
     "Bem-acabado e sincero: a banda entrega o dever de casa com letra caprichada.",
   ],
   excelente: [
-    "Um álbum ambicioso e maduro na composição: melodias marcantes e arranjos que enfim pararam de pedir desculpas.",
-    "O single mostra evolução clara — produção limpa, refrões grudentos e a identidade sonora intacta e desfilando.",
+    "Um {obra} ambicioso e maduro na composição: melodias marcantes e arranjos que enfim pararam de pedir desculpas.",
+    "O {obra} mostra evolução clara — produção limpa, refrões grudentos e a identidade sonora intacta e desfilando.",
     "Consegue soar moderno sem trair as influências; poucos unem criatividade e acessibilidade com tanta naturalidade.",
     "A banda achou o ponto exato entre o cérebro e o pé que bate no chão.",
-    "Cada faixa parece saber exatamente por que foi convidada para a festa.",
+    {
+      text: "Cada faixa parece saber exatamente por que foi convidada para a festa.",
+      multiTrack: true,
+    },
     "É o tipo de disco que faz o crítico guardar o sarcasmo para outra ocasião.",
     "Ambição e execução finalmente assinaram o mesmo contrato — e o resultado brilha.",
     "Um trabalho que respeita o ouvinte e ainda paga o estacionamento.",
@@ -69,7 +145,10 @@ export const CRITIC_COMMENTS: Record<CriticBand, string[]> = {
     "A prova de que dá para ser inteligente e cativante sem escolher um dos dois.",
   ],
   obra_prima: [
-    "Um marco na carreira da banda e, provavelmente, no orçamento da gravadora: cada faixa é indispensável e o conjunto beira a perfeição.",
+    {
+      text: "Um marco na carreira da banda e, provavelmente, no orçamento da gravadora: cada faixa é indispensável e o conjunto beira a perfeição.",
+      multiTrack: true,
+    },
     "Raramente ambição, execução e emoção batem o ponto no mesmo horário. Aqui, bateram e ainda fizeram hora extra.",
     "Difícil apontar um defeito sem parecer implicância. Um clássico instantâneo, daqueles que envelhecem melhor que o crítico.",
     "A banda entregou o disco definitivo da discografia — a nova régua para quem vier depois suar frio.",
@@ -84,76 +163,124 @@ export const CRITIC_COMMENTS: Record<CriticBand, string[]> = {
 };
 
 /** Public (fan) blurbs per band. */
-export const PUBLIC_COMMENTS: Record<PublicBand, string[]> = {
+export const PUBLIC_COMMENTS: Record<PublicBand, ReviewCommentPool> = {
   muito_negativa: [
     "O pior lançamento da banda. E olha que eu já perdoei bastante coisa.",
-    "Nenhuma música me chamou atenção. Nem o silêncio entre elas.",
+    {
+      text: "Nenhuma música me chamou atenção. Nem o silêncio entre elas.",
+      multiTrack: true,
+    },
     "Soa completamente genérico, tipo música de espera do plano de saúde.",
     "Vou continuar ouvindo os álbuns antigos, obrigado.",
     "Coloquei no fone e o fone pediu demissão.",
-    "Paguei streaming pra isso? Quero meu domingo de volta.",
+    {
+      text: "Paguei streaming pra isso? Quero meu domingo de volta.",
+      desde: 2008,
+    },
     "Dei play por educação e tirei por instinto de sobrevivência.",
-    "Achei que era a intro. Era o álbum inteiro.",
+    "Achei que era a intro. Era o {obra} inteiro.",
     "Meu pet saiu da sala. Ele tem bom gosto.",
     "Prefiro o som do micro-ondas terminando a pipoca.",
     "Uma decepção tão redonda que dá para jogar boliche.",
   ],
   negativa: [
     "Não consegui terminar de ouvir. Fiz três pausas para tomar coragem.",
-    "Parece tudo igual — se tirar uma faixa, ninguém nota.",
-    "A produção está boa, mas as músicas não me prenderam nem com fita crepe.",
+    {
+      text: "Parece tudo igual — se tirar uma faixa, ninguém nota.",
+      multiTrack: true,
+    },
+    {
+      text: "A produção está boa, mas as músicas não me prenderam nem com fita crepe.",
+      multiTrack: true,
+    },
     "Depois do último álbum, esperava bem mais. Bem mais mesmo.",
     "Tem potencial, mas ficou no 'quase' o disco inteiro.",
     "Ouvi uma vez por respeito. Não haverá segunda.",
-    "Salvei uma música. Depois desfavoritei sem dó.",
+    {
+      text: "Salvei uma música. Depois desfavoritei sem dó.",
+      desde: 2008,
+      multiTrack: true,
+    },
     "É daqueles que tocam de fundo e você esquece que estão tocando.",
     "Faltou um empurrãozinho — e uns três refrões decentes.",
     "Não é ruim ruim, é aquele morno que irrita mais que o ruim.",
     "Enchi a expectativa e voltei com o troco em decepção.",
   ],
   mista: [
-    "Algumas faixas são ótimas, outras eu provavelmente vou pular (tá, várias).",
+    {
+      text: "Algumas faixas são ótimas, outras eu provavelmente vou pular (tá, várias).",
+      multiTrack: true,
+    },
     "A produção melhorou, mas cadê a energia dos primeiros trabalhos?",
-    "Bom álbum, só não achei tão marcante. Já esqueci metade.",
+    "Bom {obra}, só não achei tão marcante. Já esqueci metade.",
     "Esperava algo mais ousado — veio na medida do seguro.",
     "Tem dia que eu amo, tem dia que eu dou de ombros.",
-    "Metade playlist, metade 'próxima, por favor'.",
+    {
+      text: "Metade playlist, metade 'próxima, por favor'.",
+      desde: 2000,
+    },
     "Não é o melhor nem o pior — é o famoso 'tá ok'.",
     "Gostei o suficiente para repetir, não o suficiente para recomendar.",
     "Uns acertos honestos e uns enchimentos igualmente honestos.",
     "Serve bem para um dia comum. Extraordinário que é bom, nada.",
-    "Salvei duas músicas e uma dúvida sobre o resto.",
+    {
+      text: "Salvei duas músicas e uma dúvida sobre o resto.",
+      desde: 2008,
+      multiTrack: true,
+    },
   ],
   positiva: [
-    "Gostei bastante. Tem duas ou três músicas que vão ficar comigo por um bom tempo.",
-    "O single é muito bom. Já fiquei animado para o próximo álbum.",
+    {
+      text: "Gostei bastante. Tem duas ou três músicas que vão ficar comigo por um bom tempo.",
+      multiTrack: true,
+    },
+    {
+      text: "O single é muito bom. Já fiquei animado para o próximo álbum.",
+      onlyFormats: ["single"],
+    },
     "Achei melhor que o lançamento anterior — evolução clara.",
-    "Entrou direto na minha playlist de rotina.",
+    {
+      text: "Entrou direto na minha playlist de rotina.",
+      desde: 2000,
+    },
     "Não é perfeito, mas acerta muito mais do que erra.",
     "Toquei três vezes seguidas sem reclamar. Isso já diz muito.",
     "Aquele disco que você coloca e deixa rolar até o fim.",
     "A banda tá afiada. Faltou só um hit gigante para fechar.",
     "Recomendei para dois amigos. Um já virou fã.",
     "Ótimo trabalho — daqueles que melhoram o dia sem pedir muito.",
-    "Dá para sentir carinho e capricho em cada faixa.",
+    {
+      text: "Dá para sentir carinho e capricho em cada faixa.",
+      multiTrack: true,
+    },
   ],
   muito_positiva: [
-    "Não consigo parar de ouvir esse álbum. Socorro (não me salvem).",
+    "Não consigo parar de ouvir esse {obra}. Socorro (não me salvem).",
     "Melhor lançamento da banda até agora, e olha que a barra estava alta.",
-    "Todas as músicas entraram na minha playlist. Todas mesmo.",
+    {
+      text: "Todas as músicas entraram na minha playlist. Todas mesmo.",
+      desde: 2000,
+      multiTrack: true,
+    },
     "Valeu cada minuto de espera e mais alguns de bônus.",
     "Já ouvi cinco vezes seguidas e comecei a sexta.",
     "Disco do ano com folga. Podem guardar o troféu.",
     "Chorei, dancei e mandei no grupo da família. Nessa ordem.",
-    "Cada faixa é um single em potencial. Como assim?",
+    {
+      text: "Cada faixa é um single em potencial. Como assim?",
+      multiTrack: true,
+    },
     "A banda entregou tudo e ainda deu troco. Obra de arte.",
-    "Coloquei no repeat e esqueci que o mundo lá fora existia.",
+    {
+      text: "Coloquei no repeat e esqueci que o mundo lá fora existia.",
+      desde: 1985,
+    },
     "Instantaneamente favorito. Já é trilha sonora da minha vida.",
   ],
 };
 
 /** Format-specific editorial notes, keyed by release format id. */
-export const FORMAT_COMMENTS: Record<string, string[]> = {
+export const FORMAT_COMMENTS: Record<string, ReviewCommentPool> = {
   single: [
     "Um ótimo cartão de visitas para a nova fase da banda.",
     "Escolha perfeita para abrir a divulgação do álbum.",
@@ -163,8 +290,14 @@ export const FORMAT_COMMENTS: Record<string, string[]> = {
     "Se a ideia era abrir o apetite, conseguiram.",
     "Uma isca e tanto para fisgar novos ouvintes.",
     "Prova de que dá para dizer muito em poucos minutos.",
-    "O tipo de faixa feita para o repeat automático.",
-    "Aposta segura para o rádio e para a playlist.",
+    {
+      text: "O tipo de faixa feita para o repeat automático.",
+      desde: 1985,
+    },
+    {
+      text: "Aposta segura para o rádio e para a playlist.",
+      desde: 2000,
+    },
   ],
   ep: [
     "Curto, direto e sem faixas descartáveis.",
@@ -252,29 +385,29 @@ export function publicBandFor(score: number): PublicBand {
  * @param formatId - The release format id.
  * @returns The matching pool (possibly empty).
  */
-export function formatCommentsFor(formatId: string): string[] {
+export function formatCommentsFor(formatId: string): ReviewCommentPool {
   if (formatId === "lp") return FORMAT_COMMENTS.album;
   return FORMAT_COMMENTS[formatId] ?? [];
 }
 
 /** Fictional specialized-critic outlets that sign the critic reviews. */
-export const CRITIC_OUTLETS: string[] = [
-  "Revista Distorção",
-  "Portal Acorde",
-  "Blog Grave & Agudo",
-  "Coluna Vinil Quente",
-  "Canal Contrabaixo",
-  "Fanzine Feedback",
-  "Palco Central",
-  "Podcast Sem Refrão",
-  "O Amplificador",
-  "Revista Timbre",
-  "Rádio Onda Média",
-  "Gazeta do Groove",
-  "Sonoridade",
-  "Revista Clave",
-  "Portal Dissonância",
-  "Caderno B7",
+export const CRITIC_OUTLETS: DatedName[] = [
+  { name: "Revista Distorção" },
+  { name: "Portal Acorde", desde: 1997 },
+  { name: "Blog Grave & Agudo", desde: 2002 },
+  { name: "Coluna Vinil Quente" },
+  { name: "Canal Contrabaixo", desde: 2006 },
+  { name: "Fanzine Feedback" },
+  { name: "Palco Central" },
+  { name: "Podcast Sem Refrão", desde: 2005 },
+  { name: "O Amplificador" },
+  { name: "Revista Timbre" },
+  { name: "Rádio Onda Média" },
+  { name: "Gazeta do Groove" },
+  { name: "Sonoridade" },
+  { name: "Revista Clave" },
+  { name: "Portal Dissonância", desde: 1997 },
+  { name: "Caderno B7" },
 ];
 
 /** Names that sign the public reviews. */
@@ -302,14 +435,19 @@ export const PUBLIC_REVIEWER_NAMES: string[] = [
 ];
 
 /** Platforms a public review was posted on (e.g. "no X"). */
-export const PUBLIC_PLATFORMS: string[] = [
-  "no X",
-  "no Instagram",
-  "no TikTok",
-  "no YouTube",
-  "no Threads",
-  "no fórum",
-  "no Reddit",
+export const PUBLIC_PLATFORMS: DatedName[] = [
+  { name: "por carta à redação" },
+  { name: "na fila do show" },
+  { name: "ao telefone da rádio" },
+  { name: "no fanzine", desde: 1970 },
+  { name: "no fórum", desde: 1996 },
+  { name: "no YouTube", desde: 2005 },
+  { name: "no Reddit", desde: 2005 },
+  { name: "no Twitter", desde: 2006, ate: 2022 },
+  { name: "no Instagram", desde: 2010 },
+  { name: "no TikTok", desde: 2018 },
+  { name: "no X", desde: 2023 },
+  { name: "no Threads", desde: 2023 },
 ];
 
 /** A review blurb paired with the author who signed it. */
@@ -323,6 +461,32 @@ export interface SelectedReviewComments {
   critic: ReviewComment[];
   public: ReviewComment[];
   format: string | null;
+}
+
+/**
+ * The blurbs of a pool that fit a format and the release year, with `{obra}`
+ * written as that format's noun.
+ *
+ * @param pool - The band's pool.
+ * @param formatId - The release format id.
+ * @param year - The release year (`null`: any year).
+ * @returns The fitting blurbs, ready to show.
+ */
+export function commentsForFormat(
+  pool: ReviewCommentPool,
+  formatId: string,
+  year: number | null = null,
+): string[] {
+  const noun = WORK_NOUNS[formatId] ?? "disco";
+  return pool
+    .map((entry) => (typeof entry === "string" ? { text: entry } : entry))
+    .filter(
+      (entry: ReviewCommentEntry) =>
+        !(entry.multiTrack && SINGLE_TRACK_FORMATS.has(formatId)) &&
+        (!entry.onlyFormats || entry.onlyFormats.includes(formatId)) &&
+        fitsYear(entry, year),
+    )
+    .map((entry) => entry.text.replaceAll("{obra}", noun));
 }
 
 /**
@@ -371,7 +535,8 @@ function pickDistinct(pool: string[], count: number, seed: number): string[] {
  * Selects the three critic comments, three public comments and one format note
  * for a finished work — deterministically from its id (ADR-0011).
  *
- * @param input - The release id, its critic/public scores and format.
+ * @param input - The release id, its critic/public scores, format and
+ *   release year.
  * @returns The selected comments.
  */
 export function selectReviewComments(input: {
@@ -379,10 +544,31 @@ export function selectReviewComments(input: {
   criticScore: number;
   publicScore: number;
   format: string;
+  /** The release year; dated texts and signatures follow it (ADR-0024). */
+  year: number | null;
 }): SelectedReviewComments {
-  const criticPool = CRITIC_COMMENTS[criticBandFor(input.criticScore)];
-  const publicPool = PUBLIC_COMMENTS[publicBandFor(input.publicScore)];
-  const formatPool = formatCommentsFor(input.format);
+  const year = input.year;
+  const criticPool = commentsForFormat(
+    CRITIC_COMMENTS[criticBandFor(input.criticScore)],
+    input.format,
+    year,
+  );
+  const publicPool = commentsForFormat(
+    PUBLIC_COMMENTS[publicBandFor(input.publicScore)],
+    input.format,
+    year,
+  );
+  const formatPool = commentsForFormat(
+    formatCommentsFor(input.format),
+    input.format,
+    year,
+  );
+  const outlets = CRITIC_OUTLETS.filter((o) => fitsYear(o, year)).map(
+    (o) => o.name,
+  );
+  const platforms = PUBLIC_PLATFORMS.filter((p) => fitsYear(p, year)).map(
+    (p) => p.name,
+  );
 
   const criticTexts = pickDistinct(
     criticPool,
@@ -390,7 +576,7 @@ export function selectReviewComments(input: {
     hashString(`${input.id}:critic`),
   );
   const criticOutlets = pickDistinct(
-    CRITIC_OUTLETS,
+    outlets,
     3,
     hashString(`${input.id}:critic-outlet`),
   );
@@ -414,9 +600,8 @@ export function selectReviewComments(input: {
     public: publicTexts.map((text, index) => ({
       text,
       author: `${publicNames[index] ?? publicNames[0]}, ${
-        PUBLIC_PLATFORMS[
-          hashString(`${input.id}:public-platform:${index}`) %
-            PUBLIC_PLATFORMS.length
+        platforms[
+          hashString(`${input.id}:public-platform:${index}`) % platforms.length
         ]
       }`,
     })),
