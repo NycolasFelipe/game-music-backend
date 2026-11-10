@@ -28,6 +28,15 @@ Abreviações: `B` = `game-music-backend/src/modules`, `F` =
   8. Sorteia evento ativo (35%).
   9. Grava snapshot (fãs, saldo, humor médio, relação média).
 - **Fãs não mudam no tick.** Só mudam por lançamento, show e evento.
+- **Painel do turno (ADR-0022):** `GET /bands/:bandId/turns/panel`
+  (`get-turn-panel.use-case.ts`) lê sem gravar: pendências (evento ativo e
+  sessão de estúdio bloqueiam; obra pronta não), show já tocado no semestre e
+  prévia de cada casa (`PreviewGigsUseCase`, `evaluateGig` com variância 1, ou
+  seja o centro da faixa `± GIG_VARIANCE`), se houve confraternização, obra no
+  estúdio com a saturação do próximo lançamento e a previsão do avanço
+  (`forecast-turn.use-case.ts`: royalties, reajuste automático, folha, caixa
+  final, quem fica em atraso e quem sai). A previsão usa as mesmas funções
+  puras do tick, então é exata para o estado do momento.
 
 ## Recursos
 
@@ -185,6 +194,13 @@ variação de caixa e fãs desde o turno anterior. `PUT relationships`
 define qualquer nível de relação de graça e funciona como atalho de debug.
 A criação de banda aceita habilidades de 0 a 10 vindas do cliente.
 
+Aparência (ADR-0023, sem efeito de jogo): cada integrante tem `appearance`
+(penteado, barba, óculos, brinco, camisa e tom), gerada em
+`B/band-members/domain/generation/appearance.generator.ts` a partir do gênero,
+da idade e do avatar; a banda tem `photoScene` (`ensaio`, `palco`, `muro`,
+`estudio`), sorteado na criação. Servem só aos retratos e à foto de capa do
+frontend "revista".
+
 ## Interface (fluidez)
 
 - `F/pages/BandTimelineTab.tsx`: botão de avançar; vira "Resolver N
@@ -202,8 +218,10 @@ A criação de banda aceita habilidades de 0 a 10 vindas do cliente.
 
 ## Documentação de design
 
-- `game-music-backend/docs/adr/0001` a `0018`: uma ADR por sistema (turnos
-  0006, fama 0007, obras 0008, salários 0010, shows 0016, atividades 0017).
+- `game-music-backend/docs/adr/0001` a `0023`: uma ADR por sistema (turnos
+  0006, fama 0007, obras 0008, salários 0010, shows 0016, atividades 0017,
+  relatório do turno 0020, humor do show 0021, painel do turno 0022,
+  aparência 0023).
   Leia a ADR do sistema antes de julgar: ela registra a intenção.
 - `game-music-backend/docs/future-work.md`: backlog de ideias.
 - `game-music-frontend/docs/adr/0001-central-de-decisoes.md`.
