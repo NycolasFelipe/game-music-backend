@@ -1,3 +1,4 @@
+import { ACTIVE_EVENT_TEMPLATES } from "@/modules/events/domain/data/active-event-templates";
 import { generateActiveEvent } from "@/modules/events/domain/generation/active-event.generator";
 import type {
   EventCharacter,
@@ -52,21 +53,27 @@ describe("generateActiveEvent", () => {
   });
 
   it("never returns a template listed as recent", () => {
-    const allIds = new Set(generateMany().map((e) => e.templateId));
-    const recent = new Set(allIds);
+    const recent = new Set(ACTIVE_EVENT_TEMPLATES.map((t) => t.id));
     const events = generateMany({ recent });
     expect(events).toHaveLength(0);
   });
 
   it("excludes a pair whose relationship level exceeds maxRelationshipLevel", () => {
-    // At fanCount 200 only template 0001 is eligible, and it requires the pair's
-    // relationship level <= 3. A level of 4 must make it ineligible.
+    // Every template but 0001 is marked recent, so only 0001 can be drawn, and
+    // it requires the pair's relationship level <= 3. A level of 4 must make it
+    // ineligible.
+    const recent = new Set(
+      ACTIVE_EVENT_TEMPLATES.map((t) => t.id).filter(
+        (id) => id !== "0001-melodia-familiar",
+      ),
+    );
     for (let i = 0; i < 100; i++) {
       const e = generateActiveEvent({
         year: 2003,
         characters,
         relationships: [{ memberAId: "m1", memberBId: "m2", level: 4 }],
         fanCount: 200,
+        recentTemplateIds: recent,
       });
       expect(e).toBeNull();
     }

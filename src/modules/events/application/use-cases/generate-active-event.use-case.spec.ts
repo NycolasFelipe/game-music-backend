@@ -3,11 +3,13 @@ import { Test } from "@nestjs/testing";
 import { AuthenticatedUserEntity } from "@/common/entities/authenticated-user.entity";
 import { BANDS_REPOSITORY } from "@/modules/bands/domain/repositories/bands.repository";
 import { GenerateActiveEventUseCase } from "@/modules/events/application/use-cases/generate-active-event.use-case";
+import { ACTIVE_EVENT_TEMPLATES } from "@/modules/events/domain/data/active-event-templates";
 import { ActiveEventEntity } from "@/modules/events/domain/entities/active-event.entity";
 import { ACTIVE_EVENTS_REPOSITORY } from "@/modules/events/domain/repositories/active-events.repository";
 
 const actor = new AuthenticatedUserEntity("owner-1", "user");
 const BAND_ID = "band-1";
+const ALL_TEMPLATE_IDS = ACTIVE_EVENT_TEMPLATES.map((t) => t.id);
 
 const member = (id: string, characteristics: string[]) => ({
   id,
@@ -40,7 +42,10 @@ describe("GenerateActiveEventUseCase", () => {
       members: [member("m1", ["plagiarist"]), member("m2", ["professional"])],
       relationships: [{ memberAId: "m1", memberBId: "m2", level: 0 }],
     });
-    eventsRepository.recentTemplateIds.mockResolvedValue([]);
+    // Every other template was used recently, so 0001 is the only candidate.
+    eventsRepository.recentTemplateIds.mockResolvedValue(
+      ALL_TEMPLATE_IDS.filter((id) => id !== "0001-melodia-familiar"),
+    );
     eventsRepository.create.mockImplementation((data) =>
       Promise.resolve(
         new ActiveEventEntity(
@@ -76,7 +81,8 @@ describe("GenerateActiveEventUseCase", () => {
       members: [member("m1", ["professional"]), member("m2", ["stable"])],
       relationships: [{ memberAId: "m1", memberBId: "m2", level: 0 }],
     });
-    eventsRepository.recentTemplateIds.mockResolvedValue([]);
+    // Every template was used recently: nothing is left to draw.
+    eventsRepository.recentTemplateIds.mockResolvedValue(ALL_TEMPLATE_IDS);
 
     await expect(useCase.execute(actor, BAND_ID, 2003)).rejects.toBeInstanceOf(
       NotFoundException,
