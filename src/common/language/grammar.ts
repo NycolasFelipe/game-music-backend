@@ -1,12 +1,10 @@
 /**
- * Grammar helpers for the band-name generator: articles, preposition +
- * article contractions, prefix orthography and the English "a/an" choice.
- * Pure functions with no randomness, so each rule can be tested on its own.
+ * Grammar helpers shared by the text generators (band names, release titles,
+ * release concepts): articles, preposition + article contractions (including
+ * the crase), prefix orthography and the English "a/an" choice. Pure functions
+ * with no randomness, so each rule can be tested on its own.
  */
-import type {
-  Gender,
-  GrammaticalNumber,
-} from "@/modules/bands/domain/generation/band-name.lexicon";
+import type { Gender, GrammaticalNumber } from "@/common/language/lexicon";
 
 /** Romance languages handled by the agreement rules. */
 export type RomanceLanguage = "pt" | "es";
@@ -32,12 +30,13 @@ const ARTICLES: Record<RomanceLanguage, ArticleTable> = {
 
 /**
  * Portuguese prepositions that fuse with the definite article
- * (de + o = do, em + a = na, por + os = pelos).
+ * (de + o = do, em + a = na, por + os = pelos, a + a = à).
  */
 const PT_CONTRACTIONS: Record<
   string,
   Record<Gender, Record<GrammaticalNumber, string>>
 > = {
+  a: { m: { sg: "ao", pl: "aos" }, f: { sg: "à", pl: "às" } },
   de: { m: { sg: "do", pl: "dos" }, f: { sg: "da", pl: "das" } },
   em: { m: { sg: "no", pl: "nos" }, f: { sg: "na", pl: "nas" } },
   por: { m: { sg: "pelo", pl: "pelos" }, f: { sg: "pela", pl: "pelas" } },
@@ -79,12 +78,23 @@ export function capitalizeFirst(text: string): string {
 }
 
 /**
+ * Joins words with single spaces, skipping empty ones, and capitalizes the
+ * first letter (articles inside the phrase stay lower case).
+ *
+ * @param parts - Words or phrases in order.
+ * @returns The joined phrase.
+ */
+export function joinWords(...parts: string[]): string {
+  return capitalizeFirst(parts.filter((part) => part !== "").join(" "));
+}
+
+/**
  * Lower-cases the first character of a string.
  *
  * @param text - Any text.
  * @returns The text with its first character in lower case.
  */
-function lowerFirst(text: string): string {
+export function lowerFirst(text: string): string {
   return text.charAt(0).toLowerCase() + text.slice(1);
 }
 
@@ -109,8 +119,8 @@ export function romanceArticle(
 
 /**
  * Joins a preposition with the definite article of the next noun, applying
- * the mandatory contractions: Portuguese "de/em/por" ("do", "nas", "pelos")
- * and Spanish "de/a + el" ("del", "más allá del", "al"). Other prepositions
+ * the mandatory contractions: Portuguese "a/de/em/por" ("à", "aos", "do",
+ * "nas", "pelos") and Spanish "de/a + el" ("del", "más allá del", "al"). Other prepositions
  * keep the article separate ("sem o", "con la").
  *
  * @param language - "pt" or "es".

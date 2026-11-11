@@ -8,23 +8,31 @@ import { EN_BAND_NAME_WORDS } from "@/modules/bands/domain/data/band-name-words-
 import { ES_BAND_NAME_WORDS } from "@/modules/bands/domain/data/band-name-words-es";
 import { PT_BAND_NAME_WORDS } from "@/modules/bands/domain/data/band-name-words-pt";
 import {
-  capitalizeFirst,
   englishIndefiniteArticle,
   joinPrefixEn,
   joinPrefixEs,
   joinPrefixPt,
+  joinWords,
   prepositionWithArticle,
   romanceArticle,
   type RomanceLanguage,
-} from "@/modules/bands/domain/generation/band-name.grammar";
+} from "@/common/language/grammar";
 import type {
   EnglishNoun,
   GrammaticalNumber,
+  RomanceAdjective,
+  RomanceNoun,
+} from "@/common/language/lexicon";
+import {
+  adjectiveForm,
+  drawNumber,
+  nounForm,
+} from "@/common/language/inflection";
+import { chance, pick, pickOther } from "@/common/language/random-pick";
+import type {
   NameGenre,
   NameLanguage,
-  RomanceAdjective,
   RomanceLexicon,
-  RomanceNoun,
 } from "@/modules/bands/domain/generation/band-name.lexicon";
 
 export type {
@@ -69,56 +77,6 @@ const DEFINITE_CHANCE = 0.85;
 const PRENOMINAL_CHANCE = 0.3;
 
 /**
- * Picks a random element from a non-empty array.
- *
- * @param array - Candidates.
- * @returns One of them, uniformly.
- */
-function pick<T>(array: readonly T[]): T {
-  return array[Math.floor(Math.random() * array.length)];
-}
-
-/**
- * Picks a random element whose key differs from every excluded key, so a name
- * never repeats a word ("Abismo do Abismo"). Falls back to the full list if
- * the exclusion empties it.
- *
- * @param array - Candidates.
- * @param key - Extracts the comparable word of a candidate.
- * @param excluded - Words already used in the name.
- * @returns A candidate not yet used.
- */
-function pickOther<T>(
-  array: readonly T[],
-  key: (item: T) => string,
-  excluded: readonly string[],
-): T {
-  const remaining = array.filter((item) => !excluded.includes(key(item)));
-  return pick(remaining.length > 0 ? remaining : array);
-}
-
-/**
- * Draws `true` with the given probability.
- *
- * @param probability - Value between 0 and 1.
- * @returns Whether the draw succeeded.
- */
-function chance(probability: number): boolean {
-  return Math.random() < probability;
-}
-
-/**
- * Joins name parts with spaces, skipping empty ones, and capitalizes the
- * first letter (articles inside the name stay lower case).
- *
- * @param parts - Words or phrases in order.
- * @returns The final name.
- */
-function compose(...parts: string[]): string {
-  return capitalizeFirst(parts.filter((part) => part !== "").join(" "));
-}
-
-/**
  * Whether a word is a single token (no space or hyphen), the only kind that
  * takes a prefix.
  *
@@ -132,50 +90,6 @@ function isSingleWord(word: string): boolean {
 // ---------------------------------------------------------------------------
 // Portuguese and Spanish
 // ---------------------------------------------------------------------------
-
-/**
- * Draws the number of a Romance noun phrase, respecting nouns without plural.
- *
- * @param noun - Head noun.
- * @param pluralChance - Probability of plural when allowed.
- * @returns "sg" or "pl".
- */
-function romanceNumber(
-  noun: RomanceNoun,
-  pluralChance = PLURAL_CHANCE,
-): GrammaticalNumber {
-  return noun.pl !== null && chance(pluralChance) ? "pl" : "sg";
-}
-
-/**
- * Returns the noun form for a number.
- *
- * @param noun - The noun.
- * @param number - Desired number.
- * @returns Singular or plural form.
- */
-function romanceNounForm(noun: RomanceNoun, number: GrammaticalNumber): string {
-  return number === "pl" && noun.pl !== null ? noun.pl : noun.sg;
-}
-
-/**
- * Returns the adjective form agreeing with a noun.
- *
- * @param adjective - The adjective.
- * @param noun - The noun it modifies.
- * @param number - Number of the noun phrase.
- * @returns The agreeing form ("Elétricas" for a feminine plural).
- */
-function romanceAdjectiveForm(
-  adjective: RomanceAdjective,
-  noun: RomanceNoun,
-  number: GrammaticalNumber,
-): string {
-  if (noun.gender === "m") {
-    return number === "sg" ? adjective.ms : adjective.mp;
-  }
-  return number === "sg" ? adjective.fs : adjective.fp;
-}
 
 /**
  * Returns the leading article of a name, or "" when articles are off.
@@ -215,11 +129,11 @@ function romanceNounWithAdjective(
   number: GrammaticalNumber,
   adjective: RomanceAdjective,
 ): string {
-  const nounForm = romanceNounForm(noun, number);
-  const adjectiveForm = romanceAdjectiveForm(adjective, noun, number);
+  const nounText = nounForm(noun, number);
+  const adjectiveText = adjectiveForm(adjective, noun.gender, number);
   return adjective.prenominal && chance(PRENOMINAL_CHANCE)
-    ? `${adjectiveForm} ${nounForm}`
-    : `${nounForm} ${adjectiveForm}`;
+    ? `${adjectiveText} ${nounText}`
+    : `${nounText} ${adjectiveText}`;
 }
 
 /**
@@ -239,8 +153,8 @@ function romanceAdjectivePhrase(
 ): string {
   const noun = pick(nouns);
   const adjective = pickOther(adjectives, (a) => a.ms, [noun.sg]);
-  const number = romanceNumber(noun);
-  return compose(
+  const number = drawNumber(noun, PLURAL_CHANCE);
+  return joinWords(
     romanceLeadingArticle(language, includeArticle, noun, number),
     romanceNounWithAdjective(noun, number, adjective),
   );
@@ -260,9 +174,9 @@ function romanceLinkedNouns(
 ): string {
   const words = ROMANCE_WORDS[language];
   const head = pick(words.nouns);
-  const headNumber = romanceNumber(head);
+  const headNumber = drawNumber(head, PLURAL_CHANCE);
   const complement = pickOther(words.nouns, (n) => n.sg, [head.sg]);
-  const complementNumber = romanceNumber(complement, 0.5);
+  const complementNumber = drawNumber(complement, 0.5);
   const link = pick(ROMANCE_LINKS[language]);
   // Proper names keep their article ("do Olimpo", never "de Olimpo").
   const bare =
@@ -277,11 +191,11 @@ function romanceLinkedNouns(
         complement.gender,
         complementNumber,
       );
-  return compose(
+  return joinWords(
     romanceLeadingArticle(language, includeArticle, head, headNumber),
-    romanceNounForm(head, headNumber),
+    nounForm(head, headNumber),
     linkPhrase,
-    romanceNounForm(complement, complementNumber),
+    nounForm(complement, complementNumber),
   );
 }
 
@@ -304,22 +218,22 @@ function romanceGerundPhrase(
   const verb = pick(words.verbs);
   const noun = pick(words.nouns);
   if (verb.transitive) {
-    const number = romanceNumber(noun, 0.5);
-    const object = romanceNounForm(noun, number);
+    const number = drawNumber(noun, 0.5);
+    const object = nounForm(noun, number);
     if (language === "es" && noun.animate) {
       const marker = prepositionWithArticle(language, "a", noun.gender, number);
-      return compose(verb.gerund, marker, object);
+      return joinWords(verb.gerund, marker, object);
     }
     if (number === "pl" && chance(0.4)) {
-      return compose(verb.gerund, object);
+      return joinWords(verb.gerund, object);
     }
     const article = romanceArticle(language, "definite", noun.gender, number);
-    return compose(verb.gerund, article, object);
+    return joinWords(verb.gerund, article, object);
   }
-  const number = romanceNumber(noun, 0.6);
-  return compose(
+  const number = drawNumber(noun, 0.6);
+  return joinWords(
     romanceLeadingArticle(language, includeArticle, noun, number),
-    romanceNounForm(noun, number),
+    nounForm(noun, number),
     verb.gerund,
   );
 }
@@ -339,15 +253,15 @@ function romanceConceptOfPlace(
   const words = ROMANCE_WORDS[language];
   const concept = pick(words.concepts);
   const place = pickOther(words.places, (p) => p.sg, [concept.sg]);
-  const placeNumber = romanceNumber(place, 0.3);
+  const placeNumber = drawNumber(place, 0.3);
   const article = includeArticle
     ? romanceArticle(language, "definite", concept.gender, "sg")
     : "";
-  return compose(
+  return joinWords(
     article,
     concept.sg,
     prepositionWithArticle(language, "de", place.gender, placeNumber),
-    romanceNounForm(place, placeNumber),
+    nounForm(place, placeNumber),
   );
 }
 
@@ -365,14 +279,14 @@ function romancePrefixed(
 ): string {
   const words = ROMANCE_WORDS[language];
   const noun = pick(words.nouns.filter((n) => isSingleWord(n.sg)));
-  const number = romanceNumber(noun);
+  const number = drawNumber(noun, PLURAL_CHANCE);
   const join = language === "pt" ? joinPrefixPt : joinPrefixEs;
   const prefixed = join(
     pick(words.prefixes),
-    romanceNounForm(noun, number),
+    nounForm(noun, number),
     noun.proper ?? false,
   );
-  return compose(
+  return joinWords(
     romanceLeadingArticle(language, includeArticle, noun, number),
     prefixed,
   );
@@ -411,13 +325,13 @@ function romanceGenrePhrase(
     );
   }
   const head = pick(words.nouns);
-  const headNumber = romanceNumber(head);
+  const headNumber = drawNumber(head, PLURAL_CHANCE);
   const material = pickOther(genreWords.nouns, (n) => n.sg, [head.sg]);
-  return compose(
+  return joinWords(
     romanceLeadingArticle(language, includeArticle, head, headNumber),
-    romanceNounForm(head, headNumber),
+    nounForm(head, headNumber),
     "de",
-    romanceNounForm(material, romanceNumber(material)),
+    nounForm(material, drawNumber(material, PLURAL_CHANCE)),
   );
 }
 
@@ -455,31 +369,6 @@ const ROMANCE_PATTERNS: readonly RomancePattern[] = [
 // ---------------------------------------------------------------------------
 // English
 // ---------------------------------------------------------------------------
-
-/**
- * Draws the number of an English noun phrase.
- *
- * @param noun - Head noun.
- * @param pluralChance - Probability of plural when the noun has one.
- * @returns "sg" or "pl".
- */
-function englishNumber(
-  noun: EnglishNoun,
-  pluralChance = PLURAL_CHANCE,
-): GrammaticalNumber {
-  return noun.pl !== null && chance(pluralChance) ? "pl" : "sg";
-}
-
-/**
- * Returns the noun form for a number.
- *
- * @param noun - The noun.
- * @param number - Desired number.
- * @returns Singular or plural form.
- */
-function englishNounForm(noun: EnglishNoun, number: GrammaticalNumber): string {
-  return number === "pl" && noun.pl !== null ? noun.pl : noun.sg;
-}
 
 /**
  * Returns the leading article of an English name: "The" or "Some" before a
@@ -524,11 +413,11 @@ function englishModifiedNoun(
   modifier: string,
   noun: EnglishNoun,
 ): string {
-  const number = englishNumber(noun);
-  return compose(
+  const number = drawNumber(noun, PLURAL_CHANCE);
+  return joinWords(
     englishLeadingArticle(includeArticle, noun, number, modifier),
     modifier,
-    englishNounForm(noun, number),
+    nounForm(noun, number),
   );
 }
 
@@ -548,7 +437,7 @@ function englishComplement(noun: EnglishNoun): string {
   if (chance(0.5)) {
     return noun.pl;
   }
-  return `the ${englishNounForm(noun, englishNumber(noun, 0.3))}`;
+  return `the ${nounForm(noun, drawNumber(noun, 0.3))}`;
 }
 
 /**
@@ -561,10 +450,10 @@ function englishComplement(noun: EnglishNoun): string {
 function englishLinkedNouns(includeArticle: boolean): string {
   const words = EN_BAND_NAME_WORDS;
   const head = pick(words.nouns);
-  const number = englishNumber(head);
-  const headForm = englishNounForm(head, number);
+  const number = drawNumber(head, PLURAL_CHANCE);
+  const headForm = nounForm(head, number);
   const complement = pickOther(words.nouns, (n) => n.sg, [head.sg]);
-  return compose(
+  return joinWords(
     englishLeadingArticle(includeArticle, head, number, headForm),
     headForm,
     pick(ENGLISH_LINKS),
@@ -582,11 +471,11 @@ function englishConceptOfPlace(includeArticle: boolean): string {
   const words = EN_BAND_NAME_WORDS;
   const concept = pick(words.concepts);
   const place = pickOther(words.places, (p) => p.sg, [concept]);
-  return compose(
+  return joinWords(
     includeArticle ? "the" : "",
     concept,
     "of the",
-    englishNounForm(place, englishNumber(place, 0.3)),
+    nounForm(place, drawNumber(place, 0.3)),
   );
 }
 
@@ -599,12 +488,9 @@ function englishConceptOfPlace(includeArticle: boolean): string {
 function englishPrefixed(includeArticle: boolean): string {
   const words = EN_BAND_NAME_WORDS;
   const noun = pick(words.nouns.filter((n) => isSingleWord(n.sg)));
-  const number = englishNumber(noun);
-  const prefixed = joinPrefixEn(
-    pick(words.prefixes),
-    englishNounForm(noun, number),
-  );
-  return compose(
+  const number = drawNumber(noun, PLURAL_CHANCE);
+  const prefixed = joinPrefixEn(pick(words.prefixes), nounForm(noun, number));
+  return joinWords(
     englishLeadingArticle(includeArticle, noun, number, prefixed),
     prefixed,
   );
@@ -636,10 +522,10 @@ function englishGenrePhrase(includeArticle: boolean, genre: NameGenre): string {
     );
   }
   const head = pick(words.nouns);
-  const number = englishNumber(head);
-  const headForm = englishNounForm(head, number);
+  const number = drawNumber(head, PLURAL_CHANCE);
+  const headForm = nounForm(head, number);
   const material = pickOther(genreWords.nouns, (n) => n.sg, [head.sg]);
-  return compose(
+  return joinWords(
     englishLeadingArticle(includeArticle, head, number, headForm),
     headForm,
     "of",

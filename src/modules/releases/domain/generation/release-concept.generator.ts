@@ -2,7 +2,15 @@
  * Release-concept generator — produces a "concept album" description in
  * Portuguese (the game's language). Pure beyond `Math.random()`. Optional seeds
  * (title, style label) let the caller weave in context.
+ *
+ * Each opening ends in a preposition and each theme stores the gender and
+ * number of its first word, so the preposition fuses with the theme's article
+ * ("um mergulho na solidão", "uma ode à passagem do tempo", "um retrato dos
+ * fantasmas do passado").
  */
+import { lowerFirst, prepositionWithArticle } from "@/common/language/grammar";
+import type { Gender, GrammaticalNumber } from "@/common/language/lexicon";
+import { pick } from "@/common/language/random-pick";
 
 /** Options seeding concept generation. */
 export interface GenerateConceptOptions {
@@ -12,26 +20,39 @@ export interface GenerateConceptOptions {
   styleLabel?: string;
 }
 
-const INTROS = [
-  "Um mergulho em",
-  "Uma jornada por",
-  "Um retrato de",
-  "Uma ode a",
-  "Um manifesto sobre",
-  "Um diário de",
+/** Opening of the concept and the preposition that introduces the theme. */
+interface ConceptIntro {
+  readonly text: string;
+  readonly preposition: string;
+}
+
+/** Theme without its leading article, with the article's gender/number. */
+interface ConceptTheme {
+  readonly gender: Gender;
+  readonly number: GrammaticalNumber;
+  readonly text: string;
+}
+
+const INTROS: readonly ConceptIntro[] = [
+  { text: "Um mergulho", preposition: "em" },
+  { text: "Uma jornada", preposition: "por" },
+  { text: "Um retrato", preposition: "de" },
+  { text: "Uma ode", preposition: "a" },
+  { text: "Um manifesto", preposition: "sobre" },
+  { text: "Um diário", preposition: "de" },
 ];
 
-const THEMES = [
-  "a solidão das grandes cidades",
-  "o fim de um amor",
-  "a passagem do tempo",
-  "a busca por pertencimento",
-  "as ruínas da juventude",
-  "a euforia e a queda",
-  "os fantasmas do passado",
-  "a esperança em tempos sombrios",
-  "a estrada e o que ficou para trás",
-  "a reinvenção de si mesmo",
+const THEMES: readonly ConceptTheme[] = [
+  { gender: "f", number: "sg", text: "solidão das grandes cidades" },
+  { gender: "m", number: "sg", text: "fim de um amor" },
+  { gender: "f", number: "sg", text: "passagem do tempo" },
+  { gender: "f", number: "sg", text: "busca por pertencimento" },
+  { gender: "f", number: "pl", text: "ruínas da juventude" },
+  { gender: "f", number: "sg", text: "euforia que vem antes da queda" },
+  { gender: "m", number: "pl", text: "fantasmas do passado" },
+  { gender: "f", number: "sg", text: "esperança em tempos sombrios" },
+  { gender: "m", number: "sg", text: "que ficou para trás na estrada" },
+  { gender: "f", number: "sg", text: "reinvenção de si mesmo" },
 ];
 
 const DEVELOPMENTS = [
@@ -51,11 +72,6 @@ const CLOSINGS = [
   "O disco que a banda precisava fazer.",
 ];
 
-/** Picks a random element from a non-empty array. */
-function pick<T>(array: readonly T[]): T {
-  return array[Math.floor(Math.random() * array.length)];
-}
-
 /**
  * Generates a concept-album description.
  *
@@ -68,13 +84,16 @@ export function generateReleaseConcept(
   const styleClause = options.styleLabel
     ? ` Tudo sob a estética ${options.styleLabel}.`
     : "";
+  const intro = pick(INTROS);
   const lead = options.title
-    ? `"${options.title}" é ${lowerFirst(pick(INTROS))}`
-    : pick(INTROS);
-  return `${lead} ${pick(THEMES)}, ${pick(DEVELOPMENTS)}.${styleClause} ${pick(CLOSINGS)}`.trim();
-}
-
-/** Lowercases the first character of a string. */
-function lowerFirst(value: string): string {
-  return value.charAt(0).toLowerCase() + value.slice(1);
+    ? `"${options.title}" é ${lowerFirst(intro.text)}`
+    : intro.text;
+  const theme = pick(THEMES);
+  const link = prepositionWithArticle(
+    "pt",
+    intro.preposition,
+    theme.gender,
+    theme.number,
+  );
+  return `${lead} ${link} ${theme.text}, ${pick(DEVELOPMENTS)}.${styleClause} ${pick(CLOSINGS)}`.trim();
 }

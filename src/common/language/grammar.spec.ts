@@ -1,14 +1,15 @@
 import {
   capitalizeFirst,
   englishIndefiniteArticle,
+  joinWords,
   joinPrefixEn,
   joinPrefixEs,
   joinPrefixPt,
   prepositionWithArticle,
   romanceArticle,
-} from "@/modules/bands/domain/generation/band-name.grammar";
+} from "@/common/language/grammar";
 
-describe("band-name grammar", () => {
+describe("language grammar", () => {
   describe("romanceArticle", () => {
     it.each([
       ["pt", "definite", "m", "sg", "o"],
@@ -32,6 +33,11 @@ describe("band-name grammar", () => {
       ["pt", "por", "m", "sg", "pelo"],
       ["pt", "por", "f", "pl", "pelas"],
       ["pt", "sem", "m", "sg", "sem o"],
+      ["pt", "a", "f", "sg", "à"],
+      ["pt", "a", "f", "pl", "às"],
+      ["pt", "a", "m", "sg", "ao"],
+      ["pt", "a", "m", "pl", "aos"],
+      ["pt", "sobre", "f", "sg", "sobre a"],
       ["es", "de", "m", "sg", "del"],
       ["es", "de", "f", "sg", "de la"],
       ["es", "de", "m", "pl", "de los"],
@@ -112,6 +118,12 @@ describe("band-name grammar", () => {
     ])("%s -> %s", (word, want) => {
       expect(englishIndefiniteArticle(word)).toBe(want);
     });
+  });
+
+  it("joinWords skips empty parts and capitalizes the first letter", () => {
+    expect(joinWords("", "os", "Lobos", "", "do", "Abismo")).toBe(
+      "Os Lobos do Abismo",
+    );
   });
 
   it("capitalizeFirst upper-cases only the first letter", () => {

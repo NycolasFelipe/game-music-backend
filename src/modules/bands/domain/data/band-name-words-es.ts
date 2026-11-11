@@ -5,8 +5,8 @@ import {
   adjO,
   fem,
   masc,
-  type RomanceLexicon,
-} from "@/modules/bands/domain/generation/band-name.lexicon";
+} from "@/common/language/lexicon";
+import type { RomanceLexicon } from "@/modules/bands/domain/generation/band-name.lexicon";
 
 /**
  * Spanish word bank for the band-name generator. Same metadata as the

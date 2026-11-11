@@ -1,7 +1,5 @@
-import type {
-  EnglishLexicon,
-  EnglishNoun,
-} from "@/modules/bands/domain/generation/band-name.lexicon";
+import type { EnglishNoun } from "@/common/language/lexicon";
+import type { EnglishLexicon } from "@/modules/bands/domain/generation/band-name.lexicon";
 
 /**
  * Builds a countable English noun. The plural defaults to `sg + "s"`; irregular

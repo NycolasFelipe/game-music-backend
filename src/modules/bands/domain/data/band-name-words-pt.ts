@@ -1,11 +1,5 @@
-import {
-  adj2,
-  adjInv,
-  adjO,
-  fem,
-  masc,
-  type RomanceLexicon,
-} from "@/modules/bands/domain/generation/band-name.lexicon";
+import { adj2, adjInv, adjO, fem, masc } from "@/common/language/lexicon";
+import type { RomanceLexicon } from "@/modules/bands/domain/generation/band-name.lexicon";
 
 /**
  * Portuguese (pt-BR) word bank for the band-name generator. Every noun carries
