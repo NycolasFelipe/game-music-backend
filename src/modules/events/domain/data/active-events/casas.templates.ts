@@ -91,7 +91,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Bate-boca",
             descriptionTemplate:
-              "A conversa vira gritaria e o ensaio acaba mais cedo. É o ensaio mais curto e mais barulhento da história da banda.",
+              "A conversa vira gritaria e o ensaio acaba mais cedo, com os amplificadores ainda desligados.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -138,7 +138,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Mandar só {character1}",
         description:
-          "Rádio é rádio. Uma entrevista com uma pessoa ainda é mais do que a banda tinha ontem.",
+          "Uma entrevista com uma pessoa ainda é mais do que a banda tinha ontem.",
         consequence: {
           resultLabel: "No ar",
           descriptionTemplate:
@@ -305,7 +305,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Organização",
           descriptionTemplate:
-            "Com tudo anotado, os atrasos param e o ensaio rende mais. A banda descobre que tinha um gerente e não sabia.",
+            "Com tudo anotado, os atrasos param e o ensaio rende mais. A planilha de {character2} ganha uma coluna só para {character1}.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -409,7 +409,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Escândalo",
             descriptionTemplate:
-              "A briga vira assunto na cidade, e a banda nunca foi tão comentada. Ninguém comenta a música.",
+              "A briga vira assunto na cidade, e a banda nunca foi tão comentada. No ponto de ônibus, cada um já escolheu um lado.",
             fanCountChange: 4,
             relationshipChanges: [
               {
@@ -453,7 +453,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Aceitar no formato deles",
         description:
-          "Palco grande é palco grande, mesmo que seja só um banquinho e um violão.",
+          "Tocar num palco grande, mesmo que seja só com um banquinho e um violão.",
         consequence: {
           resultLabel: "Plateia nova",
           descriptionTemplate:
@@ -906,7 +906,8 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     options: [
       {
         label: "Apoiar a ideia",
-        description: "Banda que não muda, cansa.",
+        description:
+          "Deixar {character1} posar como quiser e confiar na legenda para dizer quem é quem.",
         consequence: [
           {
             resultLabel: "Capa",
@@ -931,7 +932,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         description:
           "A banda tem uma imagem, e ela está funcionando. Mais ou menos.",
         consequence: {
-          resultLabel: "Contido",
+          resultLabel: "{character1:Contido|Contida|Contenção}",
           descriptionTemplate:
             '{character1} obedece, mas sai {character1:emburrado|emburrada|de cara fechada} em todas as fotos. A revista chama de "ar misterioso".',
           happinessChangePercent: -6,
@@ -944,7 +945,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Profissional",
           descriptionTemplate:
-            "O fotógrafo encontra um meio-termo, e as fotos ficam boas. Ninguém gosta muito, que é o sinal de um bom meio-termo.",
+            "O fotógrafo encontra um meio-termo, e as fotos ficam boas. {character1} aparece de óculos escuros, a única peça do visual novo que sobreviveu.",
           fanCountChange: 2,
           happinessChangePercent: 0,
         },
@@ -1684,7 +1685,8 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     options: [
       {
         label: "Demitir o primo",
-        description: "Equipe é equipe. Família é no almoço de domingo.",
+        description:
+          "Separar o trabalho da família e deixar o primo para o almoço de domingo.",
         consequence: {
           resultLabel: "Banca vazia",
           descriptionTemplate:
@@ -3002,7 +3004,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Noite grande",
             descriptionTemplate:
-              "A casa da capital lota, e a banda descobre que uma noite cheia rende mais do que cinco vazias.",
+              "A casa da capital lota, e o agente das onze cidades aparece no camarim perguntando se a banda ainda tem datas livres.",
             happinessChangePercent: 6,
             chance: 50,
           },
@@ -3103,7 +3105,8 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Devolver a máquina ao iluminador",
-        description: "Luz é para iluminar. O espetáculo é a banda.",
+        description:
+          "Tocar com as luzes de sempre e deixar a máquina no porta-malas do iluminador, que pagou por ela.",
         consequence: {
           resultLabel: "Palco limpo",
           descriptionTemplate:
@@ -3255,11 +3258,11 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Proibir a música no set da abertura",
         description:
-          "Cada banda toca o próprio repertório. Principalmente o próprio.",
+          "Cada banda toca o próprio repertório, e o sucesso volta a ter um dono só.",
         consequence: {
           resultLabel: "Repertório próprio",
           descriptionTemplate:
-            "A banda de abertura troca o sucesso por uma música dela e toca para uma casa que conversa. {character2} passa o show inteiro balançando a cabeça, e não é no ritmo.",
+            "A banda de abertura troca o sucesso por uma música dela e toca para uma casa que conversa. {character2} assiste da coxia balançando a cabeça de um lado para o outro.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -3273,7 +3276,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Deixar tocarem a música",
         description:
-          "Homenagem é homenagem, mesmo quando sai melhor que o original.",
+          "Tratar como homenagem, mesmo quando sai melhor que o original.",
         consequence: [
           {
             resultLabel: "Aquecimento",
@@ -3348,7 +3351,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Revanche",
             descriptionTemplate:
-              "A versão nova arranca a maior ovação da noite. {character1} vai ao camarim da banda de abertura agradecer, que é o jeito de garantir que ouviram.",
+              "A versão nova arranca a maior ovação da noite. {character1} vai ao camarim da banda de abertura agradecer e pergunta duas vezes se deu para ouvir de lá.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -3362,7 +3365,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Corrida",
             descriptionTemplate:
-              "A versão nova sai tão rápida que a banda termina o sucesso trinta segundos antes da plateia. Os estudantes aplaudem da coxia, por educação.",
+              "A versão nova sai tão rápida que a banda termina o sucesso trinta segundos antes da plateia. Na coxia, os estudantes tomam nota.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -3752,7 +3755,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Dupla improvável",
             descriptionTemplate:
-              "O primo aprende a usar a agenda do escritório, e o empresário aprende quais casas não pagam. Os dois passam a almoçar juntos, para surpresa geral.",
+              "O primo aprende a usar a agenda do escritório, e o empresário aprende quais casas não pagam. Os dois passam a almoçar juntos, com o caderno de capa dura aberto na mesa.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -3848,7 +3851,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Aceitar os cinquenta por cento",
         description:
-          "Pagar metade da música por uma palavra e comprar a paz, que nunca sai barata.",
+          "Pagar metade da música por uma palavra e torcer para {character2} não trocar mais nenhuma.",
         consequence: [
           {
             resultLabel: "Paz cara",
@@ -3917,7 +3920,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Parceria",
             descriptionTemplate:
-              "Os dois escrevem a música nova em três tardes e brigam por cada palavra, agora em pé de igualdade. É a melhor briga que a banda já teve.",
+              "Os dois escrevem a música nova em três tardes e brigam por cada palavra, agora em pé de igualdade. Antes de assinar, cada um conta as palavras do outro.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -4276,7 +4279,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Pagar uma aula com o músico de estúdio",
         description:
-          "Contratar uma tarde do senhor de colete para mostrar a {character2} como ele tocaria. Humildade cobra por hora.",
+          "Contratar uma tarde do senhor de colete para mostrar a {character2} como ele tocaria. O colete cobra por hora.",
         consequence: [
           {
             resultLabel: "Aula particular",
@@ -4393,8 +4396,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Recusar o convite",
-        description:
-          "Ficar na banda e no aperto. Lealdade não paga o aluguel, mas rende uma boa história.",
+        description: "Ficar na banda, no aperto e nos ensaios de terça.",
         consequence: {
           resultLabel: "Recusado",
           descriptionTemplate:
@@ -4852,7 +4854,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Música da funerária",
             descriptionTemplate:
-              'O comercial pega tanto que o sucesso da banda passa a ser conhecido como "a música da funerária". {character1} canta o refrão de olhos fechados, e não é emoção.',
+              'O comercial pega tanto que o sucesso da banda passa a ser conhecido como "a música da funerária". {character1} canta o refrão de olhos fechados e, de vez em quando, deixa escapar um "com carinho".',
             happinessChangePercent: -6,
             chance: 50,
           },
@@ -4877,7 +4879,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Dobro aceito",
             descriptionTemplate:
-              "A funerária paga o dobro sem pestanejar, o que diz muito sobre o ramo. {character1} compra um amplificador novo e não comenta de onde veio.",
+              "A funerária paga o dobro sem pestanejar, à vista. {character1} compra um amplificador novo e não comenta de onde veio.",
             happinessChangePercent: 6,
             chance: 40,
           },
@@ -5018,7 +5020,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Na programação",
             descriptionTemplate:
-              "A música entra na programação três vezes por dia, e o envelope some todo dia primeiro. A banda passa a conhecer a rádio por dentro e se arrepende.",
+              "A música entra na programação três vezes por dia, e o envelope some todo dia primeiro. No terceiro mês, o envelope precisa ser mais grosso.",
             happinessChangePercent: 4,
             chance: 60,
           },
@@ -5135,7 +5137,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Vender metade dos direitos",
         description:
-          "[{character1}] Trocar o futuro por dinheiro na mão, que pelo menos é dinheiro.",
+          "[{character1}] Trocar o futuro por dinheiro na mão e assinar embaixo do sorriso do advogado.",
         consequence: [
           {
             resultLabel: "Bolso cheio",
@@ -5591,7 +5593,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Folclore",
             descriptionTemplate:
-              "Na quinta entrevista, o cargueiro já tem um papagaio, um motim e um tesouro. Os jornalistas disputam a versão mais absurda, e a banda vira assunto.",
+              "Na quinta entrevista, o cargueiro já tem um papagaio, um motim e um tesouro. Os jornalistas disputam a versão mais absurda, e um jornal publica o mapa do tesouro.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -5720,7 +5722,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Assinar o contrato como está",
         description:
-          "Contrato de gravadora grande não se discute, se assina, de preferência rápido.",
+          "Assinar hoje, como quer {character1}, antes que alguém releia a página trinta e oito.",
         consequence: [
           {
             resultLabel: "Assinado",
@@ -5913,7 +5915,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Sem dueto",
             descriptionTemplate:
-              "A gravadora aceita sem drama, e a cantora grava com um ator de televisão. A banda segue igual, sem verba e sem dueto.",
+              "A gravadora aceita sem drama, e a cantora grava com um ator de televisão, que desafina no refrão e toca em todas as rádios.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -5927,7 +5929,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Geladeira",
             descriptionTemplate:
-              "A gravadora aceita e esquece o disco da banda numa prateleira por meses. A cantora manda flores, por educação.",
+              "A gravadora aceita e esquece o disco da banda numa prateleira por meses. A cantora manda flores, com um cartão assinado pela secretária.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",

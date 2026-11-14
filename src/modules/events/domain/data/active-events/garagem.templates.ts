@@ -41,7 +41,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Ele desistiu",
             descriptionTemplate:
-              "O vizinho desiste. O filho dele aparece no dia seguinte querendo assistir, provavelmente só para irritar o pai. Fã é fã.",
+              "O vizinho desiste. O filho dele aparece no dia seguinte querendo assistir, provavelmente só para irritar o pai.",
             fanCountChangeAbsolute: 3,
             relationshipChanges: [
               {
@@ -201,7 +201,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Um nome que é piada interna",
         description:
-          "[{character1}] Sugerir um nome absurdo que só a banda entende. Ninguém mais vai entender, e essa é a graça.",
+          "[{character1}] Sugerir um nome absurdo que só a banda entende, tirado de uma viagem que deu errado.",
         visibleIfAnyInvolvedHas: ["playful"],
         consequence: [
           {
@@ -384,7 +384,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "{character1:Misterioso|Misteriosa|Mistério}",
             descriptionTemplate:
-              "O jornal publica a entrevista mais curta da história do bairro. O mistério vende melhor que qualquer resposta.",
+              'O jornal publica a entrevista mais curta da história do bairro, e os vizinhos passam a semana tentando adivinhar o que {character1} quis dizer com "talvez".',
             fanCountChangeAbsolute: 6,
             happinessChangePercent: 2,
             chance: 50,
@@ -518,7 +518,8 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
           },
           {
             resultLabel: "Gargalhadas",
-            descriptionTemplate: "A banda ri até chorar, e não é de emoção.",
+            descriptionTemplate:
+              "A banda ri até chorar, e alguém pede bis só para rir de novo.",
             happinessChangePercent: -6,
             chance: 50,
           },
@@ -538,7 +539,8 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Guardar o caderno",
-        description: "Algumas coisas ficam melhor na gaveta.",
+        description:
+          "Devolver o caderno à gaveta antes que alguém veja a capa.",
         consequence: {
           resultLabel: "Gaveta",
           descriptionTemplate:
@@ -582,7 +584,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
     options: [
       {
         label: "Cobrar o conserto de {character1}",
-        description: "Quem quebra paga: o chiado, o cheiro e o orgulho ferido.",
+        description: "Quem quebra paga, inclusive o cheiro.",
         consequence: {
           resultLabel: "Conta paga",
           descriptionTemplate:
@@ -655,7 +657,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "De novo",
             descriptionTemplate:
-              "O amplificador volta com dois chiados. {character2} começa a entender por que lealdade é esporte de risco.",
+              "O amplificador volta com dois chiados e um cheiro novo, que ninguém consegue identificar.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -738,7 +740,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Sem casa",
           descriptionTemplate:
-            "A banda ensaia na sala da avó de alguém, cercada de bibelôs de porcelana. É o ensaio mais cuidadoso da história da banda.",
+            "A banda ensaia na sala da avó de alguém, cercada de bibelôs de porcelana, com o volume no mínimo e os cotovelos colados ao corpo.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -817,7 +819,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Exigir que {character1} escolha entre a banda e o emprego",
         description:
-          "Ultimato é o jeito mais rápido de descobrir uma resposta que ninguém queria ouvir.",
+          "Pôr a escolha na mesa, na frente da banda, e torcer para a fábrica perder.",
         consequence: [
           {
             resultLabel: "Fica na banda",
@@ -1036,7 +1038,8 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Deixar como está",
-        description: "Uma opinião de fora não faz mal a ninguém. Em tese.",
+        description:
+          "Uma opinião de fora nunca fez mal a nenhuma banda que ainda existe.",
         consequence: [
           {
             resultLabel: "Boa ideia",
@@ -1193,7 +1196,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Corrida",
           descriptionTemplate:
-            "A banda inteira acelera junto e termina as músicas ao mesmo tempo pela primeira vez. Rápido demais, mas junto.",
+            "A banda inteira acelera junto e, pela primeira vez, termina as músicas ao mesmo tempo, dois minutos antes do previsto.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -1291,7 +1294,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Dividir o tempo em dois solos",
         description:
-          "{character1} e {character2} solam três minutos e meio cada. Justiça é isso.",
+          "{character1} e {character2} solam três minutos e meio cada, cronometrados por {character2}.",
         consequence: {
           resultLabel: "Duelo",
           descriptionTemplate:
@@ -1749,7 +1752,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Avós em pé",
           descriptionTemplate:
-            "Os avós dançam, a diretora sorri, e a banda ganha a plateia mais fiel e mais cedo da cidade.",
+            "Os avós dançam, a diretora sorri, e a banda ganha a plateia mais fiel da cidade, desde que o show acabe antes das nove.",
           fanCountChangeAbsolute: 8,
           relationshipChanges: [
             {
@@ -1811,7 +1814,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Garagem mesmo",
           descriptionTemplate:
-            "A banda continua na garagem. O vizinho nunca vai saber a sorte que teve.",
+            "A banda continua na garagem. O vizinho nunca vai saber da noite de silêncio que quase ganhou.",
           happinessChangePercent: 0,
         },
       },
@@ -1885,7 +1888,8 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Recusar",
-        description: "[{character1}] Artista não é manequim.",
+        description:
+          "[{character1}] Recusar quatro horas atrás do vidro, entre um manequim e uma bateria em promoção.",
         consequence: {
           resultLabel: "Dignidade",
           descriptionTemplate:
@@ -1964,7 +1968,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Pedir um lugar no chão",
-        description: "Melhor tocar na calçada do que cair dela.",
+        description: "Melhor tocar na calçada do que cair da carroceria.",
         consequence: {
           resultLabel: "No asfalto",
           descriptionTemplate:
@@ -2000,7 +2004,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Desfile",
             descriptionTemplate:
-              "O caminhão roda o bairro com a banda tocando, e gente sai à janela para ver. Metade aplaude; a outra metade anota o nome da banda para reclamar.",
+              "O caminhão roda o bairro com a banda tocando, e gente sai à janela para ver. Metade aplaude; a outra metade vai bater na porta da associação de moradores para reclamar.",
             fanCountChangeAbsolute: 12,
             relationshipChanges: [
               {
@@ -2152,7 +2156,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Figurino que coça",
             descriptionTemplate:
-              "{character2} passa a peça inteira dentro da fantasia de árvore, sem tocar uma nota no segundo ato, que não tinha música.",
+              "{character2} passa a peça inteira se coçando dentro da fantasia de árvore, inclusive no segundo ato, que não tinha música.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -2203,7 +2207,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Trilha própria",
             descriptionTemplate:
-              "A trilha é o melhor da peça, segundo o jornal do bairro e o diretor, que não gostou de ouvir isso.",
+              "A trilha é o melhor da peça, segundo o jornal do bairro, que nem cita o nome do diretor.",
             fanCountChangeAbsolute: 10,
             relationshipChanges: [
               {
@@ -2273,7 +2277,8 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Recusar a encomenda",
-        description: "Banda não é fanfarra.",
+        description:
+          "Deixar o hino para a fanfarra da escola, que já tem uniforme.",
         consequence: {
           resultLabel: "Neutralidade",
           descriptionTemplate:
@@ -2290,7 +2295,8 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Compor um hino que sirva para os dois times",
-        description: "Sem nome, sem cor, sem ninguém para reclamar.",
+        description:
+          "Um hino sem nome de time nem cor de camisa, que qualquer torcida pode cantar.",
         consequence: {
           resultLabel: "Hino genérico",
           descriptionTemplate:
@@ -2351,7 +2357,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Assinar com o empresário",
         description:
-          "Metade de nada é nada; metade de alguma coisa é alguma coisa.",
+          "Dar metade de um cachê que ainda não existe e torcer para ele passar a existir.",
         consequence: [
           {
             resultLabel: "Primeira agenda",
@@ -2527,7 +2533,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Gravar só a melhor música",
         description:
-          "Uma música bem feita vale mais que cinco mais ou menos. Em tese.",
+          "Caprichar numa música só e torcer para ninguém pedir a segunda.",
         consequence: {
           resultLabel: "Cartão de visita",
           descriptionTemplate:
@@ -2811,7 +2817,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Tocar a música como está",
         description:
-          "[{character1}] Arte é arte, emprego é emprego, e às vezes um acaba com o outro.",
+          "[{character1}] Cantar o nome do chefe no refrão e torcer para ele não prestar atenção na letra.",
         consequence: [
           {
             resultLabel: "Hino dos colegas",
@@ -2895,7 +2901,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Assinatura",
             descriptionTemplate:
-              'O acordeão vira a marca da banda, e o público passa a pedir "aquela do acordeão", que são todas.',
+              'O acordeão pega, e o público passa a pedir "aquela do acordeão", que são todas.',
             fanCountChangeAbsolute: 8,
             relationshipChanges: [
               {
@@ -2968,7 +2974,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Prodígio",
             descriptionTemplate:
-              "Em sete dias, {character1} toca acordeão melhor que o próprio instrumento. A banda não sabe se comemora ou se preocupa.",
+              "Em sete dias, {character1} toca acordeão melhor que o próprio instrumento. A banda passa a se perguntar quanto tempo {character1} leva para aprender o instrumento de cada um.",
             fanCountChangeAbsolute: 10,
             relationshipChanges: [
               {
@@ -3116,7 +3122,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Continuar cantando na língua da banda",
-        description: "Quem quer ser entendido canta na própria língua.",
+        description: "Manter as letras que a banda pelo menos sabe pronunciar.",
         consequence: {
           resultLabel: "Raiz",
           descriptionTemplate:
@@ -3137,7 +3143,7 @@ export const GARAGEM_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Bilíngue",
           descriptionTemplate:
-            "O refrão estrangeiro gruda, e os versos ninguém nota. A banda descobre a fórmula sem querer.",
+            "O refrão estrangeiro gruda, e os versos ninguém nota. A banda passa a errar os versos sem consequência nenhuma.",
           fanCountChangeAbsolute: 4,
           relationshipChanges: [
             {

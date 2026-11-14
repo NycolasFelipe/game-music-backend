@@ -20,9 +20,10 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
           "Exigir que {character1} procure {character2} no dia seguinte e desfaça o estrago, de preferência {character1:sóbrio|sóbria|sem ressaca}.",
         consequence: [
           {
-            resultLabel: "Constrangido",
+            resultLabel:
+              "{character1:Constrangido|Constrangida|Constrangimento}",
             descriptionTemplate:
-              "{character1} pede desculpas de cabeça baixa. Ninguém toca mais no assunto — e é justamente isso que fica.",
+              "{character1} pede desculpas de cabeça baixa, e ninguém toca mais no assunto. {character2} passa a sentar na outra ponta da mesa.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -35,7 +36,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Sem recuo",
             descriptionTemplate:
-              '{character1} se recusa: "eu só disse o que todo mundo pensa". Todo mundo jura que não pensa. {character2} não esquece.',
+              '{character1} se recusa: "eu só disse o que todo mundo pensa". Todo mundo jura que não pensa, e {character2} repara em quem demorou para jurar.',
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -55,7 +56,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Silêncio",
           descriptionTemplate:
-            "O assunto morre na mesa, mas os ensaios ficam com um clima que ninguém nomeia.",
+            "Ninguém volta ao assunto naquela noite. Nos ensaios seguintes, {character1} e {character2} só se falam por intermédio do resto da banda.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -74,7 +75,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Aliviado",
             descriptionTemplate:
-              "A conversa é dura, mas o que estava entalado sai. Os dois saem melhores do que entraram.",
+              "A conversa é dura, mas o que estava entalado sai. Os dois deixam a sala três horas depois, roucos e de acordo.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -87,7 +88,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Piorou",
             descriptionTemplate:
-              "A conversa desce para terreno pior. Agora os dois sabem exatamente onde machucar.",
+              "A conversa sai do bar e chega a um empréstimo de anos atrás, com juros calculados na hora. Os dois deixam a sala um de cada vez, para não dividir o corredor.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -106,7 +107,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
     type: "confraternizacao",
     title: "A conta",
     descriptionTemplate:
-      "A conta chega e {character1} anuncia que não vai dividir igual — bebeu menos, comeu menos, e faz questão de detalhar isso na frente de {character2}.",
+      "A conta chega, e {character1} anuncia que não vai dividir igual: bebeu menos, comeu menos e faz questão de detalhar cada item na frente de {character2}.",
     requiredCharacters: 2,
     options: [
       {
@@ -116,7 +117,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Resolvido no dinheiro",
           descriptionTemplate:
-            "A conta some; o constrangimento, não. {character2} passa a noite {character2:calado|calada|sem dizer uma palavra}.",
+            "A conta fecha com o dinheiro da banda. {character2} passa o resto da noite {character2:calado|calada|sem dizer uma palavra}, somando de cabeça o que {character1} comeu.",
           moneyChange: -150,
           relationshipChanges: [
             {
@@ -147,7 +148,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Rachadura",
             descriptionTemplate:
-              "{character2} paga a diferença em silêncio e guarda o episódio inteiro.",
+              "{character2} paga a diferença em silêncio e guarda a comanda na carteira.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -177,7 +178,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Limpo",
             descriptionTemplate:
-              "Falam por duas horas. Sai caro em constrangimento e barato em ressentimento.",
+              "Os dois falam por duas horas, e a banda inteira ouve fingindo ler o cardápio. No fim, o assunto se resolve, e ninguém mais tem fome.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -211,7 +212,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Adiado",
           descriptionTemplate:
-            "A noite se recompõe. O assunto volta para a gaveta de onde saiu, esperando a próxima.",
+            "A noite segue no volume máximo, e o assunto volta para a gaveta até a próxima saída da banda.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -268,11 +269,11 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Rir junto e pedir a próxima rodada",
         description:
-          "Tratar como brincadeira entre amigos, que é como toda briga de banda começa.",
+          "Tratar como brincadeira entre amigos, do jeito que a banda tratou as três últimas brigas.",
         consequence: {
           resultLabel: "Piada interna",
           descriptionTemplate:
-            "A imitação vira atração fixa das saídas da banda. {character2} vira a atração, sem cachê.",
+            "A imitação vira número fixo das saídas da banda, sempre a pedido da mesa. {character2} continua sem receber nada pela inspiração.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -320,7 +321,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Mea-culpa",
             descriptionTemplate:
-              "{character1} jura que achou que {character2} já tinha ido. Ninguém acredita, mas o pedido de desculpas vem com café, e café não se recusa.",
+              "{character1} jura que achou que {character2} já tinha ido. Ninguém acredita, mas o pedido de desculpas vem com café, e {character2} aceita primeiro o café, depois as desculpas.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -348,7 +349,8 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Deixar passar",
-        description: "Cada um chega em casa como pode. Adulto é para isso.",
+        description:
+          "Cada um chega em casa como pode, e a banda não tem carro sobrando.",
         consequence: {
           resultLabel: "Caminhada longa",
           descriptionTemplate:
@@ -370,7 +372,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Penitência",
           descriptionTemplate:
-            "{character1} passa um mês dando carona para {character2} até o ensaio, sem ninguém pedir. O carro nunca andou tão cheio de culpa.",
+            "{character1} passa um mês dando carona para {character2} até o ensaio, sem ninguém pedir, e ainda deixa {character2} escolher a estação do rádio.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -495,7 +497,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Dúvida em casa",
           descriptionTemplate:
-            "A noite acaba, mas a dúvida vai para casa com a banda. {character2} passa a semana ensaiando aquela parte de porta fechada.",
+            "A noite acaba ali. {character2} passa a semana ensaiando aquela parte de porta fechada.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -543,7 +545,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Colou",
             descriptionTemplate:
-              "O jornal publica a explicação, e o público fica ansioso pelo clipe que não existe. Mentir juntos aproxima os dois mais do que qualquer ensaio.",
+              "O jornal publica a explicação, e o público fica ansioso pelo clipe que não existe. {character1} e {character2} passam a combinar a versão da história antes de cada entrevista.",
             fanCountChange: 3,
             relationshipChanges: [
               {
@@ -858,8 +860,7 @@ export const ACTIVITY_FALLOUT_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Rir do episódio",
-        description:
-          "Toda banda tem um rosto que o público reconhece e outros que carregam as caixas.",
+        description: "Rir junto e pedir ao fã uma cópia da foto.",
         consequence: {
           resultLabel: "Foto oficial",
           descriptionTemplate:

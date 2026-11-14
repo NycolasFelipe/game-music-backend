@@ -9,7 +9,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
   {
     id: "0001-melodia-familiar",
     type: "conflito_membros",
-    title: "Melodia Familiar",
+    title: "Melodia familiar",
     descriptionTemplate:
       "{character1} percebe que a nova composição de {character2} é idêntica a um rascunho que {character1} jogou no lixo meses atrás. Ao que parece, alguém anda revirando o lixo da banda.",
     minFanCount: 101,
@@ -54,7 +54,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Sabotagem",
         description:
-          "[{character1}] Mexer discretamente nos arranjos finais para que a parte copiada soe mal. Sabotar a própria banda para provar um ponto: um clássico.",
+          "[{character1}] Mexer discretamente nos arranjos finais para que a parte copiada soe mal. A vingança sai no disco, com o nome da banda na capa.",
         consequence: [
           {
             resultLabel: "Sucesso",
@@ -118,7 +118,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
   {
     id: "0002-o-roubo-do-microfone",
     type: "",
-    title: "O Roubo do Microfone",
+    title: "O roubo do microfone",
     descriptionTemplate:
       'Numa cerimônia de premiação da música, {character1} ganha o troféu de "Melhor Composição". No meio do discurso, um astro famoso invade o palco, arranca o microfone e anuncia que outra pessoa merecia o prêmio. Ninguém convidou o astro a subir, nem à cerimônia.',
     minFanCount: 2000001,
@@ -160,7 +160,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Abandonar o palco",
         description:
-          "[{character1}] Largar o troféu no palco e sair de cena, recusando-se a participar do circo. O circo continua sem {character1}.",
+          "[{character1}] Largar o troféu no palco e sair de cena. O astro pode terminar o discurso sozinho.",
         consequence: {
           resultLabel: "Recuo",
           descriptionTemplate:
@@ -173,7 +173,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
   {
     id: "0003-invasao-de-privacidade",
     type: "",
-    title: "Invasão de Privacidade",
+    title: "Invasão de privacidade",
     descriptionTemplate:
       "Um grupo de fãs descobriu o hotel da banda e cercou a saída. Batem nos vidros do carro com o carinho de quem quer uma lembrança, de preferência um pedaço da banda.",
     minFanCount: 10001,
@@ -182,13 +182,13 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
     requiredCharacters: 2,
     options: [
       {
-        label: "Chamar a Polícia",
+        label: "Chamar a polícia",
         description:
           "Acionar as autoridades para dispersar a multidão à força.",
         consequence: {
           resultLabel: "Repressão",
           descriptionTemplate:
-            "A banda se protege, e os jornais do dia seguinte trazem fotos de policiais arrastando adolescentes. Ótimo para a imagem.",
+            "A banda se protege, e os jornais do dia seguinte trazem fotos de policiais arrastando adolescentes com o pôster da banda na mão.",
           fanCountChange: -7,
         },
       },
@@ -225,7 +225,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
         ],
       },
       {
-        label: 'O "Surto" Criativo',
+        label: 'O "surto" criativo',
         description:
           "[{character2}] Abrir o teto solar e começar a gritar versos de uma música inédita sobre o sufoco da fama.",
         visibleIfAnyInvolvedHas: ["creative", "erratic"],
@@ -274,14 +274,14 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Desastre",
             descriptionTemplate:
-              "O amplificador desiste de vez, e o silêncio que fica é o som mais alto da noite.",
+              "O amplificador desiste de vez, e a banda passa o resto da noite abanando a fumaça.",
             fanCountChangeAbsolute: -10,
             chance: 50,
           },
         ],
       },
       {
-        label: '"Unplugged" de Improviso',
+        label: '"Unplugged" de improviso',
         description:
           "[{character2}] Desligar o equipamento elétrico e terminar o show em formato acústico, pedindo silêncio e proximidade da plateia.",
         visibleIfAnyInvolvedHas: ["experimental", "creative"],
@@ -296,7 +296,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Fracasso",
             descriptionTemplate:
-              "O bar é barulhento demais, e ninguém ouve nada. O show acústico morre sem testemunhas.",
+              "O bar é barulhento demais, e o show acústico só chega à primeira mesa, que estava discutindo futebol.",
             fanCountChangeAbsolute: -8,
             chance: 30,
           },
@@ -305,7 +305,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Pausa para manutenção",
         description:
-          "[{character1}] Parar o show, explicar a situação ao público com honestidade e prometer compensar o tempo perdido. Honestidade em bar: estratégia arriscada.",
+          "[{character1}] Parar o show, explicar ao público o que está pegando fogo e prometer compensar o tempo perdido.",
         consequence: [
           {
             resultLabel: "Respeito",
@@ -328,7 +328,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
   {
     id: "0005-caos-no-churrasco",
     type: "",
-    title: "Caos no Churrasco",
+    title: "Caos no churrasco",
     descriptionTemplate:
       'A banda foi contratada para tocar no aniversário do tio de {character1}. O "palco" fica ao lado da churrasqueira, o som dá choque e as crianças correm entre os pedestais. O cachê é pago em linguiça.',
     maxFanCount: 50,
@@ -358,7 +358,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
         ],
       },
       {
-        label: "Impor Respeito",
+        label: "Impor respeito",
         description:
           "[{character2}] Parar a música, aumentar o volume no máximo e exigir que todo mundo pare de comer para ouvir. A banda não é som de fundo, nem num churrasco.",
         visibleIfAnyInvolvedHas: ["hothead"],
@@ -380,9 +380,9 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
         ],
       },
       {
-        label: 'Virar "Jukebox" Humano',
+        label: 'Virar "jukebox" humano',
         description:
-          "Desistir do repertório autoral e começar a tocar apenas covers populares para tentar ganhar o público pelo estômago.",
+          "Desistir do repertório autoral e começar a tocar apenas covers populares para ganhar o público pelo refrão que ele já sabe cantar.",
         consequence: [
           {
             resultLabel: "Sucesso",
@@ -394,7 +394,7 @@ export const PORTED_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Humilhação",
             descriptionTemplate:
-              "A banda toca os covers tão mal que os convidados pedem para voltar às músicas autorais. Humilhação total.",
+              "A banda toca os covers tão mal que os convidados pedem as músicas autorais de volta, coisa que nunca tinha acontecido.",
             fanCountChangeAbsolute: -5,
             chance: 20,
           },

@@ -137,7 +137,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Valeu a pena",
             descriptionTemplate:
-              "A casa enche de gente que nunca tinha ouvido a banda e só entrou para fugir da chuva. Funciona.",
+              "A casa enche de gente que nunca tinha ouvido a banda e só entrou para fugir da chuva.",
             fanCountChange: 5,
             relationshipChanges: [
               {
@@ -152,7 +152,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Noite perdida",
             descriptionTemplate:
-              "Chove, ninguém aparece, e {character2} passa a volta inteira em silêncio. Um silêncio bem alto.",
+              "Chove, ninguém aparece, e {character2} passa a volta inteira em silêncio e só abre a boca para pedir a {character1} o dinheiro da passagem.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -691,7 +691,8 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     options: [
       {
         label: "Adotar o uniforme",
-        description: "Banda com visual é banda que se lembra.",
+        description:
+          "{character1} já escolheu as cores e tirou as medidas de todo mundo.",
         consequence: [
           {
             resultLabel: "Identidade",
@@ -727,7 +728,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Cada um com a sua roupa",
-        description: "A banda é a música, não o figurino.",
+        description: "Cada um sobe ao palco com a roupa que estiver limpa.",
         consequence: {
           resultLabel: "Liberdade",
           descriptionTemplate:
@@ -966,7 +967,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Leilão",
             descriptionTemplate:
-              "{character1} responde com um sanduíche, e o técnico passa a mexer nos volumes conforme o lanche. O show vira um leilão com trilha sonora.",
+              "{character1} responde com um sanduíche, e o técnico passa a mexer nos volumes conforme o lanche. No fim da noite, o técnico já jantou duas vezes.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -1150,7 +1151,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Aprovação",
             descriptionTemplate:
-              "A fila aprova o visual, por pressa, e {character1} sobe ao palco com uma confiança que dura o show inteiro. A fila também agradece.",
+              "A fila aprova o visual, por pressa, e {character1} sobe ao palco com uma confiança que dura o show inteiro.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -1264,7 +1265,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Dança",
             descriptionTemplate:
-              "Os brigões se olham sem saber o que fazer, e um casal de outra mesa começa a dançar entre eles. A briga perde o palco.",
+              "Os brigões se olham sem saber o que fazer, e um casal de outra mesa começa a dançar entre eles. Os brigões voltam para as mesas para não atrapalhar o casal.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -1411,7 +1412,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Ressentimento",
             descriptionTemplate:
-              "{character2} sai de cada show com o bolso tilintando. {character1} passa a tocar os solos de costas para o pote, como se isso mudasse alguma coisa.",
+              "{character2} sai de cada show com o bolso tilintando. {character1} passa a tocar os solos de costas para o pote, de frente para a parede.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -1532,7 +1533,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Esquecido",
             descriptionTemplate:
-              "O cliente dorme na mesa antes do fim. A banda fica com a nota e com a consciência pesada, nessa ordem.",
+              "O cliente dorme na mesa antes do fim. A banda fica com a nota e deixa o guardanapo dobrado ao lado dele.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -2233,7 +2234,8 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Pedir ao dono que desligue a televisão",
-        description: "Show é show. Jogo é em outro lugar.",
+        description:
+          "Durante o show, o bar olha para o palco, por bem ou por falta de opção.",
         consequence: {
           resultLabel: "Bar da esquina",
           descriptionTemplate:
@@ -2337,7 +2339,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Taco no braço",
           descriptionTemplate:
-            "A banda toca espremida contra a parede e desvia dos tacos a cada jogada. O show vira uma partida com trilha sonora.",
+            "A banda toca espremida contra a parede e desvia dos tacos a cada jogada. No fim, quem leva os aplausos é a dupla que ganhou a partida.",
           happinessChangePercent: -2,
         },
       },
@@ -2368,7 +2370,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Sinuca musical",
             descriptionTemplate:
-              "Os jogadores entram na brincadeira e passam a jogar no tempo da música. O bar assiste à partida mais musical da história da cidade.",
+              "Os jogadores entram na brincadeira e passam a jogar no tempo da música. A bola sete cai no último acorde, e o dono pede a mesma coisa para o sábado seguinte.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -2478,7 +2480,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Recusar o nome no cardápio",
-        description: "A banda é de música, não de lanche.",
+        description: "O nome da banda fica no cartaz, longe da chapa.",
         consequence: {
           resultLabel: "Especial do dono",
           descriptionTemplate:
@@ -2927,7 +2929,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Ofendido",
             descriptionTemplate:
-              "O senhor paga em silêncio e, na semana seguinte, não aparece. A banda descobre que tinha um fã quando ele vai embora.",
+              "O senhor paga em silêncio e, na semana seguinte, não aparece. A mesa do canto passa a receber um casal que não aplaude nada.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -3168,7 +3170,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Manter a lâmpada",
-        description: "Quem tem que brilhar é a música.",
+        description: "A lâmpada balança, mas não pega fogo.",
         consequence: {
           resultLabel: "Penumbra",
           descriptionTemplate:
@@ -3914,7 +3916,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Nome no poste",
             descriptionTemplate:
-              "O amigo arranca um cartaz de cada poste da cidade para guardar de lembrança. O cachê continua intacto, e a divulgação, nem tanto.",
+              "O amigo arranca um cartaz de cada poste da cidade para guardar de lembrança. O cachê continua intacto, e os postes ficam sem nenhum cartaz da banda.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -4302,7 +4304,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Ninguém notou",
             descriptionTemplate:
-              "{character1} afina no meio da primeira música e descobre que ninguém notou a diferença, o que é bem pior.",
+              "{character1} afina no meio da primeira música, e ninguém nota a diferença, nem {character1}.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -4396,7 +4398,8 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Aceitar a divisão por peso",
-        description: "Quem carrega mais, paga mais, e a matemática agradece.",
+        description:
+          "Quem carrega mais, paga mais. {character2} já está fazendo as contas.",
         consequence: [
           {
             resultLabel: "Balança de feira",
@@ -4415,7 +4418,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Paz no carro",
             descriptionTemplate:
-              "{character2} paga o dobro sem discutir, e {character1} para de falar das lombadas. É a viagem mais silenciosa da história da banda.",
+              "{character2} paga o dobro sem discutir, e {character1} para de falar das lombadas. Na volta, {character2} vem com a mochila mais leve: deixou duas camisas no bar.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -4640,7 +4643,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Vendida",
             descriptionTemplate:
-              "O vizinho diz que motorista de meio expediente não existe e vende a caminhonete para outra banda.",
+              "O vizinho recusa trabalhar só nas viagens longas e vende a caminhonete para outra banda, que vai de carro até a padaria.",
             happinessChangePercent: -2,
             chance: 50,
           },
@@ -4993,7 +4996,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Sorteio justo",
             descriptionTemplate:
-              "O sorteio sai com palitos de fósforo, e todo mundo dorme mal por igual. É a noite mais democrática da banda.",
+              "O sorteio sai com palitos de fósforo, e todo mundo dorme mal por igual.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -5891,7 +5894,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Recado dado",
             descriptionTemplate:
-              "Os rivais assistem da calçada e não reagem. A história corre o circuito, e a banda ganha fama de perigosa, que ainda é melhor do que fama nenhuma.",
+              "Os rivais assistem da calçada e não reagem. A história corre o circuito, e a banda ganha fama de perigosa. O dono do bar dos rivais passa a revistar a banda na porta.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -6293,7 +6296,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Jantar descoberto",
             descriptionTemplate:
-              "O primo comenta o jantar com a família, e a família comenta com {character2}. A banda ganha o concurso e perde a paz.",
+              "O primo comenta o jantar com a família, e a família comenta com {character2}. A banda ganha o concurso, e {character2} passa a tarde no estúdio sem dirigir uma palavra a {character1}.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -6583,7 +6586,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Gravar mais uma música com o tempo que sobrou",
         description:
-          "Quantidade também é qualidade quando o dinheiro é contado.",
+          "Vinte minutos dão para uma música inteira, se ninguém errar.",
         consequence: {
           resultLabel: "Faixa extra",
           descriptionTemplate:
@@ -6700,7 +6703,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Deixar o ex falar",
-        description: "Quem compôs sabe quem compôs.",
+        description: "O ex fica com a história, e a banda fica com as músicas.",
         consequence: {
           resultLabel: "Boato",
           descriptionTemplate:
@@ -7095,7 +7098,8 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     options: [
       {
         label: "Pagar a inscrição e ir",
-        description: "Festival é festival, mesmo entre aspas.",
+        description:
+          "A banda passa a ter um festival no currículo, com aspas e tudo.",
         consequence: [
           {
             resultLabel: "Festival de verdade",
@@ -7291,7 +7295,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Desistir de abrir o show",
-        description: "Palco emprestado com pedágio não serve.",
+        description: "Onze amigos não viram trinta, nem com boa vontade.",
         consequence: {
           resultLabel: "Na plateia",
           descriptionTemplate:
@@ -7383,7 +7387,8 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Recusar os novatos",
-        description: "Palco não é escolinha.",
+        description:
+          "Os novatos podem voltar quando o ensaio deles chegar ao fim de uma música.",
         consequence: {
           resultLabel: "Sem abertura",
           descriptionTemplate:
@@ -7503,7 +7508,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Vitrine",
             descriptionTemplate:
-              "A demo vende bem na vitrine, um pouco menos do que o dono cobra pelo espaço. A banda chama isso de investimento.",
+              "A demo vende bem na vitrine, um pouco menos do que o dono cobra pelo espaço. A banda paga a diferença com o cachê de sábado.",
             happinessChangePercent: 2,
             chance: 50,
           },
@@ -7920,7 +7925,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Sobrenome",
           descriptionTemplate:
-            "O nome fica comprido demais e cabe no cartaz só em letra pequena. Pelo menos ninguém confunde mais.",
+            "O nome fica comprido demais e cabe no cartaz só em letra pequena. O locutor do bar desiste na metade e anuncia só o bairro.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -7940,7 +7945,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Nome conquistado",
             descriptionTemplate:
-              "A banda vence por aclamação, e a outra banda aceita trocar de nome no próprio palco, com a dignidade que sobrou.",
+              "A banda vence por aclamação, e a outra banda troca de nome ali mesmo, no palco, pelo primeiro que alguém grita da plateia.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -7982,7 +7987,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Mandar o texto como está",
         description:
-          "[{character1}] Exagero é o idioma oficial dos textos de apresentação.",
+          "[{character1}] Todo texto de apresentação começa com a banda mais comentada de algum lugar.",
         consequence: [
           {
             resultLabel: "Comentada",
@@ -8102,7 +8107,8 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Ignorar a música dos rivais",
-        description: "Provocação morre de fome se ninguém alimentar.",
+        description:
+          "Esperar que o público enjoe do refrão antes de {character2}.",
         consequence: {
           resultLabel: "Sem resposta",
           descriptionTemplate:

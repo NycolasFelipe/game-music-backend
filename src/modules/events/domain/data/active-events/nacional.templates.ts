@@ -55,7 +55,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Pedir que espere",
         description:
-          'Primeiro a turnê da banda; o solo fica para depois. "Depois" é uma data muito flexível.',
+          "Primeiro a turnê da banda; o solo fica para depois da última data, que o empresário ainda não marcou.",
         consequence: {
           resultLabel: "Adiado",
           descriptionTemplate:
@@ -158,7 +158,8 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
     options: [
       {
         label: "Aceitar as vinte datas",
-        description: "O momento é agora, e ninguém sabe quanto tempo ele dura.",
+        description:
+          "O empresário já mandou imprimir as camisetas com as vinte cidades.",
         consequence: {
           resultLabel: "Estrada",
           descriptionTemplate:
@@ -226,7 +227,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
             chance: 60,
           },
           {
-            resultLabel: "Flagrado",
+            resultLabel: "{character2:Flagrado|Flagrada|Flagrante}",
             descriptionTemplate:
               "Um fotógrafo flagra {character2} na piscina do hotel na hora do show, com uma saúde invejável.",
             fanCountChange: -4,
@@ -275,7 +276,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
             chance: 60,
           },
           {
-            resultLabel: "Constrangido",
+            resultLabel: "Constrangimento",
             descriptionTemplate:
               "Os dois mal se olham na entrevista, e a foto da capa diz mais do que qualquer resposta.",
             fanCountChange: -2,
@@ -294,7 +295,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Ignorar",
         description:
-          "Revista de fofoca vive de resposta. De silêncio também, só que demora mais.",
+          "Não responder e torcer para outra banda arranjar um escândalo antes da próxima edição.",
         consequence: {
           resultLabel: "Desconfiança",
           descriptionTemplate:
@@ -317,7 +318,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Era mentira",
             descriptionTemplate:
-              "{character1} jura que nunca disse nada, e {character2} acredita. Ou finge muito bem.",
+              "{character1} jura que nunca disse nada, e {character2} acredita, mas passa a comprar a revista toda semana.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -412,7 +413,8 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Deixar sair na imprensa",
-        description: "Rock é isso, dizem. Que falem.",
+        description:
+          "Deixar os jornais publicarem a foto da televisão no estacionamento do hotel.",
         consequence: [
           {
             resultLabel: "Lenda",
@@ -809,7 +811,8 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
     options: [
       {
         label: "Aceitar",
-        description: "[{character1}] Não se recusa um convite desses.",
+        description:
+          "[{character1}] Ir ao estúdio da lenda com o primeiro disco dela debaixo do braço, para pedir autógrafo no intervalo.",
         consequence: {
           resultLabel: "Consagração",
           descriptionTemplate:
@@ -833,7 +836,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Convite retirado",
             descriptionTemplate:
-              "A lenda prefere chamar outra pessoa. Lendas não negociam.",
+              "A lenda prefere chamar outra pessoa e manda avisar pela secretária.",
             happinessChangePercent: -6,
             chance: 60,
           },
@@ -1000,7 +1003,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Cancelar",
-        description: "Segurança em primeiro lugar.",
+        description: "O palco já tem uma poça embaixo de cada amplificador.",
         consequence: {
           resultLabel: "Prudência",
           descriptionTemplate:
@@ -1018,7 +1021,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Pago",
             descriptionTemplate:
-              "O cachê chega antes do primeiro acorde e é a única coisa que termina a noite seca. Prioridades.",
+              "O cachê chega antes do primeiro acorde e é a única coisa que termina a noite seca.",
             fanCountChange: 5,
             happinessChangePercent: 8,
             chance: 50,
@@ -1077,7 +1080,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Hino proibido",
             descriptionTemplate:
-              "A proibição transforma a música em símbolo, e o público canta cada verso. Nada vende mais que uma proibição.",
+              "A proibição transforma a música em símbolo, e o público canta cada verso. As lojas põem o disco na vitrine com um cartaz de proibido.",
             fanCountChange: 7,
             happinessChangePercent: 6,
             chance: 50,
@@ -1141,7 +1144,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Portas fechadas",
             descriptionTemplate:
-              "Outras rádios se solidarizam com a primeira e param de tocar a banda. Corporativismo também é um gênero musical.",
+              "Outras rádios se solidarizam com a primeira e param de tocar a banda, todas na mesma semana e com a mesma nota oficial.",
             fanCountChange: -5,
             relationshipChanges: [
               {
@@ -1173,7 +1176,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Vendável",
           descriptionTemplate:
-            "O disco vende bem, e a crítica chama de preguiçoso. As duas coisas são verdade.",
+            "O disco vende bem, e a crítica chama de preguiçoso. O empresário emoldura o cheque ao lado da resenha.",
           fanCountChange: 4,
           happinessChangePercent: -4,
         },
@@ -1255,7 +1258,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Discreto",
           descriptionTemplate:
-            "A renda ajuda centenas de famílias, e quem estava lá nunca esquece.",
+            "A renda ajuda centenas de famílias, e ninguém na cidade sabe dizer que banda tocou.",
           fanCountChange: 2,
           relationshipChanges: [
             {
@@ -1341,7 +1344,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Acesso total",
         description:
-          "Bastidores, brigas, ensaios: tudo. O que pode dar errado?",
+          "Câmera ligada em tudo, inclusive no café da manhã e na divisão do cachê.",
         consequence: [
           {
             resultLabel: "Retrato honesto",
@@ -1367,14 +1370,14 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Filme de show",
           descriptionTemplate:
-            "O resultado é bonito e não diz nada sobre quem a banda é. É, basicamente, um show caro com créditos.",
+            "O resultado é bonito e não diz nada sobre quem a banda é. Quem compra o ingresso passa o filme esperando a parte das brigas.",
           fanCountChange: 3,
           happinessChangePercent: 2,
         },
       },
       {
         label: "Recusar",
-        description: "Algumas coisas são só da banda.",
+        description: "O café da manhã e as brigas continuam sem plateia.",
         consequence: {
           resultLabel: "Privacidade",
           descriptionTemplate:
@@ -1419,7 +1422,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Mudar tudo",
         description:
-          "Banda grande é banda que se reinventa. Banda pequena também, mas ninguém repara.",
+          "Jogar fora a fórmula e gastar o adiantamento da gravadora num som que ninguém pediu.",
         consequence: [
           {
             resultLabel: "Nova fase",
@@ -1448,7 +1451,8 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Repetir a fórmula",
-        description: "Em time que está ganhando não se mexe.",
+        description:
+          "Gravar o mesmo disco com outra capa, como pede o empresário.",
         consequence: {
           resultLabel: "Mais do mesmo",
           descriptionTemplate:
@@ -1533,8 +1537,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
     options: [
       {
         label: "Deixar {character1} na primeira classe",
-        description:
-          "Quem chegou primeiro dorme melhor. Quem chegou depois dorme com rancor.",
+        description: "{character1} já tirou os sapatos e pediu o cobertor.",
         consequence: {
           resultLabel: "Rancor de bordo",
           descriptionTemplate:
@@ -1552,12 +1555,12 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Mandar {character1} para a classe econômica",
         description:
-          "Justiça aérea: troca de lugar no meio do corredor, com o avião inteiro assistindo.",
+          "Trocar os dois de lugar no meio do corredor, com o avião inteiro assistindo.",
         consequence: [
           {
             resultLabel: "Troca feita",
             descriptionTemplate:
-              "{character2} viaja de pernas esticadas, e {character1}, entre duas crianças e um saco de amendoim. A justiça foi feita para um dos dois.",
+              "{character2} viaja de pernas esticadas, e {character1}, entre duas crianças e um saco de amendoim. As crianças pedem autógrafo até o pouso.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -1586,7 +1589,8 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Devolver o assento à companhia",
-        description: "Se ninguém pode ganhar, ninguém dorme.",
+        description:
+          "Entregar o assento à comissária e mandar os dois para a econômica, lado a lado.",
         consequence: {
           resultLabel: "Empate",
           descriptionTemplate:
@@ -1670,7 +1674,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Dividir a conta entre todos",
         description:
-          "A banda é uma família, e família divide a conta de quem come demais.",
+          "Cada integrante paga um pedaço dos catorze frigobares, inclusive quem nunca abriu um.",
         consequence: [
           {
             resultLabel: "Paz cara",
@@ -1841,12 +1845,12 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Contratar segurança para a banda inteira",
         description:
-          "Se é para ter gente grande no corredor, que seja para todos. A conta também.",
+          "Um segurança de dois metros para cada integrante, pago pelo caixa comum, inclusive o de {character1}.",
         consequence: [
           {
             resultLabel: "Corredor cheio",
             descriptionTemplate:
-              "Cada integrante ganha o seu segurança, e o camarim passa a ter mais músculo que instrumento. A paz sai cara, mas chega.",
+              "Cada integrante ganha o seu segurança, e o camarim passa a ter mais músculo que instrumento. A produção dobra o pedido de sanduíches do camarim.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -2127,7 +2131,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Recusar o convite",
         description:
-          "O domingo é a única folga do mês, e folga não tem auditório.",
+          "O domingo é a única folga do mês, e a cama do hotel já está paga.",
         consequence: {
           resultLabel: "Domingo livre",
           descriptionTemplate:
@@ -2630,7 +2634,8 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Trocar os voos por ônibus",
-        description: "Ônibus não cai, só atrasa. Atrasa muito.",
+        description:
+          "Cruzar o país de ônibus leito, com uma caixa de travesseiros e nenhum horário garantido.",
         consequence: [
           {
             resultLabel: "Estrada",
@@ -2879,7 +2884,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Desafinado",
             descriptionTemplate:
-              "O instrumento emprestado desafina na segunda música e não volta mais. {character1} passa o show sorrindo para não chorar.",
+              "O instrumento emprestado desafina na segunda música e não volta mais. {character1} passa o resto do show tocando só as notas que ainda funcionam.",
             happinessChangePercent: -6,
             chance: 40,
           },
@@ -3271,7 +3276,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Corte em vão",
             descriptionTemplate:
-              "O show anterior atrasa, e os vinte e cinco minutos viram quinze. A música de {character2} saiu para nada.",
+              "O show anterior atrasa, e os vinte e cinco minutos viram quinze. A música de {character2} sai, e duas de {character1} vão junto.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -3341,7 +3346,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Porta fechada",
             descriptionTemplate:
-              "A organização retira a oferta e ainda passa o show para as três da tarde, que é quando o sol é mais honesto.",
+              "A organização retira a oferta e ainda passa o show para as três da tarde, quando o gramado tem mais vendedor de água que público.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -3357,7 +3362,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Propor cortar um pedaço de cada música",
         description:
-          "[{character2}] A música de nove minutos fica com quatro e meia, e as de {character1} perdem um refrão cada. Todo mundo sangra igual.",
+          "[{character2}] A música de nove minutos fica com quatro e meia, e as de {character1} perdem um refrão cada.",
         visibleIfCharacterHas: [[], ["conciliator"]],
         consequence: [
           {
@@ -3716,7 +3721,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Pedir à assessoria mais duzentos fãs",
         description:
-          "[{character1}] Se é para ter recepção, que tenha quatrocentos fãs, uma faixa de vinte metros e um coral.",
+          "[{character1}] Dobrar a encomenda: quatrocentos fãs, uma faixa de vinte metros e um coral.",
         visibleIfCharacterHas: [["validation_seeker"]],
         consequence: [
           {
@@ -3736,7 +3741,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Conta da recepção",
             descriptionTemplate:
-              "A recepção sai no jornal, e a conta chega no mesmo dia, para a banda dividir. {character2} divide em voz alta.",
+              "A recepção sai no jornal, e a conta chega no mesmo dia, para a banda dividir. {character2} faz a divisão num guardanapo e põe o coral na parte de {character1}.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -3939,7 +3944,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Folga",
           descriptionTemplate:
-            "A banda dorme o dia inteiro no hotel. {character1} passa a folga calculando o triplo do cachê no bloco de papel do hotel, em voz alta.",
+            "A banda dorme o dia inteiro no hotel. {character1} passa a folga calculando o triplo do cachê no bloco de papel do hotel.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -4361,7 +4366,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Aparecer de mãos dadas na cerimônia de prêmios",
         description:
-          "Se é para mentir, que seja no tapete vermelho, com fotógrafo credenciado.",
+          "Confirmar o boato sem dizer uma palavra, diante dos fotógrafos credenciados da cerimônia.",
         consequence: [
           {
             resultLabel: "Foto da noite",
@@ -4484,7 +4489,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Meio a meio",
             descriptionTemplate:
-              "O esquema funciona, e todo mundo reclama na mesma proporção. É o mais perto de justiça que a banda já chegou.",
+              "O esquema funciona, e todo mundo reclama na mesma proporção. {character2} passa a carregar o estojo no ônibus só nas semanas ímpares.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -4534,7 +4539,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Regras da casa",
             descriptionTemplate:
-              "Em um mês, {character2} descobre que a casa de hóspedes vem com horário de silêncio e regras para a piscina. Volta para o apartamento com uma mala e uma lista de queixas.",
+              "Em um mês, {character2} descobre que a casa de hóspedes vem com horário de silêncio e regras para a piscina. Volta para o apartamento com uma mala e o regulamento da piscina.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -4732,7 +4737,8 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Propor que a banda inteira grave o disco",
-        description: "Se é para ter outro nome, que seja um nome para todos.",
+        description:
+          "Um nome estrangeiro para a banda inteira, com um chapéu para cada integrante.",
         consequence: [
           {
             resultLabel: "Banda dupla",
@@ -5109,14 +5115,14 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Encontro",
             descriptionTemplate:
-              "O arranjo misturado agrada aos dois públicos, que pela primeira vez concordam em alguma coisa. O cantor já fala em segunda música.",
+              "O arranjo misturado agrada aos dois públicos, e os fãs de bolero passam a aparecer nos shows da banda com flores. O cantor já fala em segunda música.",
             happinessChangePercent: 4,
             chance: 50,
           },
           {
             resultLabel: "Nem um nem outro",
             descriptionTemplate:
-              "O arranjo desagrada aos fãs de bolero e aos da banda ao mesmo tempo. Nunca se viu um consenso tão rápido.",
+              "O arranjo desagrada aos fãs de bolero e aos da banda ao mesmo tempo. As rádios dos dois lados tiram a música da programação na mesma semana.",
             happinessChangePercent: -4,
             chance: 50,
           },
@@ -5178,7 +5184,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Contrato é contrato",
             descriptionTemplate:
-              "O juiz lê a cláusula em voz alta e encerra o caso em dez minutos. A banda paga as custas, e o antiácido continua no ar.",
+              "O juiz sublinha a cláusula e encerra o caso em dez minutos. A banda paga as custas, e o antiácido continua no ar.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -5416,7 +5422,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Engavetado",
             descriptionTemplate:
-              "Sem a briga, o estúdio acha a história chata e engaveta o filme. A banda descobre que a própria vida não rende roteiro.",
+              "Sem a briga, o estúdio acha a história chata e engaveta o filme. O barco vai para o filme de outra banda.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -5432,7 +5438,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Pedir que {character2} faça o próprio papel",
         description:
-          "Ninguém desmente uma briga melhor do que quem não brigou.",
+          "Pôr {character2} diante da câmera para interpretar a briga que nunca aconteceu.",
         consequence: [
           {
             resultLabel: "Revelação",
@@ -5535,7 +5541,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Recusar o convite",
-        description: "A fama continua de carne e osso, sem cera.",
+        description: "Guardar os três dias e os sapatos.",
         consequence: {
           resultLabel: "Verão quente",
           descriptionTemplate:
@@ -5551,7 +5557,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Ninguém nota",
             descriptionTemplate:
-              "A estátua fica idêntica ao sósia, e o museu não percebe a troca. Os fãs também não, o que {character1} prefere não analisar.",
+              "A estátua fica idêntica ao sósia, e o museu não percebe a troca. Os fãs também não, e o sósia passa a cobrar mais caro.",
             happinessChangePercent: 2,
             chance: 50,
           },
@@ -5771,7 +5777,8 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
       },
       {
         label: "Esperar o próximo executivo",
-        description: "Na gravadora, quem espera sempre encontra alguém novo.",
+        description:
+          "Deixar o disco como está e torcer para o quarto diretor gostar de guitarras.",
         consequence: [
           {
             resultLabel: "Primeira versão",
@@ -6191,7 +6198,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Quatro a mais",
             descriptionTemplate:
-              "{character1} canta as quatro primeiras palavras e não para nas quatro seguintes. {character2} descobre que conciliar dá trabalho só para um lado.",
+              "{character1} canta as quatro primeiras palavras e não para nas quatro seguintes. {character2} fica diante do microfone com a harmonia ensaiada e nada para cantar.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -6231,7 +6238,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Rima repetida",
             descriptionTemplate:
-              "A crítica cita a letra inteira, e não por admiração. {character1} passa a semana explicando nas entrevistas que não escreveu aquilo.",
+              "A crítica cita a letra inteira, com os quatro amores sublinhados. {character1} passa a semana explicando nas entrevistas que não escreveu aquilo.",
             happinessChangePercent: -4,
             chance: 50,
           },
