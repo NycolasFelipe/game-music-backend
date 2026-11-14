@@ -170,7 +170,7 @@ export const ACTIVITY_SCENES: Record<ActivityId, ActivityScene> = {
 export const ACTIVITY_SATURATION_BEATS = [
   "Fazia pouco tempo desde a última vez. A graça de novidade já não estava lá.",
   "Todo mundo já tinha feito aquilo havia pouco, e dava para sentir na energia da coisa.",
-  "A segunda vez no mesmo semestre tem sempre um quê de repetição, e essa teve.",
+  "A segunda vez em poucos meses tem sempre um quê de repetição, e essa teve.",
   "Alguém comentou que estavam saindo demais. Ninguém discordou com muita convicção.",
 ];
 

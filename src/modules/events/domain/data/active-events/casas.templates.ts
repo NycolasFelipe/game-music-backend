@@ -2421,7 +2421,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Fama na região",
             descriptionTemplate:
-              "A casa abandonada avisa a todas as casas da região. A banda recebe o dobro uma vez e metade das propostas no resto do semestre.",
+              "A casa abandonada avisa a todas as casas da região. A banda recebe o dobro uma vez e metade das propostas nos meses seguintes.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -2959,7 +2959,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "decisao_criativa",
     title: "O mapa rodoviário",
     descriptionTemplate:
-      "{character1} abre o mapa rodoviário do estado na mesa do bar para fechar a turnê do semestre. Um agente de shows da região ofereceu onze cidades em catorze dias, todas com casa garantida e nenhuma com hotel garantido.",
+      "{character1} abre o mapa rodoviário do estado na mesa do bar para fechar a turnê dos próximos meses. Um agente de shows da região ofereceu onze cidades em catorze dias, todas com casa garantida e nenhuma com hotel garantido.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 1,
@@ -2997,7 +2997,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
       {
         label: "Trocar a turnê por uma noite na capital",
         description:
-          "Um show só, numa casa maior, e o resto do semestre para ensaiar.",
+          "Um show só, numa casa maior, e os meses seguintes para ensaiar.",
         consequence: [
           {
             resultLabel: "Noite grande",
@@ -3009,7 +3009,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Noite de chuva",
             descriptionTemplate:
-              "Chove na noite do show, e a capital fica em casa. A banda tem o resto do semestre para pensar nisso.",
+              "Chove na noite do show, e a capital fica em casa. A banda tem alguns meses para pensar nisso.",
             happinessChangePercent: -8,
             chance: 50,
           },
@@ -3234,7 +3234,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Vibração cara",
             descriptionTemplate:
-              "{character1} sente a energia certa no ônibus mais caro da garagem. O frete leva o cachê do semestre, mas a poltrona sete, segundo {character1}, é um portal.",
+              "{character1} sente a energia certa no ônibus mais caro da garagem. O frete leva o cachê de meses, mas a poltrona sete, segundo {character1}, é um portal.",
             happinessChangePercent: -6,
             chance: 50,
           },
@@ -3713,7 +3713,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Vinte por cento",
             descriptionTemplate:
-              "As casas são melhores, mas a comissão come o que sobrava. No fim do semestre a banda ganha o mesmo que antes, agora com recibo.",
+              "As casas são melhores, mas a comissão come o que sobrava. Alguns meses depois, a banda ganha o mesmo que antes, agora com recibo.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -4086,7 +4086,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
     type: "conflito_membros",
     title: "O primeiro dinheiro de verdade",
     descriptionTemplate:
-      "A editora paga o primeiro semestre de direitos da banda, e pela primeira vez o valor tem mais de três dígitos antes da vírgula. {character1} quer gastar tudo num equipamento de som decente. {character2} já prometeu a própria parte ao dono do apartamento.",
+      "A editora paga os primeiros meses de direitos da banda, e pela primeira vez o valor tem mais de três dígitos antes da vírgula. {character1} quer gastar tudo num equipamento de som decente. {character2} já prometeu a própria parte ao dono do apartamento.",
     minFanCount: 2001,
     maxFanCount: 100000,
     requiredCharacters: 2,
@@ -4453,7 +4453,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Duas agendas",
             descriptionTemplate:
-              "{character1} cumpre as duas agendas o semestre inteiro e ainda compõe duas músicas no banco de trás do táxi. A banda fica com medo de pedir mais alguma coisa.",
+              "{character1} cumpre as duas agendas por meses e ainda compõe duas músicas no banco de trás do táxi. A banda fica com medo de pedir mais alguma coisa.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -4532,7 +4532,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Dívida",
             descriptionTemplate:
-              "O disco sai bonito e vende o esperado. No fim do semestre, a gravadora manda a conta: a banda deve um piano, mais juros.",
+              "O disco sai bonito e vende o esperado. Alguns meses depois, a gravadora manda a conta: a banda deve um piano, mais juros.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -4553,7 +4553,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Vale assinado",
             descriptionTemplate:
-              "{character1} assina um vale e passa o semestre sem receber nada. O piano fica, e só {character1} tem a chave da tampa.",
+              "{character1} assina um vale e passa meses sem receber nada. O piano fica, e só {character1} tem a chave da tampa.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -4932,7 +4932,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Direitos em dia",
             descriptionTemplate:
-              "A regravação toca em todas as rádios românticas do estado. {character1} recebe os direitos todo semestre e não reconhece a própria música.",
+              "A regravação toca em todas as rádios românticas do estado. {character1} recebe os direitos a cada prestação de contas e não reconhece a própria música.",
             happinessChangePercent: 4,
             chance: 60,
           },
@@ -4959,7 +4959,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Outro compositor",
             descriptionTemplate:
-              "A cantora desiste e regrava a música de outro compositor, que aceitou trocar até o título. A rádio toca a regravação dele o semestre inteiro.",
+              "A cantora desiste e regrava a música de outro compositor, que aceitou trocar até o título. A rádio toca a regravação dele por meses.",
             happinessChangePercent: -4,
             chance: 50,
           },
@@ -5140,14 +5140,14 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Bolso cheio",
             descriptionTemplate:
-              "{character1} compra um instrumento novo e paga as dívidas da banda. Nos semestres seguintes, assina os recibos de direitos com metade da alegria.",
+              "{character1} compra um instrumento novo e paga as dívidas da banda. Nos anos seguintes, assina os recibos de direitos com metade da alegria.",
             happinessChangePercent: 4,
             chance: 50,
           },
           {
             resultLabel: "Para sempre",
             descriptionTemplate:
-              "Seis meses depois, uma das músicas estoura no rádio. {character1} acompanha o sucesso pelo extrato da editora, que manda lembranças.",
+              "Alguns meses depois, uma das músicas estoura no rádio. {character1} acompanha o sucesso pelo extrato da editora, que manda lembranças.",
             happinessChangePercent: -6,
             chance: 50,
           },
@@ -5276,7 +5276,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Verba cortada",
             descriptionTemplate:
-              "A gravadora aceita a recusa e corta a verba de divulgação do semestre, por coincidência.",
+              "A gravadora aceita a recusa e corta a verba de divulgação dos próximos meses, por coincidência.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -5927,7 +5927,7 @@ export const CASAS_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Geladeira",
             descriptionTemplate:
-              "A gravadora aceita e esquece o disco da banda numa prateleira o semestre inteiro. A cantora manda flores, por educação.",
+              "A gravadora aceita e esquece o disco da banda numa prateleira por meses. A cantora manda flores, por educação.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",

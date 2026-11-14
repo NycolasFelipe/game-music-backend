@@ -39,6 +39,25 @@ describe("RecordMemberDeparturesUseCase", () => {
     expect(records[1].artists).toEqual(["Beto"]);
   });
 
+  it("writes unpaid time as approximate months and years, never in turns", async () => {
+    await useCase.execute("band-1", 1990.5, [
+      { memberName: "Ana", unpaidTurns: 1, reason: "salario_atrasado" },
+      { memberName: "Bia", unpaidTurns: 2, reason: "salario_atrasado" },
+      { memberName: "Caio", unpaidTurns: 3, reason: "salario_atrasado" },
+      { memberName: "Duda", unpaidTurns: 4, reason: "salario_atrasado" },
+    ]);
+
+    const [records] = passiveEventsRepository.createMany.mock.calls[0] as [
+      Array<{ description: string }>,
+    ];
+    expect(records.map((record) => record.description)).toEqual([
+      "Ana deixou a banda após alguns meses sem receber salário.",
+      "Bia deixou a banda após cerca de um ano sem receber salário.",
+      "Caio deixou a banda após mais de um ano sem receber salário.",
+      "Duda deixou a banda após cerca de dois anos sem receber salário.",
+    ]);
+  });
+
   it("records nothing when no one left", async () => {
     await useCase.execute("band-1", 1990.5, []);
 

@@ -1970,7 +1970,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Nota oficial",
           descriptionTemplate:
-            "A assessoria cancela tudo e manda aos jornais uma nota de três parágrafos. É a coisa mais longa que a banda disse no semestre.",
+            "A assessoria cancela tudo e manda aos jornais uma nota de três parágrafos. É a coisa mais longa que a banda disse em meses.",
           happinessChangePercent: 0,
         },
       },
@@ -4034,9 +4034,9 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
     requiredCharacters: 2,
     options: [
       {
-        label: "Revezar o quadro a cada semestre",
+        label: "Revezar o quadro de tempos em tempos",
         description:
-          "Seis meses na casa de cada integrante, com cerimônia de entrega e prego novo.",
+          "Alguns meses na casa de cada integrante, com cerimônia de entrega e prego novo.",
         consequence: [
           {
             resultLabel: "Revezamento",
@@ -4347,7 +4347,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Silêncio estratégico",
           descriptionTemplate:
-            "O disco sai com o boato ainda quente e vende acima do previsto. Os dois passam o semestre evitando sentar lado a lado, por estratégia.",
+            "O disco sai com o boato ainda quente e vende acima do previsto. Os dois passam meses evitando sentar lado a lado, por estratégia.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -5078,7 +5078,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Sucesso de casamento",
             descriptionTemplate:
-              "O dueto toca em todas as rádios de madrugada e em todos os casamentos do semestre. Senhoras passam a reconhecer {character1} na fila do mercado.",
+              "O dueto toca em todas as rádios de madrugada e em todos os casamentos da temporada. Senhoras passam a reconhecer {character1} na fila do mercado.",
             happinessChangePercent: 6,
             chance: 60,
           },
@@ -5164,7 +5164,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Fora do ar",
             descriptionTemplate:
-              "O juiz dá razão à banda, e o comercial sai do ar. A gravadora cumpre a sentença e esquece o telefone da banda por um semestre.",
+              "O juiz dá razão à banda, e o comercial sai do ar. A gravadora cumpre a sentença e esquece o telefone da banda por alguns meses.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -5286,7 +5286,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
     type: "oportunidade_externa",
     title: "A música deles",
     descriptionTemplate:
-      "A música mais tocada do país neste semestre é de uma banda estrangeira, e o refrão é igual ao de uma música de {character1} de três discos atrás. O advogado da gravadora já calculou a indenização, e a comissão dele.",
+      "A música mais tocada do país nos últimos meses é de uma banda estrangeira, e o refrão é igual ao de uma música de {character1} de três discos atrás. O advogado da gravadora já calculou a indenização, e a comissão dele.",
     minFanCount: 100001,
     maxFanCount: 2000000,
     requiredCharacters: 1,
@@ -5620,7 +5620,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Multa",
             descriptionTemplate:
-              "A multa leva o dinheiro do semestre, e nenhuma gravadora liga na semana seguinte. O ventríloquo, dizem, vai muito bem.",
+              "A multa leva o dinheiro de meses, e nenhuma gravadora liga na semana seguinte. O ventríloquo, dizem, vai muito bem.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -5790,7 +5790,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Disco na gaveta",
             descriptionTemplate:
-              "O quarto executivo demora a chegar, e o disco passa um semestre na gaveta. {character1} liga para a gravadora toda segunda-feira para perguntar quem está lá.",
+              "O quarto executivo demora a chegar, e o disco passa meses na gaveta. {character1} liga para a gravadora toda segunda-feira para perguntar quem está lá.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -5847,7 +5847,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Colou",
             descriptionTemplate:
-              "O terceiro executivo ouve, aprova e elogia as mudanças. A banda ganha o semestre, e {character1} ganha um apelido no estúdio.",
+              "O terceiro executivo ouve, aprova e elogia as mudanças. A banda ganha alguns meses de sossego, e {character1} ganha um apelido no estúdio.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -6284,7 +6284,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Sinceridade",
             descriptionTemplate:
-              "O presidente responde com sinceridade, coisa que ninguém na gravadora tinha feito antes. {character1} passa o semestre reouvindo os próprios discos atrás de rimas repetidas.",
+              "O presidente responde com sinceridade, coisa que ninguém na gravadora tinha feito antes. {character1} passa meses reouvindo os próprios discos atrás de rimas repetidas.",
             happinessChangePercent: -6,
             chance: 50,
           },
@@ -6352,7 +6352,7 @@ export const NACIONAL_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Cofre",
           descriptionTemplate:
-            "A banda compra as gravações com o dinheiro do semestre e guarda tudo num cofre. {character2} fica com a chave, e com o poder.",
+            "A banda compra as gravações com o dinheiro de meses e guarda tudo num cofre. {character2} fica com a chave, e com o poder.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",

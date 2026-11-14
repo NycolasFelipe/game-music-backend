@@ -55,13 +55,36 @@ export class RecordMemberDeparturesUseCase {
   private describe(departure: MemberDepartureInput): string {
     if (departure.reason === "humor") {
       return (
-        `${departure.memberName} deixou a banda depois de dois semestres ` +
-        `seguidos sem achar graça em nada.`
+        `${departure.memberName} deixou a banda depois de meses seguidos ` +
+        `sem achar graça em nada.`
       );
     }
     return (
-      `${departure.memberName} deixou a banda após ${departure.unpaidTurns} ` +
-      `turno(s) sem receber salário.`
+      `${departure.memberName} deixou a banda após ` +
+      `${this.unpaidSpan(departure.unpaidTurns)} sem receber salário.`
     );
+  }
+
+  /**
+   * Writes a number of turns as approximate time (ADR-0033). Turn dates are
+   * drawn inside each half of the year, so the gap between turns varies and is
+   * never written as an exact number of months.
+   *
+   * @param turns - How many turns went by.
+   * @returns The span in words, e.g. "alguns meses" or "cerca de um ano".
+   */
+  private unpaidSpan(turns: number): string {
+    if (turns <= 1) {
+      return "alguns meses";
+    }
+    if (turns === 2) {
+      return "cerca de um ano";
+    }
+    if (turns === 3) {
+      return "mais de um ano";
+    }
+    const years = Math.round(turns / 2);
+    const words = ["", "um", "dois", "três", "quatro", "cinco"];
+    return `cerca de ${words[years] ?? years} anos`;
   }
 }

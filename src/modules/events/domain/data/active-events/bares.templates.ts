@@ -504,7 +504,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
     type: "oportunidade_externa",
     title: "A festa da faculdade",
     descriptionTemplate:
-      "Uma república de estudantes contrata a banda para a festa do semestre, com um orçamento que cabe num cofrinho. {character1} e {character2} cuidam da negociação.",
+      "Uma república de estudantes contrata a banda para a festa de fim de ano, com um orçamento que cabe num cofrinho. {character1} e {character2} cuidam da negociação.",
     minFanCount: 151,
     maxFanCount: 2000,
     requiredCharacters: 2,
@@ -3351,7 +3351,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Porta nova",
           descriptionTemplate:
-            "A porta fica perfeita. As cordas da banda vão ter que durar mais um semestre.",
+            "A porta fica perfeita. As cordas da banda vão ter que durar mais alguns meses.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -5938,7 +5938,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Agenda cheia",
             descriptionTemplate:
-              "O empresário arruma seis shows no semestre, todos em bares de amigos dele, todos com pastel de cortesia. É mais do que a banda arrumava por conta própria.",
+              "O empresário arruma seis shows nos meses seguintes, todos em bares de amigos dele, todos com pastel de cortesia. É mais do que a banda arrumava por conta própria.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -6402,7 +6402,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Duas camisetas",
             descriptionTemplate:
-              "{character2} aceita a camiseta e veste por cima da outra. A estampa rival aparece pela gola em todas as fotos do semestre.",
+              "{character2} aceita a camiseta e veste por cima da outra. A estampa rival aparece pela gola em todas as fotos dos meses seguintes.",
             relationshipChanges: [
               {
                 character1Id: "{character1_id}",
@@ -6704,7 +6704,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Boato",
           descriptionTemplate:
-            "O boato cresce sem ninguém para contrariar. No fim do semestre, o ex compôs também uma música que a banda ainda nem terminou.",
+            "O boato cresce sem ninguém para contrariar. Alguns meses depois, o ex compôs também uma música que a banda ainda nem terminou.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
@@ -7406,7 +7406,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
           {
             resultLabel: "Casa cheia",
             descriptionTemplate:
-              "Os novatos vendem tudo para os pais, e a banda toca para a casa mais cheia do semestre. Ninguém comenta de onde veio a ideia.",
+              "Os novatos vendem tudo para os pais, e a banda toca para a casa mais cheia do ano. Ninguém comenta de onde veio a ideia.",
             happinessChangePercent: 4,
             chance: 60,
           },
@@ -8106,7 +8106,7 @@ export const BARES_TEMPLATES: ActiveEventTemplate[] = [
         consequence: {
           resultLabel: "Sem resposta",
           descriptionTemplate:
-            "A banda não responde. A música dos rivais dura o semestre inteiro, e {character2} aprende a sorrir no refrão.",
+            "A banda não responde. A música dos rivais dura meses, e {character2} aprende a sorrir no refrão.",
           relationshipChanges: [
             {
               character1Id: "{character1_id}",
