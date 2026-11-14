@@ -1,7 +1,7 @@
 # Esboço: vida pessoal dos integrantes e progressão
 
-- **Status:** Esboço com as decisões do dono e três revisões; ainda sem ADR e sem implementação
-- **Data:** 2026-11-13
+- **Status:** Esboço com as decisões do dono, três revisões e a revisão "rever tudo"; ainda sem ADR e sem implementação
+- **Data:** 2026-11-13 (revisto em 2026-11-14)
 - **Itens do backlog:** [10 e 11 do trabalho futuro](future-work.md)
 - **Toca em:** [0010 — Salários](adr/0010-salarios-por-integrante.md),
   [0012 — Evolução](adr/0012-evolucao-dos-integrantes.md),
@@ -65,7 +65,7 @@ estado permite.
           ▼
   [sinal no painel] ──► fila ──► [momento: estágio 1] ──► sinais ──► fila ──► [momento: estágio 2] ──► … ──► desfecho
                                         │                                            │
-                                        └── intervir / conversar ────────────────────┴──► recuperação
+                                        └── ajudar / conversar ──────────────────────┴──► recuperação
 ```
 
 ### Catálogo inicial (quatro condições)
@@ -78,7 +78,8 @@ estado permite.
 | **Ego** (o integrante que se acha maior que a banda) | 1. Projeto paralelo · 2. Disco solo · 3. Ultimato | Volta humilde, concessão de crédito ou salário, saída para carreira solo |
 
 Burnout e escândalo como arcos próprios ficam para uma segunda leva. O
-vazamento do "encobrir" (1.3) entra já no primeiro corte, junto com o vício.
+vazamento de "abafar a imprensa" (1.3) entra já no primeiro corte, junto com o
+vício.
 
 ## 1.2 Pressão e fila
 
@@ -119,42 +120,51 @@ risco(condição) = base(fase de fama)
   semestre por azar.
 - **A UTI ocupa a vaga do turno** em que aparece, na frente de qualquer outro
   momento.
-- **A fase sombria tem relógio.** Nos estágios 2 e 3 do vício, a pressão sobe
-  numa taxa fixa por turno, mesmo enquanto o momento espera na fila. Esperar não
-  congela o risco.
 
-## 1.3 Agência: as posturas
+## 1.3 Agência: três papéis por momento
 
-Cada momento oferece um conjunto fixo de *posturas*, com textos próprios por
-condição e estágio. O nome da opção diz o que o jogador faz (ADR-0026 §3.2).
+Cada momento oferece **três papéis fixos**: ajudar, conversar e deixar quieto.
+Os textos mudam por condição e estágio, e o nome da opção diz o que o jogador
+faz (ADR-0026 §3.2). O texto da cena precisa justificar as três opções. Um
+quarto papel, **abafar a imprensa**, só aparece quando a cena envolve a
+imprensa. Tirar o integrante da banda não é opção do momento: a saída passa
+pelo "Mandar embora" da entrevista, com o custo da demissão (1.6).
 
 Os custos em dinheiro usam a **receita do turno anterior**, com mínimo de **1×
 a folha do turno**, para não sumirem no fim do jogo nem zerarem num turno sem
-receita. Como o dinheiro vira placar depois do T14, toda postura tem também um
+receita. Como o dinheiro vira placar depois do T14, todo papel tem também um
 custo fora do dinheiro (decisão do dono).
 
-| Postura | Custo | Efeito | Conta como recusa? |
+| Papel | Custo | Efeito | Conta como recusa? |
 |---|---|---|---|
-| **Intervir** | 10% da receita do turno anterior, humor do integrante e alguns turnos de afastamento (clínica, advogado, fisioterapia) | Encerra a condição ou a faz regredir ao estágio 1, com boa chance | Não |
-| **Conversar** | Barato em dinheiro; ocupa o tempo de um colega | Funciona melhor quando alguém tem relação ≥ 3 com o integrante (≥ 2 com *Banda família*); esse amigo entra no elenco do momento | Não (decisão do dono) |
-| **Ignorar** | Nenhum agora | Mantém o bônus da condição (1.4) e deixa a pressão subir | Sim |
-| **Encobrir** | 10% da receita do turno anterior, dobrando a cada uso no mesmo arco, e relação com quem sabe do segredo | Evita a perda de fãs agora. No fim do arco, o jogo checa uma vez se vazou, com chance de 1 − 0,75^(usos de encobrir); se vazar, a perda evitada volta em dobro | Sim |
-| **Expulsar** | Humor de quem gostava do integrante | Saída imediata. Do estágio 2 ao penúltimo custa 5% dos fãs, a menos que o integrante esteja em risco de sair por humor (≤ −4); no estágio 1, no último ou em risco por humor, 10% | Encerra o arco |
+| **Ajudar** | 10% da receita do turno anterior, −1,0 de humor do integrante (ele se irrita com a interferência) e alguns turnos de afastamento (clínica, advogado, fisioterapia). No ultimato do ego, o custo é o aumento de salário com afastamento (Valores propostos, 6) | Encerra a condição ou a faz regredir ao estágio 1, com boa chance | Não |
+| **Conversar** | Barato em dinheiro; ocupa o tempo de um colega | Funciona melhor quando alguém tem relação ≥ 3 com o integrante (≥ 2 com *Banda família*); esse amigo entra no elenco do momento. Sem ninguém próximo e disponível, a opção aparece desabilitada, com uma frase de cena dizendo por quê | Não (decisão do dono) |
+| **Deixar quieto** | Nenhum em dinheiro | +1,0 de humor do integrante na hora (ele gosta de não ser cobrado), mantém o bônus da condição (1.4) e deixa a pressão subir | Sim |
+| **Abafar a imprensa** (só em cena com imprensa) | 10% da receita do turno anterior, dobrando a cada uso no mesmo arco, e relação com quem sabe do segredo | Evita a perda de fãs agora. No fim do arco, o jogo checa uma vez se vazou, com chance de 1 − 0,75^(usos); se vazar, a perda evitada volta em dobro | Sim |
 
-O jogador sempre vê o estágio atual quando o momento aparece. A pressão entre um
-momento e outro fica escondida e é comunicada por sinais em texto no painel
-("{character1} chegou ao ensaio de óculos escuros. O ensaio era em lugar
-fechado."). O risco do próximo momento é calculado em faixa (baixo, alto ou
-iminente), mas a faixa nunca aparece como rótulo. A seção Bastidores agrupa os
-sinais por integrante e mostra a gravidade pelo peso visual (fio vermelho) e por
-uma frase do narrador ("Ninguém tocou no assunto com Rita. Ainda."); com risco
-baixo ficam só os sinais. A tela não mostra nome de condição, estágio nem fila
-(decisão do dono no protótipo, 2026-11-14).
+**Na UTI** só existem dois papéis: **pagar o tratamento** (o ajudar da UTI) e
+**esperar a alta** (o deixar quieto da UTI, sem o alívio de humor).
+
+**O que a tela do momento mostra** (decisão do dono, 2026-11-14): o texto da
+cena, as opções com o custo em dinheiro e, quando houver afastamento, "fica fora
+por um tempo", e uma frase de gravidade no topo. A tela não mostra barra de
+estágios, linha de fatos, porcentagens, fãs ou humor em número, e também não
+explica a regra da morte. Na UTI, "risco de morte" aparece em vermelho. O cartão
+do integrante no Elenco mostra só a frase de gravidade.
+
+A pressão entre um momento e outro fica escondida e é comunicada por sinais em
+texto no painel ("{character1} chegou ao ensaio de óculos escuros. O ensaio era
+em lugar fechado."). O risco do próximo momento é calculado em faixa (baixo,
+alto ou iminente), mas a faixa nunca aparece como rótulo. A seção Bastidores
+agrupa os sinais por integrante e mostra a gravidade pelo peso visual (fio
+vermelho) e por uma frase do narrador ("Ninguém tocou no assunto com Rita.
+Ainda."); com risco baixo ficam só os sinais. A tela não mostra nome de
+condição, estágio nem fila (decisão do dono no protótipo, 2026-11-14).
 
 ## 1.4 A tentação: risco com recompensa
 
-Para que "ignorar" seja uma escolha de verdade, as condições rendem alguma
-coisa enquanto duram.
+Para que "deixar quieto" seja uma escolha de verdade, ele alivia o humor na hora
+(1.3) e algumas condições rendem alguma coisa enquanto duram.
 
 - **Vício, porta de entrada:** o padrão mais sólido da pesquisa (Crusader Kings
   3, Darkest Dungeon, Rockstar!) é o vício nascer como *alívio que o jogador
@@ -162,14 +172,6 @@ coisa enquanto duram.
   eventos ganham uma opção do tipo "deixar {character1} relaxar do jeito
   {character1:dele|dela|de sempre}": o humor sobe na hora e a pressão de vício
   sobe junto. O sorteio do tick é o caminho secundário.
-- **Vício, estágios 2 e 3, a "fase sombria"** (aposta nossa, aprovada pelo dono;
-  nenhum jogo pesquisado faz isso):
-  - **Na obra:** se pelo menos um creditado em letras ou composição está na fase
-    sombria, a obra ganha +5% a +10% de qualidade. O bônus vale **uma vez por
-    obra**, por mais creditados que estejam na fase.
-  - **No palco:** com alguém na fase sombria, a decisão do show (ADR-0031 §2)
-    ganha uma opção extrema, noite genial ou desastre, com a chance mostrada
-    antes da escolha.
 - **Ego, estágio 1:** o projeto paralelo traz fãs novos para a banda principal
   enquanto o integrante ainda está nela.
 - **Encrenca com a lei, estágio 1:** dependendo do estilo da banda, a ocorrência
@@ -178,20 +180,23 @@ coisa enquanto duram.
 - **Saúde:** sem recompensa. A tentação é continuar tocando para não perder o
   cachê, e o custo é a sequela.
 
+A **fase sombria** (bônus de obra e opção extrema no palco nos estágios 2 e 3 do
+vício) saiu do jogo na revisão de 2026-11-14. No vício, a tentação fica na porta
+de entrada e no alívio de humor de deixar quieto.
+
 ## 1.5 Regras contra a frustração
 
 A perda permanente só é justa quando o jogador viu o desastre chegando e
 escolheu não agir.
 
 1. **Morte só no último estágio do vício**, e só depois de pelo menos duas
-   recusas no arco (ignorar ou encobrir). Intervir e conversar nunca contam como
-   recusa, então a falta de dinheiro não força uma morte. Nenhuma condição
+   recusas no arco (deixar quieto ou abafar a imprensa). Ajudar e conversar
+   nunca contam como recusa, então a falta de dinheiro não força uma morte. Nenhuma condição
    começa já grave.
 2. **UTI antes da morte.** O estágio de crise leva a um estado de UTI que dura
    um turno e ocupa a vaga de momento desse turno, no modelo da Death's Door do
-   Darkest Dungeon. Nesse turno ainda dá para intervir, com custo alto. Se o
-   jogador deixar passar também essa chance, o integrante morre com 20% de
-   chance; senão, sobrevive e o arco volta ao estágio 1 (decisão do dono, depois
+   Darkest Dungeon. Nesse turno ainda dá para pagar o tratamento, com custo
+   alto. Se o jogador esperar a alta, o integrante morre com 20% de chance; senão, sobrevive e o arco volta ao estágio 1 (decisão do dono, depois
    da simulação: com morte certa, o descuidado perdia alguém em 57% a 67% das
    partidas).
 2b. **Recuperação e recaída.** Ao recusar, o arco pode se encerrar sozinho, com
@@ -206,8 +211,8 @@ escolheu não agir.
 5. **Metas de frequência**, a medir por simulação como na ADR-0032. Proposta
    inicial: morte em menos de 2% das partidas do jogador atento e em 15% a 25%
    das do descuidado; prisão em 10% a 20% das partidas do descuidado (o dono
-   fixou o perfil em 2026-11-14); pelo menos um arco
-   aberto em 80% das partidas.
+   fixou o perfil em 2026-11-14); pelo menos um arco aberto em 80% das
+   partidas; saída por humor do atento abaixo de 5%.
 
 ## 1.6 Desfechos
 
@@ -236,7 +241,7 @@ afastado, ele não toca e não pode ser creditado.
 ### Obra em produção com alguém fora
 
 Quem sai ou é afastado no meio de uma produção, por qualquer motivo (morte,
-expulsão, prisão, reabilitação), conta na obra pela **fração dos turnos de
+demissão, prisão, reabilitação), conta na obra pela **fração dos turnos de
 produção que trabalhou**. A mesma regra para todos impede que a morte renda mais
 que a reabilitação.
 
@@ -270,8 +275,20 @@ nunca trave a partida por falta de caixa, a lista de recrutamento sempre traz um
 **candidato da casa**: contratação sem custo, skills de 0 a 2 e salário-alvo
 ×0,8. Os outros candidatos são gerados e gravados pelo servidor, escolhidos por
 id, com skills de 0 a 3 mais um bônus da fase de fama, e custam ≈ 2× o
-salário-alvo. Demitir passa pelo mesmo caminho das saídas: Arquivo, −10% de fãs
-e golpe no humor de quem gostava do demitido.
+salário-alvo. Demitir ("Mandar embora", na entrevista) passa pelo mesmo caminho
+das saídas: Arquivo, −10% de fãs e golpe no humor de quem gostava do demitido.
+A tela mostra esse custo em palavras, pela intensidade ("Uma boa parte do
+público vai junto.", "Dênis sente o golpe."). É também o único jeito de tirar da
+banda um integrante em arco.
+
+Decisões do dono no protótipo (2026-11-14):
+- A lista de candidatos se renova a cada edição: quem não foi contratado vai
+  embora. A tela diz só que a lista muda na próxima edição.
+- A contratação só é obrigatória abaixo de 3 integrantes. Um instrumento
+  essencial descoberto por afastamento não obriga a contratar: o show fica
+  bloqueado ou usa músico de aluguel (1.6, afastamento).
+- A banda tem de 3 a 6 integrantes (`BAND_MEMBERS_MIN` e `BAND_MEMBERS_MAX`).
+  A contagem "N de 6 integrantes" só aparece abaixo de 3 ou com a banda cheia.
 
 ## 1.7 Show por cobertura
 
@@ -338,7 +355,7 @@ personagens. Exemplos para calibrar:
 
 A morte sem piada é uma exceção à ADR-0026 §2 ("quase todo resultado termina com
 uma observação irônica") e precisa de emenda explícita àquela ADR. A mesma
-exceção vale para a internação (UTI): o momento, as posturas e os desfechos não
+exceção vale para a internação (UTI): o momento, os papéis e os desfechos não
 têm piada, nem mirando a indústria ("o empresário já pergunta pelos ingressos"
 saiu), e o drama vem de detalhes concretos ("a banda passa a noite no corredor,
 revezando o único banco"). Decisão do dono no protótipo, 2026-11-14.
@@ -353,8 +370,7 @@ revezando o único banco"). Decisão do dono no protótipo, 2026-11-14.
 - Os modelos de momento usados ficam numa tabela por banda, como nos eventos
   ativos.
 - `band_members.unavailable_until` (`numeric(6,1)`, nulo quando disponível).
-- `DepartureReason` ganha `morte`, `carreira_solo`, `prisao`, `expulsao` e
-  `demissao`.
+- `DepartureReason` ganha `morte`, `carreira_solo`, `prisao` e `demissao`.
 - A pressão, a transição de estágio e a fila ficam em funções puras, usadas pelo
   tick e pela previsão do turno, no padrão da ADR-0032. A previsão converte a
   pressão em faixa, que só escolhe o peso visual e a frase do narrador.
@@ -383,7 +399,7 @@ o dinheiro sobra no fim, então **pontos de progressão não vêm do caixa.**
 
 Uma árvore da banda com quatro ramos. Os pontos vêm de **marcos da carreira**.
 Cada nó custa de 2 a 3 pontos e, depois de comprado, cobra de **3% a 5% da
-receita do turno anterior** por turno, com o mesmo mínimo das posturas (1× a
+receita do turno anterior** por turno, com o mesmo mínimo dos papéis do momento (1× a
 folha). Os pontos medem conquista, e o dinheiro do fim de jogo ganha um destino.
 
 **Marcos (fonte de pontos).** Cerca de 25 marcos, dos quais uma partida típica
@@ -417,6 +433,9 @@ identidade:
 
 **Trocar de lado** num par custa 1 ponto, com efeito na hora, ou uma transição
 de 4 a 6 turnos com os dois lados desligados.
+
+Na tela, os pontos de carreira só aparecem quando há ponto para gastar (decisão
+do dono, 2026-11-14).
 
 Os nós de fim de árvore trazem risco junto com poder, porque o dono quer tensão
 no fim do jogo. *Turnê sem fim* é o modelo: o nó mais forte do ramo Palco é
@@ -481,8 +500,8 @@ voltar como candidatos raros no recrutamento.
      código;
    - receita do turno gravada no snapshot.
 1. **Parte 1 com uma condição só (vício)**, de ponta a ponta: pressão, fila,
-   sinais, momentos, posturas com vazamento, afastamento, músico de aluguel,
-   UTI e morte. É a fatia que mais muda o fim do jogo e testa o motor de
+   sinais, momentos com os três papéis, "abafar a imprensa" com vazamento,
+   afastamento, músico de aluguel, UTI e morte. É a fatia que mais muda o fim do jogo e testa o motor de
    condições.
 2. **Camada A com o ramo Bastidores e o par Banda família × Banda empresa**, que
    dão ferramentas contra a Parte 1 e provam marcos e custo por turno.
@@ -495,7 +514,9 @@ voltar como candidatos raros no recrutamento.
 ## Histórico de decisões
 
 Todas as decisões são do dono, em 2026-11-13 e 2026-11-14. A seção indica onde
-cada uma está no corpo.
+cada uma está no corpo. As tabelas antigas usam os nomes da época: intervir,
+ignorar e encobrir viraram ajudar, deixar quieto e abafar a imprensa na revisão
+"rever tudo", que também tirou a fase sombria e a postura expulsar.
 
 ### Primeiras respostas
 
@@ -504,7 +525,7 @@ cada uma está no corpo.
 | Morte | Entra sempre, sem opção do save para desligar | 1.5 |
 | Canal dos momentos | Canal próprio, além do evento do semestre | 1.8 |
 | Salário do afastado | Reabilitação recebe, prisão não, sem contar como atraso | 1.6 |
-| Fase sombria | Entra | 1.4 |
+| Fase sombria | Entra (saiu na revisão "rever tudo") | 1.4 |
 | Pontos da árvore | Marcos da carreira | 2.2 A |
 | Custo dos nós | Por turno em dinheiro | 2.2 A |
 | Hall da Fama | Depois | 2.2 C |
@@ -585,46 +606,84 @@ Varredura de sensibilidade de cada valor estimado (±50%, 109 variações, semen
 | Custos de humor (expulsar, luto, crise) não mexem no placar | Ficam como efeito de narrativa e clima | Valores propostos, 5 |
 | Previsão em faixa bem calibrada, mas exposta como rótulo no protótipo | A faixa só escolhe o peso visual e a frase do narrador nos Bastidores | 1.3, 1.5 |
 
+### Revisão "rever tudo" (2026-11-14)
+
+| Tema | Decisão | Seção |
+|---|---|---|
+| Cinco posturas | Três papéis fixos: ajudar, conversar e deixar quieto. "Abafar a imprensa" só em cena com imprensa | 1.3 |
+| Expulsar no momento | Sai; tirar da banda só pelo "Mandar embora" da entrevista, com o custo da demissão | 1.3, 1.6 |
+| Fase sombria | Sai do jogo | 1.4 |
+| Tela do momento | Texto da cena, opções com custo em dinheiro e "fica fora por um tempo", frase de gravidade no topo. Sem barra de estágios, linha de fatos, porcentagens, fãs, humor em número ou regra da morte. Na UTI, "risco de morte" em vermelho | 1.3 |
+| UTI | Só "pagar o tratamento" e "esperar a alta" | 1.3, 1.5 |
+| Conversar sem ninguém próximo | Aparece desabilitado, com uma frase de cena | 1.3 |
+| Cartão do Elenco em arco | Só a frase de gravidade | 1.3 |
+| Deixar quieto era opção morta (−5 a −13 mil fãs por condição sem a fase sombria) | Deixar quieto alivia o humor do integrante; ajudar irrita | 1.3, Valores propostos, 4 |
+| Contadores | Pontos de carreira só quando há ponto para gastar; "N de 6 integrantes" só abaixo de 3 ou com a banda cheia | 1.6, 2.2 A |
+| Custo de demitir | Em palavras, pela intensidade | 1.6 |
+| Skill e humor na tela | Só barras e palavras, sem número (já na `main` do frontend) | Requisitos |
+| Ficam como estão | Especialização com prós e contras, pares da Carreira com troca por 1 ponto, previsão linha a linha e a palavra "turno" | 2.2 |
+
+### Calibração de deixar quieto (2026-11-14)
+
+Grade de alívio de humor ao deixar quieto (0, +0,5, +1,0, +1,5 e +2,0) contra
+custo de humor ao ajudar (−0,5, −1,0 e −1,5), 500 partidas por célula, sementes
+20261113 e 20261114. Cada célula também rodou o abuso (deixar quieto em tudo),
+ajudar em tudo e quatro políticas de deixar quieto por condição (sempre, só no
+estágio 1, com humor ≤ −3 e com humor ≤ −2). O dono delegou a escolha.
+
+| Achado | Decisão | Seção |
+|---|---|---|
+| Todas as 15 células cumprem as metas: morte do descuidado de 20,0% a 24,6%, prisão de 17,8% a 19,4%, saída por humor do atento de 1,4% a 2,2% | — | 1.5 |
+| Deixar quieto vence no ego em estágio 1 em todas as células (+3,6 a +6,4 mil fãs, IC acima de zero nas duas sementes). Na lei em estágio 1 fica perto do empate (positivo, com IC cruzando zero em quase todas as células) | Deixar quieto tem uso comum: o projeto paralelo ainda traz fãs | Valores propostos, 4 |
+| Ajudar segue melhor no vício (deixar quieto no estágio 1 custa de −4 a −7 mil fãs) e na saúde (deixar quieto sempre custa de −3 a −5 mil) | Ajudar não vira opção morta | Valores propostos, 4 |
+| Deixar quieto em tudo custa de −33 a −44 mil fãs | Não é exploit | Números |
+| O alívio quase não mexe nos fãs; muda o humor de quem é deixado quieto | +1,0 de alívio e −1,0 ao ajudar, simétricos e fáceis de ler. +1,5 / −1,0 também cumpre as metas e fica como alternativa | Valores propostos, 4 |
+
 ---
 
 ## Números da simulação
 
 Monte Carlo com as funções puras do domínio, 500 partidas de 80 turnos por
 perfil, semente 20261113 (conferida com 20261114). Os números abaixo já usam os
-valores travados em 2026-11-14 (relax a 30 p.p., afastamento no ultimato,
-sequela 3,0). Script em `~/Documentos/handoffs/vida-pessoal-2026-11-13/sim/`
-(cópia com as chaves novas no scratchpad da sessão de 2026-11-14). **[C]** marca valor calibrado contra uma
-meta; **[V]** marca valor sem meta própria que passou por uma varredura de
-sensibilidade (±50%, sementes 20261113 e 20261114) e foi travado pelo dono em
-2026-11-14.
+valores travados em 2026-11-14: relax a 30 p.p., afastamento no ultimato,
+sequela 3,0, sem fase sombria, deixar quieto com +1,0 de humor e ajudar com
+−1,0. Scripts e análises em `~/Documentos/handoffs/vida-pessoal-2026-11-14/sim-e/`
+(`sim.ts`; a grade da calibração em `grid.py`, `grid_resumo.txt` e
+`grid_detalhe.txt`). **[C]** marca valor calibrado contra uma meta; **[V]** marca
+valor sem meta própria que passou por uma varredura de sensibilidade (±50%,
+sementes 20261113 e 20261114) e foi travado pelo dono em 2026-11-14.
 
 ### Resultado por perfil
 
 | Perfil | Fãs T80 (mediana) | Humor T26 / T52 | Mortes | Prisão | Saída por humor |
 |---|---|---|---|---|---|
-| Atento, escolhe bem | 609 mil | +2,06 / +3,89 | 0% | 0% | 1,4% das partidas |
-| Atento, escolhe ao acaso | 580 mil | +2,06 / +3,81 | 2,2% | 12,6% | 1,4% |
-| Descuidado | 396 mil | +0,94 / +2,03 | 21,6% | 20,0% | 0,8% |
-| Cínico (tenta os exploits) | 585 mil | +1,90 / +3,88 | 4,6% | 5,8% | 0% |
-| Equilibrado (referência) | 615 mil | +1,70 / +3,86 | 0% | 0% | 1,6% |
+| Atento, escolhe bem | 600 mil | +2,03 / +4,00 | 0% | 0% | 1,4% das partidas |
+| Atento, escolhe ao acaso | 588 mil | +2,08 / +3,99 | 1,0% | 8,8% | 1,4% |
+| Descuidado | 394 mil | +1,04 / +2,27 | 23,0% | 19,4% | 0,6% |
+| Cínico (tenta os exploits) | 587 mil | +1,99 / +3,94 | 4,2% | 6,2% | 0,2% |
+| Equilibrado (referência) | 596 mil | +1,72 / +3,76 | 0% | 0% | 1,6% |
 
-Na semente 20261114, o descuidado fica em 21,6% de mortes e 16,8% de prisão, e
-o atento ao acaso em 8,8% de prisão (a meta de prisão vale só para o
-descuidado). As metas do descuidado ficam dentro nas duas sementes; a prisão na
-20261113 encosta no teto de 20%.
+Na semente 20261114, o descuidado fica em 23,0% de mortes (IC até 26,9%) e
+17,8% de prisão, o atento ao acaso em 9,0% de prisão e o atento em 2,0% de
+saída por humor. As metas do descuidado ficam dentro nas duas sementes.
 
 - Pelo menos um arco aparece em 93% a 96% das partidas (93% a 98% na outra
-  semente). Arcos por partida: 3,0 no atento, 3,6 no descuidado.
-- O cínico termina abaixo do atento: −22 mil fãs (IC95 ±7 mil; −25 mil na outra
-  semente). Contra o próprio cínico sem exploit, cada exploit isolado também
-  perde: segurar a fase sombria −10,4 mil, expulsar no estágio 2 −6,5 mil,
-  deixar o mais fraco morrer −3,6 mil. Abusar de "deixar relaxar" é neutro
-  (o IC cruza zero).
-- "Deixar relaxar" é uma troca para o atento: zera as saídas por humor, não
-  muda os fãs e dobra os arcos de vício. Para quem escolhe ao acaso, custa fãs
-  e dobra as mortes (de 2,2% para 4,8%).
-- Não há espiral: o atento perde alguém por humor em 1,4% das partidas, abaixo
-  dos 5% medidos na ADR-0032.
+  semente). Arcos por partida: 3,0 no atento, 3,5 no descuidado.
+- Do estágio 1 até a UTI, deixando quieto: 21 a 25 turnos para um integrante
+  neutro; no descuidado, mediana de 16 (p10 de 10 a 11, p90 de 22).
+- O cínico termina abaixo do atento: −9,9 mil fãs (IC95 ±6,5 mil; −10,1 mil
+  na outra semente). Contra o próprio cínico sem exploit, deixar o mais fraco
+  morrer custa −4,4 mil (−3,1 mil). Abusar de "deixar relaxar" é neutro (o IC
+  cruza zero nas duas sementes).
+- Deixar quieto em tudo (ajudando só na UTI) custa −35 mil fãs ao atento
+  (−41 mil na outra semente). Ajudar em tudo custa −6,8 mil (−3,8 mil, com IC
+  cruzando zero).
+- "Deixar relaxar" segue como troca para o atento: zera as saídas por humor e
+  custa de 1,5 a 5,6 mil fãs. Para quem escolhe ao acaso, custa de 2,5 a 7 mil
+  e pode multiplicar as mortes (de 0,8% para 4,4% numa semente). Medido sem a
+  fase sombria e antes do alívio de deixar quieto.
+- Não há espiral: o atento perde alguém por humor em 1,4% a 2,0% das partidas,
+  abaixo dos 5% medidos na ADR-0032.
 
 ### Valores propostos
 
@@ -644,25 +703,33 @@ descuidado). As metas do descuidado ficam dentro nas duas sementes; a prisão na
      de pressão. Com 40 p.p. a morte do descuidado chegava a 25% e a prisão a
      21%. **[V]**
    - Dentro do arco, a pressão sobe 0,12 por turno em média (saúde 0,15, ego
-     0,10), com o limite de cada estágio em 1. Fase sombria: +0,12 fixo por
-     turno. Do estágio 1 até a UTI, ignorando tudo: 16 a 18 turnos para um
-     integrante neutro; no descuidado, com humor, traços e exposição, mediana
-     de 13 (10 a 15). É o valor mais sensível: com 0,15 a prisão do descuidado
-     passa de 20%. **[V]**
+     0,10), com o limite de cada estágio em 1. Do estágio 1 até a UTI,
+     deixando quieto: 21 a 25 turnos para um integrante neutro; no descuidado,
+     com humor, traços e exposição, mediana de 16 (p25 a p75 de 13 a 20). É o
+     valor mais sensível: com 0,15 a prisão do descuidado passava de 20% (medido
+     com a fase sombria). **[V]**
    - Previsão: baixo abaixo de 0,5; iminente quando a pressão mais o
      incremento esperado chega a 1; alto entre os dois. "Iminente" avança no
      turno seguinte em 85% a 90% das vezes e "baixo" em 0% a 2,4%. **[V]**
 3. **Fila:** UTI primeiro, depois gravidade, depois chegada. Na prática quase
    nunca há dois momentos esperando (p90 de 1). Se o integrante sai, o momento é
    descartado e os modelos reservados não usados voltam ao catálogo.
-4. **Intervir:** encerra o arco com 75% / 55% / 40% nos estágios 1 a 3, senão
-   volta ao estágio 1; afasta 0 / 1 / 2 turnos; −0,5 de humor. Na UTI: 30% da
-   receita (mínimo 3× a folha), 2 turnos internado, encerra em 40% ou volta ao
-   estágio 1. **[C]**
-5. **Perdas:** ignorar custa 0% / 1% / 2% dos fãs nos estágios do vício;
-   expulsar tira 0,3 × relação de humor de cada colega; luto de
+4. **Ajudar e deixar quieto:**
+   - Ajudar encerra o arco com 75% / 55% / 40% nos estágios 1 a 3, senão volta
+     ao estágio 1; afasta 0 / 1 / 2 turnos; −1,0 de humor (fora do ego, que
+     paga com o aumento do item 6). Pagar o tratamento na UTI: 30% da receita
+     (mínimo 3× a folha), 2 turnos internado, encerra em 40% ou volta ao
+     estágio 1. **[C]**
+   - Deixar quieto: +1,0 de humor na hora, fora da UTI. Esperar a alta não
+     alivia. **[C]** pela grade da calibração: com qualquer par entre +0 e +2,0
+     de alívio e −0,5 e −1,5 de custo as metas se mantêm; deixar quieto vence no
+     ego em estágio 1 (+4,4 a +5,7 mil fãs com o par escolhido), ajudar vence no
+     vício e na saúde, e deixar quieto em tudo nunca compensa. O alívio pesa
+     pouco nos fãs e serve para o humor reagir à escolha.
+5. **Perdas:** deixar quieto custa 0% / 1% / 2% dos fãs nos estágios do vício;
+   mandar embora tira 0,3 × relação de humor de cada colega; luto de
    0,5 + 0,35 × relação (0,25 com relação negativa); crise tira 0,5 de quem tem
-   relação ≥ 3. Os custos de humor (expulsar, luto, crise e o humor no risco)
+   relação ≥ 3. Os custos de humor (mandar embora, luto, crise e o humor no risco)
    mudam no máximo 1,8 mil fãs mesmo dobrados; o dono decidiu que ficam como
    efeito de narrativa e clima. **[V]**
 6. **Lei e ego:**
@@ -674,12 +741,12 @@ descuidado). As metas do descuidado ficam dentro nas duas sementes; a prisão na
      0/60/40/0; só no julgamento 35/30/20/15; nunca no julgamento 25/20/15/40.
      Pena de 2 a 12 turnos; acima de 8 vira saída. Multa de 15% da receita.
      **[C]**
-   - Ego: projeto paralelo +0,5% dos fãs por turno. No ultimato, intervir sobe o
-     salário 30% e afasta o integrante por 2 turnos; ignorar leva à carreira
-     solo em 70%. Só com o aumento, intervir dominava (o aumento não pesa no
-     caixa); com o afastamento, conversar empata com intervir para o jogador
-     atento. Ignorar continua a pior opção (−25 a −43 mil fãs por ultimato).
-     **[V]**
+   - Ego: projeto paralelo +0,5% dos fãs por turno. No ultimato, ajudar sobe o
+     salário 30% e afasta o integrante por 2 turnos; deixar quieto leva à
+     carreira solo em 70%. Só com o aumento, ajudar dominava (o aumento não pesa
+     no caixa); com o afastamento, conversar empata com ajudar para o jogador
+     atento. Deixar quieto no ultimato continua a pior opção (−25 a −43 mil fãs,
+     medido antes da revisão). **[V]**
 7. **Saúde:** a sequela baixa o teto de skill do integrante em 3,0 (com 1,5
    ela custava 1,7 a 3,3 mil fãs, invisível no placar; com 3,0, cerca de
    10 mil por sequela). Pede um campo de teto por integrante usado na folga de
@@ -711,8 +778,8 @@ descuidado). As metas do descuidado ficam dentro nas duas sementes; a prisão na
 
 | Perfil | Turnos com ≥ 5 por partida | Turnos com ≥ 6 |
 |---|---|---|
-| Atento | 1,9 | 0,05 |
-| Descuidado | 6,6 | 0,83 (medido antes de 2026-11-14) |
+| Atento | 1,7 a 1,9 | 0,05 (medido antes da revisão "rever tudo") |
+| Descuidado | 6,3 | 0,83 (medido antes da revisão "rever tudo") |
 
 No atento, 77% dos turnos têm 3 ou 4 decisões.
 
@@ -726,6 +793,14 @@ marcos, 58% deles depois do T40. Custo dos nós a 4% da receita: o atento compra
 6 nós e paga 16% do caixa final, sem nunca ficar negativo.
 
 ## Requisitos levantados nos protótipos
+
+- **Números na tela:** skill e humor aparecem só em barras e palavras, sem
+  "6,8" nem "−2,3", nos cartões, na capa, nos crachás, na entrevista, no
+  Convívio e no cabeçalho ("Humor da banda neutro"). Já está na `main` do
+  frontend. Custo em dinheiro pode ficar em número.
+- **Tela do momento e da UTI:** as regras da 1.3 (texto da cena, opções com
+  custo, frase de gravidade, "risco de morte" em vermelho na UTI, conversar
+  desabilitado com frase de cena).
 
 - **Registro de eventos por integrante:** entrada, primeiros shows e obras,
   níveis, especializações, brigas e arcos. Alimenta a linha do tempo da página
@@ -757,12 +832,12 @@ versão do jogo.
 |---|---|---|
 | **Rockstar!** (1989) [V] | Na turnê, festas e anfetamina viram a atividade principal; "certo nível de vício" é preciso para manter o humor. A crítica do Obscuritory diz que o desastre chega sem regra clara e que a reabilitação é só chata. | O vício precisa de regra legível, e o afastamento precisa de algum ganho (1.4, 1.6). |
 | **ROCKBEASTS** (2026) [V] | Banda dos anos 90 com Health, Hype, Mood e Cash. Um conflito mal resolvido com um integrante trancou parte da casa no show seguinte. | Drama pessoal vira penalidade concreta no próximo show (1.6). |
-| **Hollywood Animal** (2025) [V] | O álcool é o vício mais comum e a maioria é "viciado funcional". O vício gera eventos raros e serve de material para chantagem. Encobrir crimes é ferramenta central. A felicidade do elenco foi chamada de microgestão tediosa. | A postura "encobrir" como dívida que estoura depois (1.3). Eventos raros demais somem da percepção do jogador. |
+| **Hollywood Animal** (2025) [V] | O álcool é o vício mais comum e a maioria é "viciado funcional". O vício gera eventos raros e serve de material para chantagem. Encobrir crimes é ferramenta central. A felicidade do elenco foi chamada de microgestão tediosa. | O papel "abafar a imprensa" como dívida que estoura depois (1.3). Eventos raros demais somem da percepção do jogador. |
 | **The Movies** (2005) [M] | Estrelas estressadas bebem e o jogador as manda para a reabilitação, onde ficam fora por um tempo. A crítica chamou isso de "babá de gente". | Fila com um momento por turno, para a crise não virar microgestão (1.2). |
 | **Crusader Kings 3** [V] | O estresse sobe ao agir contra os traços e com mortes próximas. Em 100/200/300, um *mental break* oferece um *coping trait* (como beberrão), que alivia o estresse e cobra depois. Intervalo mínimo de 5 anos entre breaks. | O vício como alívio escolhido (1.4) e um intervalo mínimo entre momentos graves. |
 | **Darkest Dungeon** [V] | Aos 100 de estresse, aflição (75%) ou virtude (25%). Aos 200, ataque cardíaco e Death's Door. No bar: 5,9% de sumir uma semana, 3,9% de virar *Tippler* (só alivia bebendo), 3,9% de *Resolution* (nunca mais bebe). | Estado intermediário antes da morte (1.5) e desfechos que marcam traços (1.7). |
 | **RimWorld** [V] | Breaks em 35/20/5% de humor, deslocados pelos traços. Tolerância sobe a cada dose e aumenta a chance de vício; abstinência longa cura; overdose raramente mata. | A escada tolerância → dependência → abstinência dos estágios do vício (1.1). |
-| **This War of Mine** [V] | Humor em escada (Sad, Depressed, Broken); Broken pode ir embora ou se matar. A cura é outro morador conversar. | A postura "conversar" com o amigo da banda no elenco (1.3). |
+| **This War of Mine** [V] | Humor em escada (Sad, Depressed, Broken); Broken pode ir embora ou se matar. A cura é outro morador conversar. | O papel "conversar" com o amigo da banda no elenco (1.3). |
 | **Football Manager** [V/M] | Propensão a lesão é atributo oculto, estimado pelo histórico e pelos relatórios. Promessas não cumpridas pioram a moral. | Pressão escondida comunicada por sinais (1.3). |
 | **Failbetter / Emily Short** [V] | *Storylets*: trechos com pré-requisitos e efeitos, recombináveis sem explodir a árvore. Os estados de falha de Fallen London (prisão, loucura) eram procurados pelos jogadores porque eram conteúdo. | Cada momento é um storylet; a prisão precisa ser conteúdo e não só castigo. |
 
