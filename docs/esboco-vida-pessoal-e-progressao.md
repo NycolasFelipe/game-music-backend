@@ -144,8 +144,12 @@ custo fora do dinheiro (decisão do dono).
 O jogador sempre vê o estágio atual quando o momento aparece. A pressão entre um
 momento e outro fica escondida e é comunicada por sinais em texto no painel
 ("{character1} chegou ao ensaio de óculos escuros. O ensaio era em lugar
-fechado."). A previsão do turno (ADR-0022) mostra o risco do próximo momento em
-faixa: baixo, alto ou iminente.
+fechado."). O risco do próximo momento é calculado em faixa (baixo, alto ou
+iminente), mas a faixa nunca aparece como rótulo. A seção Bastidores agrupa os
+sinais por integrante e mostra a gravidade pelo peso visual (fio vermelho) e por
+uma frase do narrador ("Ninguém tocou no assunto com Rita. Ainda."); com risco
+baixo ficam só os sinais. A tela não mostra nome de condição, estágio nem fila
+(decisão do dono no protótipo, 2026-11-14).
 
 ## 1.4 A tentação: risco com recompensa
 
@@ -194,14 +198,15 @@ escolheu não agir.
    30%, 15% e 5% de chance nos estágios 1, 2 e 3. Cada arco tem no máximo uma
    recaída: a segunda volta ao estágio 1 encerra o arco.
 3. **Pelo menos um sinal no painel antes de cada momento.** Os sinais ficam fora
-   da regra de nunca repetir, para nunca faltarem. A previsão mostra o risco em
-   faixa.
+   da regra de nunca repetir, para nunca faltarem. A gravidade aparece no tom e
+   no peso visual dos sinais, nunca como rótulo de risco.
 4. **A morte vale em todo save.** O dono descartou uma opção para desligá-la. As
    regras 1 a 3 são a única proteção do jogador, então os testes do motor de
    condições precisam garantir cada uma delas.
 5. **Metas de frequência**, a medir por simulação como na ADR-0032. Proposta
    inicial: morte em menos de 2% das partidas do jogador atento e em 15% a 25%
-   das do descuidado; prisão em 10% a 20% das partidas; pelo menos um arco
+   das do descuidado; prisão em 10% a 20% das partidas do descuidado (o dono
+   fixou o perfil em 2026-11-14); pelo menos um arco
    aberto em 80% das partidas.
 
 ## 1.6 Desfechos
@@ -332,7 +337,11 @@ personagens. Exemplos para calibrar:
   O ensaio de sexta não aconteceu."
 
 A morte sem piada é uma exceção à ADR-0026 §2 ("quase todo resultado termina com
-uma observação irônica") e precisa de emenda explícita àquela ADR.
+uma observação irônica") e precisa de emenda explícita àquela ADR. A mesma
+exceção vale para a internação (UTI): o momento, as posturas e os desfechos não
+têm piada, nem mirando a indústria ("o empresário já pergunta pelos ingressos"
+saiu), e o drama vem de detalhes concretos ("a banda passa a noite no corredor,
+revezando o único banco"). Decisão do dono no protótipo, 2026-11-14.
 
 ## 1.10 Persistência (traços largos)
 
@@ -348,7 +357,7 @@ uma observação irônica") e precisa de emenda explícita àquela ADR.
   `demissao`.
 - A pressão, a transição de estágio e a fila ficam em funções puras, usadas pelo
   tick e pela previsão do turno, no padrão da ADR-0032. A previsão converte a
-  pressão em faixa.
+  pressão em faixa, que só escolhe o peso visual e a frase do narrador.
 - A receita de cada turno passa a ser gravada no snapshot de `turns`, que hoje
   não a guarda, para servir de base aos custos.
 
@@ -485,8 +494,8 @@ voltar como candidatos raros no recrutamento.
 
 ## Histórico de decisões
 
-Todas as decisões são do dono, em 2026-11-13. A seção indica onde cada uma está
-no corpo.
+Todas as decisões são do dono, em 2026-11-13 e 2026-11-14. A seção indica onde
+cada uma está no corpo.
 
 ### Primeiras respostas
 
@@ -560,29 +569,60 @@ no corpo.
 | Humor do atento em +4,3 no fim do jogo | Aceito | 1.7 |
 | Banda sem caixa presa num laço de saídas (0,4% das partidas) | Covers e bar sem saldo mínimo | 1.7 |
 
+### Validação dos valores estimados (tycoon-review, 2026-11-14): veredito crítico
+
+Varredura de sensibilidade de cada valor estimado (±50%, 109 variações, sementes
+20261113 e 20261114) e rodada final com as decisões juntas.
+
+| Achado | Decisão | Seção |
+|---|---|---|
+| No ultimato do ego, intervir dominava: o aumento de 30% não pesa no caixa | Intervir também afasta o integrante por 2 turnos; conversar empata com intervir | Valores propostos, 6 |
+| Pressão no arco é o valor mais sensível; o tempo até a UTI era 16 a 18 turnos, não 12 a 16 | Fica em 0,12; texto corrigido | Valores propostos, 2 |
+| Meta de prisão sem perfil definido; o atento ao acaso ficava em 8,6% numa semente | A meta vale só para o descuidado | 1.5 |
+| Sequela de 1,5 era invisível no placar | Sobe para 3,0 | Valores propostos, 7 |
+| Casa grande perto da borda (acima de 1,3 a prisão passa de 20%) | Fica em ×1,15 | Valores propostos, 2 |
+| "Deixar relaxar" quase grátis para o atento | O dono pediu 40 p.p.; com as outras decisões, a morte do descuidado chegava a 25% e a prisão a 21%, então ficou em 30 p.p. | Valores propostos, 2 |
+| Custos de humor (expulsar, luto, crise) não mexem no placar | Ficam como efeito de narrativa e clima | Valores propostos, 5 |
+| Previsão em faixa bem calibrada, mas exposta como rótulo no protótipo | A faixa só escolhe o peso visual e a frase do narrador nos Bastidores | 1.3, 1.5 |
+
 ---
 
 ## Números da simulação
 
 Monte Carlo com as funções puras do domínio, 500 partidas de 80 turnos por
-perfil, semente 20261113 (conferida com 20261114). Script em
-`scratchpad/sim/sim.ts` da sessão. **[C]** marca valor calibrado contra uma
-meta; **[E]** marca valor estimado, com efeito medido mas sem meta que o fixe.
+perfil, semente 20261113 (conferida com 20261114). Os números abaixo já usam os
+valores travados em 2026-11-14 (relax a 30 p.p., afastamento no ultimato,
+sequela 3,0). Script em `~/Documentos/handoffs/vida-pessoal-2026-11-13/sim/`
+(cópia com as chaves novas no scratchpad da sessão de 2026-11-14). **[C]** marca valor calibrado contra uma
+meta; **[V]** marca valor sem meta própria que passou por uma varredura de
+sensibilidade (±50%, sementes 20261113 e 20261114) e foi travado pelo dono em
+2026-11-14.
 
 ### Resultado por perfil
 
 | Perfil | Fãs T80 (mediana) | Humor T26 / T52 | Mortes | Prisão | Saída por humor |
 |---|---|---|---|---|---|
-| Atento, escolhe bem | 613 mil | +2,06 / +3,93 | 0% | 0% | 1,4% das partidas |
-| Atento, escolhe ao acaso | 581 mil | +2,06 / +3,83 | 2,0% | 12,6% | 1,4% |
-| Descuidado | 398 mil | +0,94 / +2,05 | 20,2% | 18,6% | 0,6% |
-| Cínico (tenta os exploits) | 584 mil | +1,90 / +3,89 | 5,0% | 6,6% | 0% |
+| Atento, escolhe bem | 609 mil | +2,06 / +3,89 | 0% | 0% | 1,4% das partidas |
+| Atento, escolhe ao acaso | 580 mil | +2,06 / +3,81 | 2,2% | 12,6% | 1,4% |
+| Descuidado | 396 mil | +0,94 / +2,03 | 21,6% | 20,0% | 0,8% |
+| Cínico (tenta os exploits) | 585 mil | +1,90 / +3,88 | 4,6% | 5,8% | 0% |
 | Equilibrado (referência) | 615 mil | +1,70 / +3,86 | 0% | 0% | 1,6% |
 
-- Pelo menos um arco aparece em 93% a 97% das partidas (mediana de 3 arcos).
-- O cínico termina abaixo do atento: −23 mil fãs (IC95 ±7 mil). Cada exploit
-  isolado também perde: segurar a fase sombria −15,8 mil, expulsar no estágio 2
-  −9,9 mil, deixar o mais fraco morrer −7,6 mil.
+Na semente 20261114, o descuidado fica em 21,6% de mortes e 16,8% de prisão, e
+o atento ao acaso em 8,8% de prisão (a meta de prisão vale só para o
+descuidado). As metas do descuidado ficam dentro nas duas sementes; a prisão na
+20261113 encosta no teto de 20%.
+
+- Pelo menos um arco aparece em 93% a 96% das partidas (93% a 98% na outra
+  semente). Arcos por partida: 3,0 no atento, 3,6 no descuidado.
+- O cínico termina abaixo do atento: −22 mil fãs (IC95 ±7 mil; −25 mil na outra
+  semente). Contra o próprio cínico sem exploit, cada exploit isolado também
+  perde: segurar a fase sombria −10,4 mil, expulsar no estágio 2 −6,5 mil,
+  deixar o mais fraco morrer −3,6 mil. Abusar de "deixar relaxar" é neutro
+  (o IC cruza zero).
+- "Deixar relaxar" é uma troca para o atento: zera as saídas por humor, não
+  muda os fãs e dobra os arcos de vício. Para quem escolhe ao acaso, custa fãs
+  e dobra as mortes (de 2,2% para 4,8%).
 - Não há espiral: o atento perde alguém por humor em 1,4% das partidas, abaixo
   dos 5% medidos na ADR-0032.
 
@@ -597,14 +637,21 @@ meta; **[E]** marca valor estimado, com efeito medido mas sem meta que o fixe.
      0,22%; saúde 0 / 0,04% / 0,1% / 0,15%; ego 0 / 0 / 0,08% / 0,15%. **[C]**
    - Traço de risco ×1,5, traço protetor ×0,6, histórico +0,5 por arco anterior,
      tudo junto limitado a ×2. Humor: ×(1 + 0,35 × máx(0, −humor − 1)).
-     Exposição: festa ×1,5, casa de shows ou festival ×1,15. **[E]**
-   - "Deixar relaxar": +1,5 de humor na hora e +15 pontos percentuais no risco
-     de vício naquele avanço. **[E]**
+     Exposição: festa ×1,5, casa de shows ou festival ×1,15 (faixa segura de
+     1,0 a 1,3; acima disso a prisão do descuidado passa de 20%). **[V]**
+   - "Deixar relaxar": +1,5 de humor na hora e +30 pontos percentuais no risco
+     de vício naquele avanço; se o integrante já está num arco de vício, +0,35
+     de pressão. Com 40 p.p. a morte do descuidado chegava a 25% e a prisão a
+     21%. **[V]**
    - Dentro do arco, a pressão sobe 0,12 por turno em média (saúde 0,15, ego
      0,10), com o limite de cada estágio em 1. Fase sombria: +0,12 fixo por
-     turno. Do estágio 1 até a UTI, ignorando tudo: 12 a 16 turnos. **[E]**
+     turno. Do estágio 1 até a UTI, ignorando tudo: 16 a 18 turnos para um
+     integrante neutro; no descuidado, com humor, traços e exposição, mediana
+     de 13 (10 a 15). É o valor mais sensível: com 0,15 a prisão do descuidado
+     passa de 20%. **[V]**
    - Previsão: baixo abaixo de 0,5; iminente quando a pressão mais o
-     incremento esperado chega a 1; alto entre os dois. **[E]**
+     incremento esperado chega a 1; alto entre os dois. "Iminente" avança no
+     turno seguinte em 85% a 90% das vezes e "baixo" em 0% a 2,4%. **[V]**
 3. **Fila:** UTI primeiro, depois gravidade, depois chegada. Na prática quase
    nunca há dois momentos esperando (p90 de 1). Se o integrante sai, o momento é
    descartado e os modelos reservados não usados voltam ao catálogo.
@@ -615,7 +662,9 @@ meta; **[E]** marca valor estimado, com efeito medido mas sem meta que o fixe.
 5. **Perdas:** ignorar custa 0% / 1% / 2% dos fãs nos estágios do vício;
    expulsar tira 0,3 × relação de humor de cada colega; luto de
    0,5 + 0,35 × relação (0,25 com relação negativa); crise tira 0,5 de quem tem
-   relação ≥ 3. **[E]**
+   relação ≥ 3. Os custos de humor (expulsar, luto, crise e o humor no risco)
+   mudam no máximo 1,8 mil fãs mesmo dobrados; o dono decidiu que ficam como
+   efeito de narrativa e clima. **[V]**
 6. **Lei e ego:**
    - Estilos agressivos: punk, metal, grunge, rap-hiphop, funk-carioca, gótico,
      cyberpunk e skate-streetwear. Comportados: kpop, pop-mainstream,
@@ -625,10 +674,16 @@ meta; **[E]** marca valor estimado, com efeito medido mas sem meta que o fixe.
      0/60/40/0; só no julgamento 35/30/20/15; nunca no julgamento 25/20/15/40.
      Pena de 2 a 12 turnos; acima de 8 vira saída. Multa de 15% da receita.
      **[C]**
-   - Ego: projeto paralelo +0,5% dos fãs por turno; no ultimato, intervir sobe o
-     salário 30%, e ignorar leva à carreira solo em 70%. **[E]**
-7. **Saúde:** a sequela baixa o teto de skill do integrante em 1,5. Pede um
-   campo de teto por integrante usado na folga de `grownSkill`. **[E]**
+   - Ego: projeto paralelo +0,5% dos fãs por turno. No ultimato, intervir sobe o
+     salário 30% e afasta o integrante por 2 turnos; ignorar leva à carreira
+     solo em 70%. Só com o aumento, intervir dominava (o aumento não pesa no
+     caixa); com o afastamento, conversar empata com intervir para o jogador
+     atento. Ignorar continua a pior opção (−25 a −43 mil fãs por ultimato).
+     **[V]**
+7. **Saúde:** a sequela baixa o teto de skill do integrante em 3,0 (com 1,5
+   ela custava 1,7 a 3,3 mil fãs, invisível no placar; com 3,0, cerca de
+   10 mil por sequela). Pede um campo de teto por integrante usado na folga de
+   `grownSkill`. **[V]**
 8. **Afastados:** volta ao neutro normal e `lowMoodTurns` congelado.
 9. **Show:**
    - Multiplicador do cachê por casa (covers / bar / pub / casa de shows /
@@ -647,16 +702,17 @@ meta; **[E]** marca valor estimado, com efeito medido mas sem meta que o fixe.
 12. **Transição de par exclusivo:** fora do alcance da simulação.
 13. **Catálogo de momentos:** com os modelos não usados voltando ao catálogo,
     bastam uns 15 de vício (4 do estágio 1, 5 do 2, 3 do 3 e 3 de UTI) e 6 a 8
-    de cada outra condição. Momentos por partida: 6 no atento, 11 no descuidado.
-14. **Emenda à ADR-0026:** a morte e a página de despedida ficam sem piada
-    nenhuma (decisão do dono nos protótipos).
+    de cada outra condição. Momentos por partida (média de todas as bandas):
+    5 no atento, 11 no descuidado.
+14. **Emenda à ADR-0026:** a morte, a página de despedida e a internação (UTI)
+    ficam sem piada nenhuma (decisões do dono nos protótipos).
 
 ### Decisões que seguram o avanço
 
 | Perfil | Turnos com ≥ 5 por partida | Turnos com ≥ 6 |
 |---|---|---|
 | Atento | 1,9 | 0,05 |
-| Descuidado | 6,4 | 0,83 |
+| Descuidado | 6,6 | 0,83 (medido antes de 2026-11-14) |
 
 No atento, 77% dos turnos têm 3 ou 4 decisões.
 
