@@ -152,7 +152,7 @@ export class GetTurnPanelUseCase {
 
     return {
       year: band.currentYear,
-      period: formatPeriod(band.currentYear),
+      period: formatPeriod(bandId, band.currentYear),
       performance,
       pending,
       gig: {

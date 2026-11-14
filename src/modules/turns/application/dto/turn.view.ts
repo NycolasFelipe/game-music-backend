@@ -4,7 +4,7 @@
 export class TurnView {
   /** The band's live year after this turn. */
   year: number;
-  /** Human-readable period, e.g. `"2003 - 2º semestre"`. */
+  /** Human-readable period, e.g. `"14 de setembro de 2003"` (ADR-0033). */
   period: string;
   /** Fan count captured when the turn was taken. */
   fanCount: number;

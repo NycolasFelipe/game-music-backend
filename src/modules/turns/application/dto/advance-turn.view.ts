@@ -13,7 +13,7 @@ export class AdvanceTurnView {
   previousYear: number;
   /** The band's year after the step. */
   year: number;
-  /** Human-readable period, e.g. `"2003 - 2º semestre"`. */
+  /** Human-readable period, e.g. `"14 de setembro de 2003"` (ADR-0033). */
   period: string;
   /** Whether members aged this step (true only on a calendar-year rollover). */
   agedMembers: boolean;

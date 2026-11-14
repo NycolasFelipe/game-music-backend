@@ -136,7 +136,7 @@ describe("AdvanceTurnUseCase", () => {
 
     expect(result.previousYear).toBe(2003);
     expect(result.year).toBe(2003.5);
-    expect(result.period).toBe("2003 - 2º semestre");
+    expect(result.period).toBe("8 de setembro de 2003");
     expect(result.agedMembers).toBe(false);
     expect(bandsRepository.advanceTurn).toHaveBeenCalledWith(BAND_ID, {
       newYear: 2003.5,
@@ -164,7 +164,7 @@ describe("AdvanceTurnUseCase", () => {
     const result = await useCase.execute(actor, BAND_ID);
 
     expect(result.year).toBe(2004);
-    expect(result.period).toBe("2004 - 1º semestre");
+    expect(result.period).toBe("14 de março de 2004");
     expect(result.agedMembers).toBe(true);
     expect(bandsRepository.advanceTurn).toHaveBeenCalledWith(BAND_ID, {
       newYear: 2004,

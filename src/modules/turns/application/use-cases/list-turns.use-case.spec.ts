@@ -50,7 +50,7 @@ describe("ListTurnsUseCase", () => {
     expect(result).toEqual([
       expect.objectContaining({
         year: 2003.5,
-        period: "2003 - 2º semestre",
+        period: "8 de setembro de 2003",
         fanCount: 500,
         passiveEventId: "pe-1",
         activeEventId: null,

@@ -274,7 +274,7 @@ export class AdvanceTurnUseCase {
     });
 
     this.logger.log(
-      `Band ${bandId} advanced to ${formatPeriod(newYear)}` +
+      `Band ${bandId} advanced to ${formatPeriod(bandId, newYear)}` +
         `${agedMembers ? " (members aged)" : ""}` +
         `${activeEvent ? ` — active event "${activeEvent.templateId}"` : ""}` +
         `${payroll.totalPaid > 0 ? ` — paid ${payroll.totalPaid} in salaries` : ""}` +
@@ -287,7 +287,7 @@ export class AdvanceTurnUseCase {
     return {
       previousYear,
       year: newYear,
-      period: formatPeriod(newYear),
+      period: formatPeriod(bandId, newYear),
       agedMembers,
       passiveEvent,
       activeEvent,

@@ -107,7 +107,7 @@ describe("GetTurnPanelUseCase", () => {
     );
     expect(result).toEqual({
       year: YEAR,
-      period: "2004 - 2º semestre",
+      period: "21 de outubro de 2004",
       performance: 0.33,
       pending: [],
       gig: { playedThisTurn: null, previews: previews.previews },
