@@ -286,6 +286,49 @@ cálculo do índice + rótulos + `ReleaseCard`.
 
 ---
 
+## 10. Vida pessoal dos integrantes (vício, lei, saúde, ego)
+
+> **Esboço detalhado:** [esboço de vida pessoal e progressão](esboco-vida-pessoal-e-progressao.md), parte 1.
+
+**Motivação.** Hoje o integrante só "dá errado" pelo humor ou pelo salário, e as
+saídas se parecem. Arcos pessoais que escalam por vários turnos (até
+reabilitação, prisão ou morte) dão tensão ao fim do jogo e histórias próprias a
+cada save.
+
+**Esboço.** Condições com estágios, pressão vinda de traços, humor, fama e
+exposição, sinais no painel antes de cada momento de decisão, posturas fixas
+(intervir, conversar, ignorar, encobrir, expulsar) e regras contra a frustração
+para a morte.
+
+**Integração.** Clima (ADR-0032), traços (item 8), eventos únicos (ADR-0031),
+Arquivo de ex-integrantes, previsão do turno (ADR-0022).
+
+**Dependências.** ADR + tabela `member_conditions` + status de afastado + catálogo
+de momentos no tom da ADR-0026.
+
+---
+
+## 11. Progressão: carreira da banda e especializações
+
+> **Esboço detalhado:** [esboço de vida pessoal e progressão](esboco-vida-pessoal-e-progressao.md), parte 2.
+
+**Motivação.** A evolução das skills é automática e a fama quase para na segunda
+metade. O jogador precisa escolher como a banda cresce e ter marcos espalhados
+pela partida.
+
+**Esboço.** Árvore da banda com quatro ramos (Palco, Estúdio, Negócios,
+Bastidores), pontos vindos de marcos da carreira e custo por turno em dinheiro;
+especializações por instrumento no `leveledUp` da ADR-0012; Hall da Fama entre
+partidas por último.
+
+**Integração.** Evolução (ADR-0012), shows, obras, salários, gravadoras (ADR-0009)
+e o item 10 (ramo Bastidores).
+
+**Dependências.** ADR + catálogo de marcos e nós + persistência dos nós e das
+especializações.
+
+---
+
 ## Ordem sugerida (não vinculante)
 
 1. **Shows ao vivo** (item 5) — renda de base do início; destrava o começo do jogo
